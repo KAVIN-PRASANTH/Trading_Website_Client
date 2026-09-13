@@ -1,0 +1,125 @@
+/* ══════════════════════════════════════════════════════════════
+   PRAVYN ICT — motion.css
+   Premium micro-animations — Midnight Indigo theme
+   ══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* ── Scroll-reveal ─────────────────────────────────────────── */
+  .motion-target {
+    opacity: 1; transform: none;
+  }
+  .motion-target.in-view { opacity: 1; transform: none; }
+
+  /* stagger siblings */
+  .principles article:nth-child(2), .module:nth-child(2),
+  .course-rail-shell, .testimonial-card:nth-child(2), .video-card:nth-child(2), .mentor-plan:nth-child(2) { transition-delay: .08s; }
+  .principles article:nth-child(3), .module:nth-child(3),
+  .batch-countdown, .testimonial-card:nth-child(3), .video-card:nth-child(3), .mentor-plan:nth-child(3) { transition-delay: .16s; }
+  .module:nth-child(4) { transition-delay: .12s; }
+  .module:nth-child(5) { transition-delay: .20s; }
+  .testimonial-card:nth-child(4) { transition-delay: .09s; }
+  .testimonial-card:nth-child(5) { transition-delay: .18s; }
+  .testimonial-card:nth-child(6) { transition-delay: .27s; }
+
+  /* ── Header entrance ───────────────────────────────────────── */
+  .site-header { animation: header-arrive .8s both cubic-bezier(.2,.75,.25,1); }
+
+  /* ── Hero hero dot ─────────────────────────────────────────── */
+  .hero-visual::after {
+    content: ''; position: absolute; width: 7px; aspect-ratio: 1;
+    top: 9%; right: 7%; border-radius: 50%;
+    background: var(--cyan); box-shadow: 0 0 0 8px rgba(6,182,212,.12), 0 0 24px var(--cyan);
+    animation: beacon 2.8s infinite ease-in-out;
+  }
+
+  /* ── Primary button breathe ────────────────────────────────── */
+  .hero-copy .button-primary {
+    box-shadow: 0 0 0 0 rgba(37,99,235,.4);
+    animation: btn-breathe 3.2s 1.5s infinite ease-in-out;
+  }
+
+  /* ── Ticker fade mask ──────────────────────────────────────── */
+  .ticker::before, .ticker::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 80px;
+    z-index: 1; pointer-events: none;
+  }
+  .ticker { position: relative; }
+  .ticker::before { left: 0;  background: linear-gradient(90deg, var(--bg), transparent); }
+  .ticker::after  { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+
+  /* ── Mentor ring orbit ─────────────────────────────────────── */
+  .mentor-art .mentor-ring { animation: mentor-orbit 20s linear infinite; }
+  .mentor-art .mentor-grid { animation: grid-drift 18s linear infinite alternate; }
+
+  /* ── Module hover ──────────────────────────────────────────── */
+  .module { transition-property: background, padding, transform, opacity; }
+  .module:hover { transform: translateX(8px); }
+
+  /* ── FAQ hover ─────────────────────────────────────────────── */
+  .faq-item { transition: background .25s, padding-left .25s, padding-right .25s; }
+  .faq-item:hover:not(.active) { padding-left: 10px; padding-right: 10px; }
+
+  /* ── Testimonial shimmer on hover ──────────────────────────── */
+  .testimonial-card::after {
+    content: ''; position: absolute; inset: 0; border-radius: var(--r-lg); pointer-events: none;
+    background: radial-gradient(circle at 50% 0%, rgba(37,99,235,.07), transparent 65%);
+    opacity: 0; transition: opacity .4s;
+  }
+  .testimonial-card:hover::after { opacity: 1; }
+
+  /* ── Video play pulse ──────────────────────────────────────── */
+  .video-play-btn::before { animation: play-pulse 3s 2.2s infinite ease-in-out; }
+
+  /* ── Mentor plan shimmer ───────────────────────────────────── */
+  .mentor-plan-popular {
+    animation: border-glow 4s infinite ease-in-out;
+  }
+
+  /* ── Countdown unit subtle glow ────────────────────────────── */
+  .countdown-unit b { animation: count-shine 3s infinite ease-in-out; }
+
+  /* ── Contact section radial accent ────────────────────────── */
+  .contact { background-image: radial-gradient(ellipse at 85% 10%, rgba(37,99,235,.08), transparent 30%); }
+  .contact input, .contact textarea { transition: border-color .25s, box-shadow .25s, transform .2s; }
+  .contact input:focus, .contact textarea:focus { transform: translateY(-1px); }
+
+  /* ── Footer brand hover ────────────────────────────────────── */
+  footer .brand { transition: letter-spacing .35s, opacity .25s; }
+  footer .brand:hover { letter-spacing: -.04em; }
+
+  /* ── Mobile CTA entrance ───────────────────────────────────── */
+  .mobile-cta { animation: slide-up .5s .6s both; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   KEYFRAMES
+   ══════════════════════════════════════════════════════════════ */
+@keyframes header-arrive { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+@keyframes btn-breathe   { 50% { box-shadow: 0 0 0 12px rgba(37,99,235,0), 0 0 35px rgba(37,99,235,.25); } }
+@keyframes beacon        { 50% { transform: scale(1.7); box-shadow: 0 0 0 18px rgba(6,182,212,0), 0 0 32px var(--cyan); } }
+@keyframes mentor-orbit  { to { transform: rotate(360deg); } }
+@keyframes grid-drift    { to { background-position: 36px 36px; } }
+@keyframes play-pulse    { 0%,100% { box-shadow: 0 0 0 0   rgba(37,99,235,.3); } 50% { box-shadow: 0 0 0 14px rgba(37,99,235,0); } }
+@keyframes border-glow   { 0%,100% { box-shadow: 0 0 0 1px rgba(37,99,235,.2), 0 20px 50px rgba(37,99,235,.12); } 50% { box-shadow: 0 0 0 1px rgba(96,165,250,.45), 0 20px 50px rgba(37,99,235,.22); } }
+@keyframes count-shine   { 0%,100% { filter: none; } 50% { filter: drop-shadow(0 0 10px rgba(186,230,253,.4)); } }
+@keyframes slide-up      { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ══════════════════════════════════════════════════════════════
+   MOBILE OVERRIDES
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 850px) and (prefers-reduced-motion: no-preference) {
+  .motion-target { transform: translate3d(0, 14px, 0); transition-duration: .5s; }
+  .hero-visual::after { top: 3%; right: 2%; }
+  .mentor-art .mentor-ring { animation-duration: 28s; }
+}
+
+/* ── Touch devices: disable hover effects ──────────────────── */
+@media (hover: none) {
+  .course-card:hover, .module:hover, .faq-item:hover,
+  .testimonial-card:hover, .video-card:hover, .mentor-plan:hover {
+    transform: none !important; box-shadow: none !important;
+  }
+  .course-card:active { transform: scale(.97) !important; transition: transform .1s !important; }
+  .button:active, .cart-button:active { transform: scale(.96) !important; }
+}
