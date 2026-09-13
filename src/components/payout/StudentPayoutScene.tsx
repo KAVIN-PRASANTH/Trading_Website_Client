@@ -5,6 +5,7 @@ import { AchievementSphere, SphereImpulse } from './AchievementSphere'
 
 interface StudentPayoutSceneProps {
   sphereImpulse?: React.MutableRefObject<SphereImpulse>
+  isAutoRotating?: boolean
 }
 
 // Adjust camera distance and FOV dynamically for mobile portrait screens
@@ -91,6 +92,7 @@ function FinancialParticles({ count = 80 }: { count?: number }) {
 
 export const StudentPayoutScene: React.FC<StudentPayoutSceneProps> = ({
   sphereImpulse,
+  isAutoRotating = true,
 }) => {
   return (
     <div className="student-payout-canvas-wrapper" aria-hidden="false">
@@ -115,7 +117,7 @@ export const StudentPayoutScene: React.FC<StudentPayoutSceneProps> = ({
         <FinancialParticles count={85} />
 
         {/* 3D Achievement Sphere */}
-        <AchievementSphere sphereImpulse={sphereImpulse} />
+        <AchievementSphere sphereImpulse={sphereImpulse} isAutoRotating={isAutoRotating} />
       </Canvas>
     </div>
   )

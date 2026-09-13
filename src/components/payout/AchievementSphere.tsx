@@ -13,6 +13,7 @@ export interface SphereImpulse {
 interface AchievementSphereProps {
   sphereImpulse?: React.MutableRefObject<SphereImpulse>
   autoRotateSpeed?: number
+  isAutoRotating?: boolean
 }
 
 interface CardLayout {
@@ -26,6 +27,7 @@ interface CardLayout {
 export const AchievementSphere: React.FC<AchievementSphereProps> = ({
   sphereImpulse,
   autoRotateSpeed = 0.0032,
+  isAutoRotating = true,
 }) => {
   const groupRef = useRef<THREE.Group>(null)
   const { gl, viewport } = useThree()
@@ -261,8 +263,9 @@ export const AchievementSphere: React.FC<AchievementSphereProps> = ({
       velocityY.current *= 0.94
       velocityX.current *= 0.94
 
-      // Continuous cruising horizontal rotation: NEVER gets stuck!
-      targetRotationY.current += (autoRotateSpeed + velocityY.current) * factor
+      // Continuous cruising horizontal rotation: Freezes when isAutoRotating is false, but user can freely rotate!
+      const effectiveAutoRotateSpeed = isAutoRotating ? autoRotateSpeed : 0
+      targetRotationY.current += (effectiveAutoRotateSpeed + velocityY.current) * factor
       targetRotationX.current = THREE.MathUtils.clamp(
         targetRotationX.current + velocityX.current * factor,
         -1.42,
