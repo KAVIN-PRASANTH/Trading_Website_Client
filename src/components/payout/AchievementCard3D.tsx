@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { useFrame, ThreeEvent } from '@react-three/fiber'
 import * as THREE from 'three'
 import { getOrCreateFeedbackCardTexture } from './feedbackTextureGenerator'
@@ -13,7 +13,7 @@ interface AchievementCard3DProps {
   cardHeight?: number
 }
 
-export const AchievementCard3D: React.FC<AchievementCard3DProps> = ({
+export const AchievementCard3D: React.FC<AchievementCard3DProps> = React.memo(({
   imageUrl,
   position,
   normal,
@@ -25,7 +25,7 @@ export const AchievementCard3D: React.FC<AchievementCard3DProps> = ({
   const meshRef = useRef<THREE.Group>(null)
   const materialRef = useRef<THREE.MeshBasicMaterial>(null)
   const borderMatRef = useRef<THREE.MeshStandardMaterial>(null)
-  const [hovered, setHovered] = useState(false)
+  const isHoveredRef = useRef(false)
 
   // 1. Generate / Retrieve cached texture for real student feedback screenshot
   const texture = useMemo(() => getOrCreateFeedbackCardTexture(imageUrl, index), [imageUrl, index])
@@ -63,9 +63,9 @@ export const AchievementCard3D: React.FC<AchievementCard3DProps> = ({
     const frontZ = worldPos.z
     const proximity = THREE.MathUtils.clamp((frontZ + sphereRadius) / (sphereRadius * 2), 0, 1)
 
-    // 1. Scale boost when front & when hovered
+    // 1. Scale boost when front & when hovered (zero React re-render)
     const baseScale = THREE.MathUtils.lerp(0.85, 1.15, Math.pow(proximity, 1.8))
-    const hoverBoost = hovered ? 1.06 : 1.0
+    const hoverBoost = isHoveredRef.current ? 1.06 : 1.0
     const finalScale = baseScale * hoverBoost
 
     targetScale.set(finalScale, finalScale, finalScale)
@@ -81,17 +81,17 @@ export const AchievementCard3D: React.FC<AchievementCard3DProps> = ({
     if (borderMatRef.current) {
       const borderOpacity = THREE.MathUtils.lerp(0.35, 0.95, proximity)
       borderMatRef.current.opacity = borderOpacity
-      borderMatRef.current.emissiveIntensity = hovered ? 0.5 : THREE.MathUtils.lerp(0.08, 0.28, proximity)
+      borderMatRef.current.emissiveIntensity = isHoveredRef.current ? 0.5 : THREE.MathUtils.lerp(0.08, 0.28, proximity)
     }
   })
 
   const handlePointerOver = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation()
-    setHovered(true)
+    isHoveredRef.current = true
   }
 
   const handlePointerOut = () => {
-    setHovered(false)
+    isHoveredRef.current = false
   }
 
   // Scale corner clips proportionally with card
@@ -154,4 +154,4 @@ export const AchievementCard3D: React.FC<AchievementCard3DProps> = ({
       </mesh>
     </group>
   )
-}
+})

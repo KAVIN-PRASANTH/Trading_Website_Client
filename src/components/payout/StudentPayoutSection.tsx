@@ -34,7 +34,7 @@ class WebGLErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBounda
   }
 }
 
-export const StudentPayoutSection: React.FC = () => {
+export const StudentPayoutSection: React.FC = React.memo(() => {
   const [viewMode, setViewMode] = useState<'3d' | 'grid'>('3d')
   const [isAutoRotating, setIsAutoRotating] = useState(true)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
@@ -141,18 +141,6 @@ export const StudentPayoutSection: React.FC = () => {
         </div>
 
         <div className="payout-nav-actions">
-          {webglSupported && !prefersReducedMotion && viewMode === '3d' && (
-            <button
-              type="button"
-              className={`payout-ctrl-btn ${!isAutoRotating ? 'active' : ''}`}
-              onClick={() => setIsAutoRotating((prev) => !prev)}
-              aria-label={isAutoRotating ? 'Stop Auto-Rotation' : 'Resume Auto-Rotation'}
-              title={isAutoRotating ? 'Freeze Auto Rotation (Manual Rotation Only)' : 'Resume Auto Rotation'}
-            >
-              {isAutoRotating ? '⏸ Stop Rotation' : '▶ Auto Rotate'}
-            </button>
-          )}
-
           {webglSupported && !prefersReducedMotion && (
             <button
               type="button"
@@ -184,18 +172,6 @@ export const StudentPayoutSection: React.FC = () => {
         >
           <div className="payout-sphere-stage">
             <StudentPayoutScene sphereImpulse={sphereImpulse} isAutoRotating={isAutoRotating} />
-
-            {/* Prominent Stop / Auto-Rotate Toggle Button on Sphere */}
-            <button
-              type="button"
-              className={`payout-auto-rotate-toggle ${!isAutoRotating ? 'paused' : ''}`}
-              onClick={() => setIsAutoRotating((prev) => !prev)}
-              aria-label={isAutoRotating ? 'Stop Auto Rotation' : 'Resume Auto Rotation'}
-              title={isAutoRotating ? 'Freeze Auto Rotation (User Can Freely Rotate)' : 'Resume Auto Rotation'}
-            >
-              <span className="part-icon">{isAutoRotating ? '⏸' : '▶'}</span>
-              <span>{isAutoRotating ? 'Stop Auto-Rotate' : 'Resume Auto-Rotate'}</span>
-            </button>
 
             {/* 4-Way Directional Controller for full 360 rotation on mobile and desktop */}
             <div className="payout-dpad-controls" aria-label="3D Sphere Directional Controls">
@@ -278,4 +254,4 @@ export const StudentPayoutSection: React.FC = () => {
       )}
     </section>
   )
-}
+})

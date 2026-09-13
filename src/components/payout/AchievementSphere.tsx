@@ -181,20 +181,11 @@ export const AchievementSphere: React.FC<AchievementSphereProps> = ({
       velocityY.current += e.deltaY * 0.00015
     }
 
-    let lastScrollY = window.scrollY
-    const handleScroll = () => {
-      const curY = window.scrollY
-      const deltaY = curY - lastScrollY
-      lastScrollY = curY
-      velocityY.current += deltaY * 0.00022
-    }
-
     dom.addEventListener('pointerdown', handlePointerDown)
     dom.addEventListener('pointermove', handlePointerMove)
     dom.addEventListener('pointerup', handlePointerUp)
     dom.addEventListener('pointercancel', handlePointerUp)
     dom.addEventListener('wheel', handleWheel, { passive: true })
-    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
       dom.removeEventListener('pointerdown', handlePointerDown)
@@ -202,7 +193,6 @@ export const AchievementSphere: React.FC<AchievementSphereProps> = ({
       dom.removeEventListener('pointerup', handlePointerUp)
       dom.removeEventListener('pointercancel', handlePointerUp)
       dom.removeEventListener('wheel', handleWheel)
-      window.removeEventListener('scroll', handleScroll)
     }
   }, [gl.domElement, isMobile])
 
@@ -259,38 +249,32 @@ export const AchievementSphere: React.FC<AchievementSphereProps> = ({
         0.35
       )
     } else {
-      // While released or before drag: smooth inertia decay + steady continuous cruising
+      // While released or cruising: smooth inertia decay
       velocityY.current *= 0.94
       velocityX.current *= 0.94
 
-      // Continuous cruising horizontal rotation: Freezes when isAutoRotating is false, but user can freely rotate!
+      // Continuous cruising horizontal rotation: Direct, consistent, zero hitch!
       const effectiveAutoRotateSpeed = isAutoRotating ? autoRotateSpeed : 0
-      targetRotationY.current += (effectiveAutoRotateSpeed + velocityY.current) * factor
-      targetRotationX.current = THREE.MathUtils.clamp(
-        targetRotationX.current + velocityX.current * factor,
+      currentRotationY.current += (effectiveAutoRotateSpeed + velocityY.current) * factor
+      targetRotationY.current = currentRotationY.current
+
+      // Vertical tilt handling
+      currentRotationX.current = THREE.MathUtils.clamp(
+        currentRotationX.current + velocityX.current * factor,
         -1.42,
         1.42
       )
+      targetRotationX.current = currentRotationX.current
 
       // When vertical inertia decays, gently ease vertical tilt back to eye-level (0)
       if (Math.abs(velocityX.current) < 0.0003 && !sphereImpulse?.current?.continuousDir) {
-        targetRotationX.current = THREE.MathUtils.lerp(
-          targetRotationX.current,
+        currentRotationX.current = THREE.MathUtils.lerp(
+          currentRotationX.current,
           0,
           0.02 * factor
         )
+        targetRotationX.current = currentRotationX.current
       }
-
-      currentRotationY.current = THREE.MathUtils.lerp(
-        currentRotationY.current,
-        targetRotationY.current,
-        0.14
-      )
-      currentRotationX.current = THREE.MathUtils.lerp(
-        currentRotationX.current,
-        targetRotationX.current,
-        0.14
-      )
     }
 
     // Apply rotation to 3D sphere group

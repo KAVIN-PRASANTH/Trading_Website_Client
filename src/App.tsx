@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useEffect, useRef, useState } from 'react'
+import React, { FormEvent, memo, useCallback, useEffect, useRef, useState } from 'react'
 import { StudentPayoutSection } from './components/payout/StudentPayoutSection'
 
 /* ---------------------------------------- Icons ---------------------------------------- */
@@ -65,6 +65,21 @@ function useCountdown(target: Date) {
   return t
 }
 const pad = (n: number) => String(n).padStart(2, '0')
+
+const BatchCountdown = memo(function BatchCountdown() {
+  const countdown = useCountdown(BATCH_TARGET)
+  return (
+    <div className="countdown-row">
+      <div className="cu"><b>{pad(countdown.days)}</b><small>DAYS</small></div>
+      <div className="csep">:</div>
+      <div className="cu"><b>{pad(countdown.hours)}</b><small>HRS</small></div>
+      <div className="csep">:</div>
+      <div className="cu"><b>{pad(countdown.minutes)}</b><small>MIN</small></div>
+      <div className="csep">:</div>
+      <div className="cu"><b>{pad(countdown.seconds)}</b><small>SEC</small></div>
+    </div>
+  )
+})
 
 const NAV_LINKS = [
   { href: '#method',     label: 'Method'     },
@@ -286,8 +301,6 @@ function App() {
   const [annDismissed,  setAnnDismissed]  = useState(false)
   const [flippedOnline, setFlippedOnline] = useState(false)
   const [flippedOffline, setFlippedOffline] = useState(false)
-
-  const countdown       = useCountdown(BATCH_TARGET)
 
   /* ---------------------------------------- Body scroll lock when cart open ---------------------------------------- */
   useEffect(() => {
@@ -950,15 +963,7 @@ function App() {
           </div>
           <div className="batch-right reveal-el">
             <p className="batch-label">BATCH STARTS IN</p>
-            <div className="countdown-row">
-              <div className="cu"><b>{pad(countdown.days)}</b><small>DAYS</small></div>
-              <div className="csep">:</div>
-              <div className="cu"><b>{pad(countdown.hours)}</b><small>HRS</small></div>
-              <div className="csep">:</div>
-              <div className="cu"><b>{pad(countdown.minutes)}</b><small>MIN</small></div>
-              <div className="csep">:</div>
-              <div className="cu"><b>{pad(countdown.seconds)}</b><small>SEC</small></div>
-            </div>
+            <BatchCountdown />
             <a className="button button-white" href="#contact" id="batch-cta">Claim your place <Arrow /></a>
           </div>
         </div>
