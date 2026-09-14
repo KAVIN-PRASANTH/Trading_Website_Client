@@ -506,14 +506,50 @@ function App() {
       {/* ---------------------------------------- MENTOR ---------------------------------------- */}
       <section className="mentor-section" id="mentor" data-section="mentor">
         <div className="mentor-visual reveal-el">
-          <div className="mentor-bg-grid" aria-hidden />
-          <img src="/trading_leaders_animated_loop.gif" alt="Trading Leaders" className="mentor-img" />
+          {/*
+            Depth-emergence loop:
+            Images start tiny+deeply blurred in the background, grow toward the viewer,
+            drift to an orbital position, then fade back into the deep — looping forever.
+            6 ghost instances (2 src images × 3 orbital slots) staggered by 3s each.
+          */}
+          <div className="mav-depth-stage" aria-hidden>
+            {/* Background glow + grid */}
+            <div className="mav-core-glow" />
+            <div className="mav-bg-grid" />
+
+            {/* Orbit trail rings */}
+            <div className="mav-orbit mav-orbit-a" />
+            <div className="mav-orbit mav-orbit-b" />
+
+            {/* ── 6 depth-emerging ghost images ── */}
+            {/* Each cycles: scale(0.08) blur(20px) opacity(0) → emerges → drifts orbital position → fades */}
+            <img src="/MentorPic/IMG_6127.PNG" alt="" className="mav-dp mav-dp-1" loading="lazy" decoding="async" />
+            <img src="/MentorPic/IMG_6107.PNG" alt="" className="mav-dp mav-dp-2" loading="lazy" decoding="async" />
+            <img src="/MentorPic/IMG_6127.PNG" alt="" className="mav-dp mav-dp-3" loading="lazy" decoding="async" />
+            <img src="/MentorPic/IMG_6107.PNG" alt="" className="mav-dp mav-dp-4" loading="lazy" decoding="async" />
+            <img src="/MentorPic/IMG_6127.PNG" alt="" className="mav-dp mav-dp-5" loading="lazy" decoding="async" />
+            <img src="/MentorPic/IMG_6107.PNG" alt="" className="mav-dp mav-dp-6" loading="lazy" decoding="async" />
+          </div>
+
+          {/* Hero portrait — always in front, crisp */}
+          <div className="mav-hero-wrap">
+            <div className="mav-ring mav-ring-outer" aria-hidden />
+            <div className="mav-ring mav-ring-inner" aria-hidden />
+            <img
+              className="mav-hero-portrait"
+              src="/MentorPic/IMG_6107.PNG"
+              alt="Pravyn — Lead Mentor"
+            />
+          </div>
+
+          {/* Stat strip */}
           <div className="mentor-stat-strip">
-            <div><strong>500+</strong><span>Students</span></div>
+            <div><strong>1000+</strong><span>Students</span></div>
             <div><strong>4.9</strong><span>Rating</span></div>
             <div><strong>3+</strong><span>Years</span></div>
           </div>
         </div>
+
         <div className="mentor-content">
           <p className="section-tag reveal-el">02 / YOUR MENTOR</p>
           <h2 className="reveal-el">Built for the trader<br />you intend <em>to become.</em></h2>

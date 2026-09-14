@@ -547,50 +547,167 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
 }
 
 /* ══════════════════════════════════════════════════════════════
-   MENTOR SECTION — Diagonal split layout
+   MENTOR SECTION — Depth-Emergence Loop
    ══════════════════════════════════════════════════════════════ */
 .mentor-section {
   display: grid; grid-template-columns: 1fr 1fr;
-  min-height: 620px; overflow: hidden;
+  min-height: 360px; overflow: hidden;
   border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
 }
 
 .mentor-visual {
-  background: var(--bg-2);
+  background: #040c1b;
   display: grid; place-items: center;
   position: relative; overflow: hidden;
-  padding: var(--py) clamp(24px, 5vw, 80px);
+  padding: 28px clamp(20px, 4vw, 56px);
+  padding-bottom: calc(28px + 58px); /* stat-strip clearance */
 }
-.mentor-bg-grid {
-  position: absolute; inset: 0; opacity: .4;
+
+/* ── Full-cover stage with 3-D perspective ── */
+.mav-depth-stage {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  perspective: 600px;
+  perspective-origin: 50% 50%;
+  overflow: hidden;
+}
+
+/* ── Pulsing center glow ── */
+.mav-core-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 300px; height: 300px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(37,99,235,.30) 0%, rgba(37,99,235,.05) 60%, transparent 80%);
+  animation: mav-core-breathe 7s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* ── Background grid ── */
+.mav-bg-grid {
+  position: absolute; inset: 0; opacity: .18; z-index: 0;
   background-image:
-    linear-gradient(rgba(59,130,246,.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59,130,246,.12) 1px, transparent 1px);
-  background-size: 34px 34px;
-  mask-image: radial-gradient(circle, #000, transparent 70%);
+    linear-gradient(rgba(59,130,246,.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,.2) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, #000 15%, transparent 90%);
 }
-.mentor-img {
-  width: min(80%, 340px); aspect-ratio: 1; border-radius: 50%;
-  object-fit: cover; position: relative; z-index: 1;
-  border: 1px solid var(--border-2);
-  box-shadow: 0 20px 80px rgba(37,99,235,.2);
+
+/* ── Orbit rings (decorative ellipse paths) ── */
+.mav-orbit {
+  position: absolute;
+  top: 50%; left: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(59,130,246,.10);
+  transform: translate(-50%,-50%) rotateX(55deg);
 }
+.mav-orbit-a {
+  width: 380px; height: 140px;
+  animation: mav-orbit-spin 30s linear infinite;
+}
+.mav-orbit-b {
+  width: 520px; height: 190px;
+  animation: mav-orbit-spin 40s linear infinite reverse;
+}
+
+/* ══ Depth-Portal Images ══
+   Each image does a full loop:
+   0%   → z far back, tiny, blurred, invisible
+   15%  → starts emerging, growing, deblurring
+   40%  → visible, orbiting one quadrant around the portrait
+   75%  → drifts to edge, refades
+   100% → back to start
+
+   6 instances staggered every (18s/6) = 3s.
+   All share the 18s loop duration.
+*/
+.mav-dp {
+  position: absolute;
+  width: 110px; height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  top: 50%; left: 50%;
+  transform-origin: center;
+  animation-duration: 18s;
+  animation-timing-function: cubic-bezier(.4,0,.6,1);
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  z-index: 3;
+}
+
+/* Each .mav-dp-N has a different delay and orbital end-position */
+.mav-dp-1 { animation-name: mav-emerge-tl; animation-delay:  0s;  }
+.mav-dp-2 { animation-name: mav-emerge-tr; animation-delay: -3s;  }
+.mav-dp-3 { animation-name: mav-emerge-br; animation-delay: -6s;  }
+.mav-dp-4 { animation-name: mav-emerge-bl; animation-delay: -9s;  }
+.mav-dp-5 { animation-name: mav-emerge-ml; animation-delay: -12s; }
+.mav-dp-6 { animation-name: mav-emerge-mr; animation-delay: -15s; }
+
+/* ── Hero portrait wrapper ── */
+.mav-hero-wrap {
+  position: relative; z-index: 10;
+  display: grid; place-items: center;
+  animation: mav-hero-enter 1s cubic-bezier(.16,1,.3,1) both;
+}
+
+.mav-ring {
+  position: absolute; border-radius: 50%;
+  pointer-events: none;
+}
+.mav-ring-outer {
+  inset: -16px;
+  border: 1px solid rgba(59,130,246,.25);
+  animation: mav-spin-slow 28s linear infinite;
+  background: transparent;
+}
+.mav-ring-outer::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: 28%;
+  width: 24px; height: 4px; border-radius: 2px;
+  background: var(--blue);
+  box-shadow: 0 0 12px 5px var(--blue);
+}
+.mav-ring-inner {
+  inset: -5px;
+  border: 1px solid rgba(255,255,255,.05);
+  animation: mav-spin-slow 18s linear infinite reverse;
+  background: transparent;
+}
+
+.mav-hero-portrait {
+  width: min(72%, 260px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(59,130,246,.45);
+  box-shadow:
+    0 0 0 7px rgba(37,99,235,.07),
+    0 20px 70px rgba(37,99,235,.30),
+    0 4px 20px rgba(0,0,0,.65);
+  animation: mav-float 6s ease-in-out infinite;
+}
+
+/* ── Stat strip ── */
 .mentor-stat-strip {
   position: absolute; bottom: 0; left: 0; right: 0;
   display: flex; border-top: 1px solid var(--border);
-  background: rgba(7, 15, 34, 0.95);
+  background: rgba(4, 12, 27, 0.97);
+  z-index: 12;
 }
 .mentor-stat-strip > div {
   flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
-  padding: 16px 8px; border-right: 1px solid var(--border);
+  padding: 14px 8px; border-right: 1px solid var(--border);
 }
 .mentor-stat-strip > div:last-child { border: 0; }
-.mentor-stat-strip strong { font-size: 22px; font-weight: 800; letter-spacing: -.06em;
+.mentor-stat-strip strong { font-size: 20px; font-weight: 800; letter-spacing: -.06em;
   background: linear-gradient(90deg,#fff,var(--blue-lt)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .mentor-stat-strip span { font: 9px var(--mono); letter-spacing: .1em; color: var(--text-3); }
 
+/* ── Content column ── */
 .mentor-content {
-  padding: var(--py) clamp(28px, 5vw, 90px);
+  padding: var(--py) clamp(28px, 5vw, 80px);
   display: flex; flex-direction: column; justify-content: center; gap: 0;
 }
 .mentor-content h2 { margin-bottom: 20px; }
@@ -600,6 +717,104 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
   padding-left: 18px; border-left: 2px solid var(--blue-mid);
   margin: 8px 0 24px; max-width: 400px;
 }
+
+/* ══ Keyframes ══ */
+
+/* Core glow breathe */
+@keyframes mav-core-breathe {
+  0%, 100% { transform: translate(-50%,-50%) scale(1);    opacity: .75; }
+  50%       { transform: translate(-50%,-50%) scale(1.22); opacity: 1;   }
+}
+
+/* Orbit ring spin */
+@keyframes mav-orbit-spin {
+  from { transform: translate(-50%,-50%) rotateX(55deg) rotate(0deg);   }
+  to   { transform: translate(-50%,-50%) rotateX(55deg) rotate(360deg); }
+}
+
+/* Hero portrait float */
+@keyframes mav-float {
+  0%, 100% { transform: translateY(0);    }
+  50%       { transform: translateY(-8px); }
+}
+
+/* Hero portrait enter */
+@keyframes mav-hero-enter {
+  from { opacity: 0; transform: translateY(16px) scale(.93); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);   }
+}
+
+/* Spinner */
+@keyframes mav-spin-slow {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
+}
+
+/*
+  Depth-emerge keyframes — 6 orbital destination slots:
+  Top-Left, Top-Right, Bottom-Right, Bottom-Left, Mid-Left, Mid-Right.
+  Each starts from center-back (scale≈0, deep blur), grows out to its slot, 
+  stays visible briefly, then shrinks back to nothing.
+*/
+@keyframes mav-emerge-tl {
+  0%        { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+  12%       { transform: translate(-50%,-50%) translateZ(-200px) scale(.3);          opacity: .35;  filter: blur(10px) brightness(.4); }
+  30%, 55%  { transform: translate(calc(-50% - 140px), calc(-50% - 110px)) translateZ(0) scale(1); opacity: .65;  filter: blur(2px)  brightness(.55); }
+  75%       { transform: translate(calc(-50% - 160px), calc(-50% - 130px)) translateZ(0) scale(.9); opacity: .3;   filter: blur(5px)  brightness(.35); }
+  100%      { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+}
+@keyframes mav-emerge-tr {
+  0%        { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+  12%       { transform: translate(-50%,-50%) translateZ(-200px) scale(.3);          opacity: .35;  filter: blur(10px) brightness(.4); }
+  30%, 55%  { transform: translate(calc(-50% + 130px), calc(-50% - 115px)) translateZ(0) scale(1); opacity: .65;  filter: blur(2px)  brightness(.55); }
+  75%       { transform: translate(calc(-50% + 150px), calc(-50% - 135px)) translateZ(0) scale(.9); opacity: .3;   filter: blur(5px)  brightness(.35); }
+  100%      { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+}
+@keyframes mav-emerge-br {
+  0%        { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+  12%       { transform: translate(-50%,-50%) translateZ(-200px) scale(.3);          opacity: .35;  filter: blur(10px) brightness(.4); }
+  30%, 55%  { transform: translate(calc(-50% + 125px), calc(-50% + 105px)) translateZ(0) scale(1); opacity: .65;  filter: blur(2px)  brightness(.55); }
+  75%       { transform: translate(calc(-50% + 145px), calc(-50% + 125px)) translateZ(0) scale(.9); opacity: .3;   filter: blur(5px)  brightness(.35); }
+  100%      { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+}
+@keyframes mav-emerge-bl {
+  0%        { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+  12%       { transform: translate(-50%,-50%) translateZ(-200px) scale(.3);          opacity: .35;  filter: blur(10px) brightness(.4); }
+  30%, 55%  { transform: translate(calc(-50% - 135px), calc(-50% + 100px)) translateZ(0) scale(1); opacity: .65;  filter: blur(2px)  brightness(.55); }
+  75%       { transform: translate(calc(-50% - 155px), calc(-50% + 120px)) translateZ(0) scale(.9); opacity: .3;   filter: blur(5px)  brightness(.35); }
+  100%      { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+}
+@keyframes mav-emerge-ml {
+  0%        { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+  12%       { transform: translate(-50%,-50%) translateZ(-200px) scale(.3);          opacity: .35;  filter: blur(10px) brightness(.4); }
+  30%, 55%  { transform: translate(calc(-50% - 160px), -50%) translateZ(0) scale(.85); opacity: .55;  filter: blur(3px)  brightness(.5); }
+  75%       { transform: translate(calc(-50% - 180px), -50%) translateZ(0) scale(.75); opacity: .25;  filter: blur(6px)  brightness(.3); }
+  100%      { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+}
+@keyframes mav-emerge-mr {
+  0%        { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+  12%       { transform: translate(-50%,-50%) translateZ(-200px) scale(.3);          opacity: .35;  filter: blur(10px) brightness(.4); }
+  30%, 55%  { transform: translate(calc(-50% + 150px), -50%) translateZ(0) scale(.85); opacity: .55;  filter: blur(3px)  brightness(.5); }
+  75%       { transform: translate(calc(-50% + 170px), -50%) translateZ(0) scale(.75); opacity: .25;  filter: blur(6px)  brightness(.3); }
+  100%      { transform: translate(-50%,-50%) translateZ(-400px) scale(.05);         opacity: 0;    filter: blur(18px) brightness(.3); }
+}
+
+/* ── Reduced-motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .mav-core-glow, .mav-orbit, .mav-dp,
+  .mav-hero-wrap, .mav-hero-portrait,
+  .mav-ring-outer, .mav-ring-inner { animation: none !important; }
+  .mav-dp { opacity: .4; filter: blur(5px) brightness(.35);
+    transform: translate(calc(-50% + var(--rm-x, 0px)), calc(-50% + var(--rm-y, 0px))); }
+  .mav-dp-1 { --rm-x: -130px; --rm-y: -100px; }
+  .mav-dp-2 { --rm-x:  120px; --rm-y: -105px; }
+  .mav-dp-3 { --rm-x:  115px; --rm-y:  95px;  }
+  .mav-dp-4 { --rm-x: -125px; --rm-y:  90px;  }
+  .mav-dp-5 { --rm-x: -145px; --rm-y:   0px;  }
+  .mav-dp-6 { --rm-x:  135px; --rm-y:   0px;  }
+  .mav-hero-portrait { box-shadow: 0 8px 40px rgba(37,99,235,.2); }
+}
+
 
 /* ══════════════════════════════════════════════════════════════
    CURRICULUM SECTION
@@ -1064,8 +1279,10 @@ footer p { margin: 0; }
   .principles-grid .principle-card:nth-child(n) { margin-top: 0; }
 
   .mentor-section { grid-template-columns: 1fr; }
-  .mentor-visual  { min-height: 340px; padding: 60px var(--px); }
+  .mentor-visual  { min-height: 300px; padding: 28px var(--px); padding-bottom: calc(28px + 58px); }
   .mentor-content { padding: 50px var(--px); }
+  .mav-dp { width: 85px; height: 85px; }
+  .mav-hero-portrait { width: min(58%, 220px); }
 
   .faq-section { grid-template-columns: 1fr; gap: 30px; padding: var(--py) var(--px); }
 
@@ -1106,7 +1323,8 @@ footer p { margin: 0; }
 
   .testi-grid { grid-template-columns: 1fr; }
 
-  .mentor-img { width: 60%; }
+  .mav-hero-portrait { width: min(50%, 190px); }
+  .mav-dp { width: 70px; height: 70px; }
   .plans-grid { grid-template-columns: 1fr; }
 }
 
