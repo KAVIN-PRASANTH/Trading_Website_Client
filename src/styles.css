@@ -1418,24 +1418,34 @@ footer p { margin: 0; }
 /* Drag Hint */
 .payout-drag-hint {
   position: absolute;
-  bottom: 18px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 8px 20px;
-  background: rgba(6, 13, 30, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.28);
+  gap: 8px;
+  padding: 8px 22px;
+  background: rgba(6, 13, 30, 0.88);
+  border: 1px solid rgba(56, 189, 248, 0.3);
   border-radius: 999px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.12);
-  font: 10px var(--mono);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.15);
+  font: 10.5px var(--mono);
   letter-spacing: 0.08em;
   color: #BAE6FD;
   pointer-events: none;
+  white-space: nowrap;
   animation: hint-float 3.5s infinite ease-in-out;
+  z-index: 5;
+}
+
+.payout-hint-desktop {
+  display: inline;
+}
+
+.payout-hint-mobile {
+  display: none;
 }
 
 .hint-icon {
@@ -1445,7 +1455,7 @@ footer p { margin: 0; }
 
 @keyframes hint-float {
   0%, 100% { transform: translate(-50%, 0); }
-  50% { transform: translate(-50%, -5px); }
+  50% { transform: translate(-50%, -4px); }
 }
 
 /* Accessible Grid Stage */
@@ -1596,14 +1606,25 @@ footer p { margin: 0; }
   }
 
   .payout-drag-hint {
-    bottom: 12px;
-    left: 12px;
-    transform: none;
-    max-width: 58%;
-    font-size: 8px;
-    padding: 6px 10px;
-    gap: 5px;
-    text-align: left;
+    top: 14px;
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 90%;
+    font-size: 10px;
+    padding: 6px 16px;
+    gap: 6px;
+    text-align: center;
+    white-space: nowrap;
+    animation: hint-float 3.5s infinite ease-in-out;
+  }
+
+  .payout-hint-desktop {
+    display: none;
+  }
+
+  .payout-hint-mobile {
+    display: inline;
   }
 
   .payout-stats-ribbon {

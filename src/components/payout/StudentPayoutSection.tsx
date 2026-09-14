@@ -137,7 +137,6 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
           <span className="payout-live-pulse" />
           <span className="focus-label">REAL COMMUNITY RESULTS:</span>
           <span className="focus-name">VERIFIED STUDENT PAYOUT PROOF</span>
-          <span className="focus-tier">({FEEDBACK_IMAGE_URLS.length} SCREENSHOTS)</span>
         </div>
 
         <div className="payout-nav-actions">
@@ -235,7 +234,8 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
             {/* Scroll & Drag Guidance Pill */}
             <div className="payout-drag-hint" aria-hidden>
               <span className="hint-icon">✦</span>
-              <span>Swipe or use 360° buttons to rotate 3D sphere</span>
+              <span className="payout-hint-desktop">Swipe or use 360° buttons to rotate 3D sphere</span>
+              <span className="payout-hint-mobile">Swipe to rotate 360°</span>
             </div>
           </div>
         </WebGLErrorBoundary>
