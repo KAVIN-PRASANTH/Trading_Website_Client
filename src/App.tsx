@@ -1,5 +1,6 @@
 import React, { FormEvent, memo, useCallback, useEffect, useRef, useState } from 'react'
 import { StudentPayoutSection } from './components/payout/StudentPayoutSection'
+import { StudentFeedbackSection } from './components/feedback/StudentFeedbackSection'
 
 /* ---------------------------------------- Icons ---------------------------------------- */
 const Arrow  = () => <svg viewBox="0 0 24 24" aria-hidden><path d="M5 12h13M13 6l6 6-6 6"/></svg>
@@ -36,15 +37,6 @@ const mentorPlans = [
   { id: 'starter', tier: 'Starter', duration: '1 Month',  sessions: '4 Live Sessions',  price: 4999,  perks: ['Live chart walk-throughs', 'Trade setup reviews', 'WhatsApp support', 'Study materials'], variant: 'mp-a' },
   { id: 'growth',  tier: 'Growth',  duration: '3 Months', sessions: '12 Live Sessions', price: 12999, perks: ['All Starter benefits', 'Daily pre-market prep', 'Trade journal reviews', 'Session recordings', 'Priority access'], popular: true, variant: 'mp-b' },
   { id: 'elite',   tier: 'Elite',   duration: '6 Months', sessions: '24 Live Sessions', price: 22999, perks: ['All Growth benefits', '1-on-1 strategy calls', 'Custom trading plan', 'Lifetime materials', 'Alumni community', 'Post-batch support'], variant: 'mp-c' },
-]
-
-const testimonials = [
-  { initials: 'AK', name: 'Arjun Kumar',  city: 'Chennai',    course: 'ICT Trader Mastery',     rating: 5, text: 'Pravyn ICT transformed how I read price action. The market structure module alone was worth every rupee. From random entries to a solid, disciplined process.' },
-  { initials: 'PR', name: 'Priya Ramesh', city: 'Bangalore',  course: 'Precision Entry Model',  rating: 5, text: 'Live sessions with real market examples made all the difference. No theoretical fluff—practical execution logic I could apply the very next trading day.' },
-  { initials: 'KS', name: 'Karthik S',   city: 'Hyderabad',  course: 'Liquidity & Inducement', rating: 5, text: 'Finally understood how institutions trap retail traders. The liquidity concepts here are the real deal. My win rate improved significantly within weeks.' },
-  { initials: 'DM', name: 'Deepika M',   city: 'Mumbai',     course: 'ICT Market Structure',   rating: 5, text: 'Best investment I made for my trading journey. The community, mentor, curriculum—everything is top-notch. Highly recommended for serious traders.' },
-  { initials: 'RV', name: 'Rahul V',     city: 'Pune',       course: 'Risk & Psychology',      rating: 5, text: 'The psychology module fixed my biggest weakness. Stopped revenge trading, started following my rules. The risk framework is pure gold.' },
-  { initials: 'SN', name: 'Sneha N',     city: 'Coimbatore', course: 'ICT Trader Mastery',     rating: 5, text: 'Enrolled in the complete mastery path—best decision ever. Pravyn explains complex ICT concepts in a way that just clicks. Absolutely worth every rupee.' },
 ]
 
 const videos = [
@@ -884,33 +876,8 @@ function App() {
       {/* ---------------------------------------- STUDENT PAYOUT 3D SPHERE SHOWCASE ---------------------------------------- */}
       <StudentPayoutSection />
 
-      {/* ---------------------------------------- ---------------------------------------- ----------------------------------------  TESTIMONIALS ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- ----------------------------------------  */}
-      <section className="testi-section" id="testimonials" data-section="testimonials">
-        <div className="testi-header reveal-el">
-          <p className="section-tag">06 / STUDENT REVIEWS</p>
-          <h2>Real traders.<br /><em>Real results.</em></h2>
-          <div className="testi-stats">
-            <span className="testi-rating">★ 4.9 / 5</span>
-            <span>from 500+ students</span>
-          </div>
-        </div>
-        <div className="testi-grid">
-          {testimonials.map((t, i) => (
-            <div className={`testi-card tc-${i % 3}`} key={i}>
-              <div className="tc-quote-mark" aria-hidden>"</div>
-              <div className="tc-stars" aria-label={`${t.rating} stars`}>{Array.from({length:t.rating}).map((_,j)=><Star key={j}/>)}</div>
-              <p className="tc-text">{t.text}</p>
-              <div className="tc-author">
-                <div className="tc-avatar">{t.initials}</div>
-                <div><strong>{t.name}</strong><span>{t.city} · {t.course}</span></div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="testi-cta reveal-el">
-          <a className="button button-primary" href="#contact">Join the next batch <Arrow /></a>
-        </div>
-      </section>
+      {/* ---------------------------------------- STUDENT FEEDBACK 3D CARD DECK ---------------------------------------- */}
+      <StudentFeedbackSection />
 
       {/* ---------------------------------------- YOUTUBE ---------------------------------------- */}
       <section className="videos-section" id="videos" data-section="videos">

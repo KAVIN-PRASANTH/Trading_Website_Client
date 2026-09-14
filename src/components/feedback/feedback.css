@@ -1,0 +1,1283 @@
+/* ══════════════════════════════════════════════════════════════
+   STUDENT FEEDBACK — 3D SWIPEABLE TESTIMONIAL CARD DECK
+   Midnight Precision Cinematic Aesthetic · Physics-Driven Deck
+   ══════════════════════════════════════════════════════════════ */
+
+.fdeck-section {
+  position: relative;
+  padding: var(--py) var(--px);
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(4, 11, 26, 0.95) 40%, rgba(5, 13, 31, 0.95) 75%, var(--bg) 100%);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Atmospheric Background Glows */
+.fdeck-bg-radial {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 65% 50% at 50% 45%, rgba(37, 99, 235, 0.12), transparent 70%),
+    radial-gradient(circle at 18% 70%, rgba(6, 182, 212, 0.07), transparent 45%),
+    radial-gradient(circle at 82% 30%, rgba(79, 70, 229, 0.08), transparent 50%);
+  z-index: 0;
+}
+
+.fdeck-bg-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, #000 35%, transparent 80%);
+  z-index: 0;
+}
+
+/* Section Header */
+.fdeck-header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 36px;
+}
+
+.fdeck-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 10px var(--mono);
+  letter-spacing: 0.18em;
+  color: var(--blue-lt);
+  padding: 6px 14px;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid var(--border-2);
+  border-radius: 999px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.fdeck-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
+  animation: live-pulse 2s infinite;
+}
+
+.fdeck-title {
+  font-size: clamp(34px, 4.2vw, 62px);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.fdeck-title em {
+  font-style: italic;
+  font-family: var(--serif);
+  font-weight: 600;
+  background: linear-gradient(90deg, #BAE6FD 0%, #60A5FA 50%, #67E8F9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.fdeck-sub {
+  font-size: 15px;
+  color: var(--text-2);
+  line-height: 1.68;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+/* Rating Proof Strip */
+.fdeck-proof-strip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 18px;
+  padding: 6px 18px;
+  background: rgba(7, 15, 34, 0.7);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.fdeck-stars-group {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.fdeck-star-icon {
+  width: 13px;
+  height: 13px;
+  fill: #F59E0B;
+}
+
+.fdeck-proof-rating {
+  font: 700 13px var(--mono);
+  color: #F59E0B;
+}
+
+.fdeck-proof-sep {
+  width: 1px;
+  height: 12px;
+  background: var(--border-2);
+}
+
+.fdeck-proof-count {
+  font: 11px var(--mono);
+  color: var(--text-2);
+  letter-spacing: 0.04em;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   3D STAGE & DECK WRAPPER
+   ══════════════════════════════════════════════════════════════ */
+.fdeck-stage {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Atmospheric subtle backlighting behind the physical deck */
+.fdeck-stage::before {
+  content: '';
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  width: 760px;
+  height: 420px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.16) 0%, rgba(6, 182, 212, 0.04) 50%, transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(50px);
+}
+
+/* Stable Card Stack Container — Reduced Size per User Request */
+.fdeck-stack {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: pan-y;
+}
+
+.fdeck-stack.is-viewing-proof .fdeck-card {
+  cursor: default !important;
+}
+
+@media (max-width: 680px) {
+  .fdeck-stack {
+    max-width: min(325px, 88vw);
+    height: 400px;
+  }
+}
+
+@media (max-width: 420px) {
+  .fdeck-stack {
+    max-width: min(290px, 86vw);
+    height: 390px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FEEDBACK CARD COMPONENT — 3D CARD FLIP ARCHITECTURE
+   ══════════════════════════════════════════════════════════════ */
+.fdeck-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+  transform-origin: 50% 50%;
+  cursor: grab;
+}
+
+.fdeck-card.layer-active {
+  z-index: 50 !important;
+  pointer-events: auto !important;
+}
+
+.fdeck-card:not(.layer-active) {
+  pointer-events: none !important;
+}
+
+.fdeck-card.is-dragging {
+  cursor: grabbing !important;
+  user-select: none;
+  transition: none !important;
+}
+
+/* Butter-Smooth 60/120fps GPU Spring Transition — Relaxed, Luxurious Glide */
+.fdeck-card.with-spring {
+  transition:
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+/* 3D Flip Inner Wrapper — Handles 3D Rotation for the Entire Card */
+.fdeck-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.2, 0.85, 0.25, 1);
+  will-change: transform;
+}
+
+/* When card is flipped, inner wrapper rotates 180 degrees smoothly */
+.fdeck-card.is-flipped .fdeck-card-inner {
+  transform: rotateY(180deg) !important;
+}
+
+/* Common Card Face Styling — Clean 2D Plane Surface for Pixel-Perfect Hit-Testing */
+.fdeck-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  transition: opacity 0.32s ease;
+  will-change: opacity;
+}
+
+/* Front face */
+.fdeck-face-front {
+  transform: rotateY(0deg);
+  z-index: 2;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fdeck-card.is-flipped .fdeck-face-front {
+  pointer-events: none !important;
+  opacity: 0;
+}
+
+/* Back face */
+.fdeck-face-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none !important;
+}
+
+.fdeck-card.is-flipped .fdeck-face-back {
+  z-index: 10 !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* On peek/background cards, hide the Real Proof button to avoid visual clutter and click confusion */
+.fdeck-card:not(.layer-active) .fdeck-proof-btn {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+/* ── CARD FRONT (PREMIUM PHYSICAL TESTIMONIAL) ── */
+.fdeck-face-front {
+  transform: rotateY(0deg);
+  background: #081122;
+  background-image:
+    radial-gradient(ellipse 90% 70% at 50% 0%, rgba(30, 58, 138, 0.35) 0%, transparent 70%),
+    linear-gradient(168deg, rgba(14, 25, 49, 0.98) 0%, rgba(6, 13, 27, 0.99) 100%);
+  border: 1px solid rgba(96, 165, 250, 0.22);
+  border-top: 1px solid rgba(147, 197, 253, 0.45);
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.78),
+    0 10px 24px -6px rgba(2, 6, 23, 0.6),
+    0 0 28px -4px rgba(37, 99, 235, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+  padding: clamp(16px, 2.5vw, 22px);
+}
+
+/* Active Card Illumination */
+.fdeck-card.layer-active .fdeck-face-front {
+  border-color: rgba(96, 165, 250, 0.38);
+  border-top-color: rgba(186, 230, 253, 0.65);
+  box-shadow:
+    0 28px 56px -12px rgba(0, 0, 0, 0.82),
+    0 12px 28px -6px rgba(2, 6, 23, 0.7),
+    0 0 36px -2px rgba(37, 99, 235, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.fdeck-card.layer-next .fdeck-face-front,
+.fdeck-card.layer-prev .fdeck-face-front {
+  border-color: rgba(96, 165, 250, 0.20);
+  border-top-color: rgba(147, 197, 253, 0.35);
+}
+
+.fdeck-card.layer-bg .fdeck-face-front {
+  border-color: rgba(96, 165, 250, 0.12);
+  border-top-color: rgba(147, 197, 253, 0.2);
+}
+
+/* Interactive Glare / Sheen Overlay */
+.fdeck-card-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--glare-x, 50%) var(--glare-y, 0%),
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(96, 165, 250, 0.03) 45%,
+    transparent 75%
+  );
+  mix-blend-mode: overlay;
+  z-index: 1;
+}
+
+/* Front Header: Subtle Index + Section Tag */
+.fdeck-front-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+/* Card Header Infinity Stream Indicator */
+.fdeck-header-infinity {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 10px 3px 8px;
+  background: rgba(14, 25, 49, 0.7);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.fdeck-header-infinity .fdeck-infinity-icon {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.5));
+}
+
+.fdeck-infinity-label {
+  font: 700 9.5px var(--mono);
+  letter-spacing: 0.14em;
+  color: #BAE6FD;
+}
+
+.fdeck-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 9px var(--mono);
+  letter-spacing: 0.16em;
+  color: var(--blue-lt);
+  text-transform: uppercase;
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.22);
+  padding: 4px 11px;
+  border-radius: 999px;
+}
+
+.fdeck-badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+}
+
+/* Front Body: Heroic, Readable Authentic Testimonial */
+.fdeck-front-body {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 4px 0 16px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(96, 165, 250, 0.25) transparent;
+}
+
+.fdeck-front-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.fdeck-front-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.fdeck-front-body::-webkit-scrollbar-thumb {
+  background: rgba(96, 165, 250, 0.25);
+  border-radius: 4px;
+}
+
+.fdeck-quote-container {
+  position: relative;
+  width: 100%;
+}
+
+.fdeck-inline-quote {
+  font-family: var(--serif);
+  font-size: clamp(24px, 2.8vw, 30px);
+  line-height: 0.8;
+  color: #60A5FA;
+  display: block;
+  margin-bottom: 3px;
+  opacity: 0.85;
+  user-select: none;
+}
+
+.fdeck-quote-text {
+  font-size: clamp(13px, 1.25vw, 15px);
+  line-height: 1.5;
+  color: #F8FAFC;
+  font-weight: 450;
+  letter-spacing: -0.015em;
+  margin: 0;
+  white-space: pre-line;
+  text-wrap: pretty;
+}
+
+@media (max-width: 680px) {
+  .fdeck-quote-text {
+    font-size: clamp(12.5px, 3.4vw, 14px);
+    line-height: 1.46;
+  }
+}
+
+/* Front Footer: Monogram Identity + Sleek Real Proof CTA */
+.fdeck-front-footer {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid rgba(59, 130, 246, 0.18);
+  margin-top: auto;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.fdeck-student-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.fdeck-avatar-monogram {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  display: grid;
+  place-items: center;
+  font: 800 13px var(--mono);
+  color: #BAE6FD;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.fdeck-monogram-sm {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.fdeck-student-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fdeck-student-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Sleek Real Proof CTA Button */
+.fdeck-proof-btn {
+  position: relative;
+  z-index: 100 !important;
+  pointer-events: auto !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(20, 36, 68, 0.95) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  color: #BAE6FD;
+  font: 700 10.5px var(--mono);
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.fdeck-proof-radar {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+  animation: live-pulse 1.8s infinite;
+}
+
+.fdeck-proof-btn-text {
+  color: #BAE6FD;
+}
+
+.fdeck-proof-arrow {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.22s ease;
+}
+
+.fdeck-proof-btn:hover {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.35) 0%, rgba(6, 182, 212, 0.3) 100%);
+  border-color: var(--cyan);
+  color: #FFFFFF;
+  transform: scale(1.04);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4), 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.fdeck-proof-btn:hover .fdeck-proof-arrow {
+  transform: translate(2px, -2px);
+}
+
+.fdeck-proof-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── CARD BACK (ORIGINAL PROOF SCREENSHOT) ── */
+.fdeck-face-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+  background: #060e1d;
+  background-image:
+    radial-gradient(ellipse 90% 70% at 50% 0%, rgba(20, 42, 86, 0.4) 0%, transparent 70%),
+    linear-gradient(168deg, rgba(10, 20, 40, 0.98) 0%, rgba(4, 9, 18, 0.99) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-top: 1px solid rgba(147, 197, 253, 0.5);
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.8),
+    0 0 32px -4px rgba(6, 182, 212, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  padding: clamp(12px, 2vw, 16px);
+}
+
+.fdeck-back-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.fdeck-back-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fdeck-back-names {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fdeck-proof-tag {
+  font: 700 9px var(--mono);
+  letter-spacing: 0.14em;
+  color: #34D399;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.fdeck-proof-student {
+  font: 600 13px var(--sans);
+  color: var(--text-2);
+}
+
+/* Multi-proof screenshot selector */
+.fdeck-multi-proof-selector {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.fdeck-proof-pill {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-2);
+  color: var(--text-2);
+  font: 700 10px var(--mono);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fdeck-proof-pill.is-active {
+  background: var(--blue);
+  border-color: var(--blue-lt);
+  color: #FFFFFF;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+}
+
+/* Proof Image Preview Container */
+.fdeck-back-preview {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #020612;
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.fdeck-proof-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: calc(var(--r-sm) - 1px);
+  background: #020612;
+}
+
+/* Back Footer Actions */
+.fdeck-back-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.fdeck-back-btn,
+.fdeck-view-full-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 15px;
+  border-radius: 999px;
+  font: 700 10px var(--mono);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fdeck-back-btn {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-2);
+  color: var(--text-2);
+}
+
+.fdeck-back-btn:hover {
+  background: rgba(37, 99, 235, 0.22);
+  border-color: var(--blue-mid);
+  color: #FFFFFF;
+}
+
+.fdeck-view-full-btn {
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  color: var(--cyan);
+}
+
+.fdeck-view-full-btn:hover {
+  background: var(--cyan);
+  color: #020617;
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.45);
+}
+
+.fdeck-btn-icon {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── HIGH-RESOLUTION PROOF LIGHTBOX MODAL ── */
+.fdeck-lightbox-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999999 !important;
+  background: rgba(2, 6, 18, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(14px, 3vw, 36px);
+  animation: fdeck-fade-in 0.22s ease-out;
+}
+
+/* Floating Viewport-Fixed Corner Exit Pill */
+.fdeck-lightbox-fixed-close {
+  position: fixed;
+  top: 18px;
+  right: 22px;
+  z-index: 10000002;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 999px;
+  color: #FFFFFF;
+  font: 700 12px var(--mono);
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 20px rgba(56, 189, 248, 0.25);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fdeck-lightbox-fixed-close:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #EF4444;
+  color: #FFFFFF;
+  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.45), 0 0 25px rgba(239, 68, 68, 0.35);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.fdeck-lightbox-fixed-close .fdeck-lightbox-close-icon {
+  font-size: 13px;
+  font-weight: 800;
+  color: #38BDF8;
+  line-height: 1;
+}
+
+.fdeck-lightbox-fixed-close:hover .fdeck-lightbox-close-icon {
+  color: #EF4444;
+}
+
+.fdeck-lightbox-container {
+  position: relative;
+  max-width: 580px;
+  width: 100%;
+  max-height: calc(100vh - 44px);
+  display: flex;
+  flex-direction: column;
+  background: #07132a;
+  border: 1px solid rgba(56, 189, 248, 0.38);
+  border-radius: var(--r-lg);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 40px rgba(6, 182, 212, 0.22);
+  overflow: hidden;
+  animation: fdeck-zoom-in 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fdeck-lightbox-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  background: rgba(9, 21, 46, 0.96);
+  flex-shrink: 0;
+}
+
+.fdeck-lightbox-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  color: #BAE6FD;
+  font: 700 11px var(--mono);
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fdeck-lightbox-back-btn:hover {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: #38BDF8;
+  color: #FFFFFF;
+  transform: translateX(-2px);
+}
+
+.fdeck-lightbox-title {
+  font: 700 11px var(--mono);
+  letter-spacing: 0.12em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fdeck-lightbox-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: grid;
+  place-items: center;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.fdeck-lightbox-close-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+}
+
+.fdeck-lightbox-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #EF4444;
+  color: #EF4444;
+  transform: scale(1.08);
+}
+
+.fdeck-lightbox-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px;
+  background: #020612;
+  overscroll-behavior: contain;
+}
+
+.fdeck-lightbox-img {
+  max-width: 100%;
+  height: auto;
+  max-height: calc(100vh - 190px);
+  object-fit: contain;
+  display: block;
+  border-radius: var(--r-sm);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+}
+
+.fdeck-lightbox-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-top: 1px solid rgba(59, 130, 246, 0.18);
+  background: rgba(9, 21, 46, 0.96);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.fdeck-lightbox-footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.35), rgba(6, 182, 212, 0.35));
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  color: #FFFFFF;
+  font: 700 11.5px var(--mono);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fdeck-lightbox-footer-btn:hover {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.65), rgba(6, 182, 212, 0.65));
+  border-color: #38BDF8;
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.4);
+  transform: translateY(-1px);
+}
+
+.fdeck-lightbox-hint {
+  font: 500 11px var(--mono);
+  color: var(--text-3);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 640px) {
+  .fdeck-lightbox-overlay {
+    padding: 8px;
+  }
+  .fdeck-lightbox-container {
+    max-height: 98vh;
+    border-radius: var(--r-md);
+  }
+  .fdeck-lightbox-fixed-close {
+    top: 10px;
+    right: 10px;
+    padding: 7px 12px;
+    font-size: 11px;
+  }
+  .fdeck-lightbox-topbar {
+    padding: 10px 12px;
+  }
+  .fdeck-lightbox-title {
+    font-size: 9.5px;
+  }
+  .fdeck-lightbox-img {
+    max-height: calc(100vh - 170px);
+  }
+  .fdeck-lightbox-footer {
+    padding: 10px 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .fdeck-lightbox-footer-btn {
+    justify-content: center;
+  }
+  .fdeck-lightbox-hint {
+    text-align: center;
+    font-size: 10px;
+  }
+}
+
+@keyframes fdeck-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fdeck-zoom-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NAVIGATION CONTROLS & PROGRESS
+   ══════════════════════════════════════════════════════════════ */
+.fdeck-controls-wrap {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+  width: 100%;
+}
+
+.fdeck-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 3vw, 24px);
+}
+
+/* Accessible Arrow Navigation Buttons */
+.fdeck-nav-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(9, 18, 38, 0.85);
+  border: 1px solid var(--border-2);
+  display: grid;
+  place-items: center;
+  color: var(--text);
+  cursor: pointer;
+  transition:
+    transform 0.22s cubic-bezier(0.2, 0.8, 0.25, 1),
+    background 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.fdeck-nav-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s ease;
+}
+
+.fdeck-nav-btn:hover {
+  background: rgba(37, 99, 235, 0.25);
+  border-color: var(--blue-lt);
+  color: #fff;
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+}
+
+.fdeck-nav-btn:active {
+  transform: scale(0.96);
+}
+
+.fdeck-nav-btn:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+.fdeck-nav-btn.prev:hover svg {
+  transform: translateX(-2px);
+}
+
+.fdeck-nav-btn.next:hover svg {
+  transform: translateX(2px);
+}
+
+/* Infinity Stream Controls Badge */
+.fdeck-counter-badge.fdeck-infinity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: rgba(7, 15, 34, 0.88);
+  border: 1px solid rgba(56, 189, 248, 0.38);
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  user-select: none;
+}
+
+.fdeck-counter-badge.fdeck-infinity-badge .fdeck-infinity-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.65));
+  animation: fdeck-infinity-pulse 3s infinite ease-in-out;
+}
+
+.fdeck-infinity-text {
+  font: 700 11px var(--mono);
+  letter-spacing: 0.14em;
+  color: #BAE6FD;
+}
+
+@keyframes fdeck-infinity-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.5)); }
+  50% { transform: scale(1.09); filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.9)); }
+}
+
+/* Pagination Indicator Dots */
+.fdeck-dots-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  max-width: min(500px, 92vw);
+  flex-wrap: wrap;
+}
+
+.fdeck-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  cursor: pointer;
+  transition:
+    width 0.32s cubic-bezier(0.2, 0.8, 0.25, 1),
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  padding: 0;
+}
+
+.fdeck-dot:hover {
+  background: rgba(96, 165, 250, 0.4);
+  border-color: var(--blue-lt);
+}
+
+.fdeck-dot.is-active {
+  width: 24px;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+}
+
+.fdeck-dot:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+/* Secondary Controls Row (Dots + Autoplay Indicator) */
+.fdeck-secondary-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.fdeck-autoplay-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(9, 18, 38, 0.7);
+  border: 1px solid var(--border);
+  color: var(--text-3);
+  font: 600 10px var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.fdeck-autoplay-pill:hover {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: var(--border-2);
+  color: var(--text);
+}
+
+.fdeck-autoplay-pill.is-active {
+  color: var(--cyan);
+  border-color: rgba(6, 182, 212, 0.35);
+  background: rgba(6, 182, 212, 0.08);
+}
+
+.fdeck-autoplay-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-3);
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.fdeck-autoplay-pill.is-active .fdeck-autoplay-dot {
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+  animation: live-pulse 2s infinite;
+}
+
+.fdeck-autoplay-label {
+  font-size: 10px;
+}
+
+/* Gesture Interaction Hint */
+.fdeck-gesture-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 11px var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.fdeck-hint-arrow {
+  font-size: 13px;
+  animation: hint-bounce 1.8s infinite ease-in-out;
+}
+
+@keyframes hint-bounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+
+/* Bottom CTA */
+.fdeck-cta-wrap {
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ACCESSIBILITY & REDUCED MOTION
+   ══════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .fdeck-card,
+  .fdeck-card.with-spring,
+  .fdeck-card.is-dismissing {
+    transition: opacity 0.3s ease !important;
+    transform: none !important;
+  }
+
+  .fdeck-card:not(.layer-active) {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .fdeck-hint-arrow,
+  .fdeck-pulse-dot {
+    animation: none !important;
+  }
+}
