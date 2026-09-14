@@ -58,28 +58,53 @@ function useCountdown(target: Date) {
 }
 const pad = (n: number) => String(n).padStart(2, '0')
 
-const BatchCountdown = memo(function BatchCountdown() {
+const HeroCountdownModule = memo(function HeroCountdownModule() {
   const countdown = useCountdown(BATCH_TARGET)
+
   return (
-    <div className="countdown-row">
-      <div className="cu"><b>{pad(countdown.days)}</b><small>DAYS</small></div>
-      <div className="csep">:</div>
-      <div className="cu"><b>{pad(countdown.hours)}</b><small>HRS</small></div>
-      <div className="csep">:</div>
-      <div className="cu"><b>{pad(countdown.minutes)}</b><small>MIN</small></div>
-      <div className="csep">:</div>
-      <div className="cu"><b>{pad(countdown.seconds)}</b><small>SEC</small></div>
+    <div className="hero-countdown-wrap reveal-el dl-2">
+      <div className="hero-cd-glow" aria-hidden />
+      <div className="hero-cd-ring ring-outer" aria-hidden />
+      <div className="hero-cd-ring ring-inner" aria-hidden />
+
+      <div className="hero-countdown-card">
+        <div className="hcd-header">
+          <div className="hcd-live-badge">
+            <span className="hcd-pulse-dot" />
+            <span>NEXT LIVE BATCH · ONLINE</span>
+          </div>
+          <span className="hcd-timing-label">STARTS OCT 15, 2026</span>
+        </div>
+
+        <div className="hcd-grid">
+          <div className="hcd-unit">
+            <span className="hcd-val">{pad(countdown.days)}</span>
+            <span className="hcd-lbl">DAYS</span>
+          </div>
+          <div className="hcd-unit">
+            <span className="hcd-val">{pad(countdown.hours)}</span>
+            <span className="hcd-lbl">HOURS</span>
+          </div>
+          <div className="hcd-unit">
+            <span className="hcd-val">{pad(countdown.minutes)}</span>
+            <span className="hcd-lbl">MIN</span>
+          </div>
+          <div className="hcd-unit">
+            <span className="hcd-val">{pad(countdown.seconds)}</span>
+            <span className="hcd-lbl">SEC</span>
+          </div>
+        </div>
+      </div>
     </div>
   )
 })
 
 const NAV_LINKS = [
-  { href: '#method',     label: 'Method'     },
-  { href: '#programmes', label: 'Programmes' },
+  { href: '#home',           label: 'Home'           },
+  { href: '#programmes',     label: 'Programmes'     },
   { href: '#student-payout', label: 'Student Payout' },
-  { href: '#testimonials', label: 'Reviews'  },
-  { href: '#videos',     label: 'Videos'     },
-  { href: '#batch',      label: 'Batch'      },
+  { href: '#testimonials',   label: 'Reviews'        },
+  { href: '#videos',         label: 'Videos'         },
 ]
 
 /* ---------------------------------------- CoinDCX-Style Slide Button ---------------------------------------- */
@@ -285,7 +310,7 @@ function App() {
   }
   const [menuOpen,      setMenuOpen]      = useState(false)
   const [scrolled,      setScrolled]      = useState(false)
-  const [activeSection, setActiveSection] = useState('top')
+  const [activeSection, setActiveSection] = useState('home')
   const [activeQs,      setActiveQs]      = useState<number[]>([0])
   const [submitted,     setSubmitted]     = useState(false)
   const [cartOpen,      setCartOpen]      = useState(false)
@@ -321,7 +346,7 @@ function App() {
       if (!target) return
       const href = target.getAttribute('href')
       if (!href || href === '#') return
-      if (href === '#top') {
+      if (href === '#top' || href === '#home') {
         e.preventDefault()
         window.scrollTo({ top: 0, behavior: 'smooth' })
         return
@@ -381,7 +406,7 @@ function App() {
 
       {/* ---------------------------------------- HEADER ---------------------------------------- */}
       <header className={`site-header${scrolled ? ' scrolled' : ''}${annDismissed ? ' no-ann' : ''}`}>
-        <a className="brand" href="#top" aria-label="Pravyn ICT home">
+        <a className="brand" href="#home" aria-label="Pravyn ICT home">
           <span>PRAVYN</span><em>ICT</em>
         </a>
 
@@ -405,8 +430,8 @@ function App() {
         </div>
       </header>
 
-      {/* ---------------------------------------- HERO ---------------------------------------- */}
-      <section className="hero" id="top" data-section="top">
+      {/* ---------------------------------------- HERO / HOME ---------------------------------------- */}
+      <section className="hero" id="home" data-section="home">
         <div className="hero-inner">
           <div className="hero-copy">
             <div className="hero-badge reveal-el">
@@ -433,34 +458,7 @@ function App() {
             </div>
           </div>
 
-          <div className="hero-visual">
-            <div className="chart-ring ring-1" /><div className="chart-ring ring-2" />
-            <div className="hero-chart-card">
-              <div className="hcc-header">
-                <span className="hcc-pair">NIFTY50 · 5M</span>
-                <span className="hcc-live"><span />LIVE</span>
-              </div>
-              <svg className="hcc-svg" viewBox="0 0 480 220" preserveAspectRatio="none" aria-hidden>
-                <defs>
-                  <linearGradient id="lg1" x1="0" x2="1"><stop stopColor="#1D4ED8"/><stop offset="1" stopColor="#60A5FA"/></linearGradient>
-                  <linearGradient id="lga" x1="0" x2="0" y1="0" y2="1"><stop stopColor="#3B82F6" stopOpacity=".3"/><stop offset="1" stopColor="#3B82F6" stopOpacity="0"/></linearGradient>
-                </defs>
-                {[55,110,165,220].map(y => <line key={y} x1="0" x2="480" y1={y} y2={y} stroke="rgba(59,130,246,.08)" strokeWidth="1"/>)}
-                <path d="M0 200 C40 185 55 205 90 165 S130 195 160 148 S200 168 235 110 S270 142 305 75 S340 105 375 55 S420 82 450 35 S472 55 480 20" fill="none" stroke="url(#lg1)" strokeWidth="2.2" strokeLinecap="round"/>
-                <path d="M0 200 C40 185 55 205 90 165 S130 195 160 148 S200 168 235 110 S270 142 305 75 S340 105 375 55 S420 82 450 35 S472 55 480 20 V220H0Z" fill="url(#lga)"/>
-                <circle cx="305" cy="75" r="5" fill="#60A5FA" stroke="rgba(3,6,15,.6)" strokeWidth="3"/>
-                <circle cx="480" cy="20" r="5" fill="#06B6D4" stroke="rgba(3,6,15,.6)" strokeWidth="3"/>
-              </svg>
-              <div className="hcc-price-tag">
-                <small>EXECUTION ZONE</small>
-                <strong>19,824.50</strong>
-                <span className="hcc-change">↑ +1.84%</span>
-              </div>
-            </div>
-            <div className="hero-float-tl">
-              <small>LIQUIDITY</small><strong>Mapped</strong><p>◌ Intent visible</p>
-            </div>
-          </div>
+          <HeroCountdownModule />
         </div>
         <div className="hero-scroll-hint" aria-hidden>
           <div className="scroll-track"><div className="scroll-thumb" /></div>
@@ -914,28 +912,6 @@ function App() {
         </div>
       </section>
 
-      {/* ---------------------------------------- BATCH COUNTDOWN ---------------------------------------- */}
-      <section className="batch-section" id="batch" data-section="batch">
-        <div className="batch-bg-text" aria-hidden>OCT</div>
-        <div className="batch-content">
-          <div className="batch-left reveal-el">
-            <p className="section-tag light">08 / UPCOMING BATCH</p>
-            <h2>A seat at the<br /><em>right table.</em></h2>
-            <p>Live mentorship. Real-market context. A community committed to the work.</p>
-            <div className="batch-info-row">
-              <div className="bi"><strong>Online</strong><small>MODE</small></div>
-              <div className="bi"><strong>Oct 15</strong><small>START</small></div>
-              <div className="bi"><strong>12</strong><small>SEATS LEFT</small></div>
-            </div>
-          </div>
-          <div className="batch-right reveal-el">
-            <p className="batch-label">BATCH STARTS IN</p>
-            <BatchCountdown />
-            <a className="button button-white" href="#contact" id="batch-cta">Claim your place <Arrow /></a>
-          </div>
-        </div>
-      </section>
-
       {/* ---------------------------------------- FAQ ---------------------------------------- */}
       <section className="faq-section" id="faq" data-section="faq">
         <div className="faq-head reveal-el">
@@ -981,7 +957,7 @@ function App() {
 
       {/* ---------------------------------------- FOOTER ---------------------------------------- */}
       <footer>
-        <a className="brand" href="#top"><span>PRAVYN</span><em>ICT</em></a>
+        <a className="brand" href="#home"><span>PRAVYN</span><em>ICT</em></a>
         <nav>{NAV_LINKS.map(l => <a key={l.href} href={l.href}>{l.label}</a>)}</nav>
         <p>© {new Date().getFullYear()} PRAVYN ICT. Educational content only.</p>
       </footer>
