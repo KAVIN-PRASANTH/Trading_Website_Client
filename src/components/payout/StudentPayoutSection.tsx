@@ -115,8 +115,8 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
           </div>
           <div className="payout-stat-sep" />
           <div className="payout-stat-item">
-            <strong>120+</strong>
-            <span>FUNDED TRADERS</span>
+            <strong>500+</strong>
+            <span>FUNDED STUDENTS</span>
           </div>
           <div className="payout-stat-sep" />
           <div className="payout-stat-item">
@@ -161,7 +161,6 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
               <div className="payout-screenshots-grid">
                 {FEEDBACK_IMAGE_URLS.map((url, idx) => (
                   <div key={idx} className="payout-screenshot-card">
-                    <div className="psc-badge">PROOF #{String(idx + 1).padStart(2, '0')}</div>
                     <img src={url} alt={`Student Payout Verification Screenshot ${idx + 1}`} loading="lazy" />
                   </div>
                 ))}
@@ -245,7 +244,6 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
           <div className="payout-screenshots-grid">
             {FEEDBACK_IMAGE_URLS.map((url, idx) => (
               <div key={idx} className="payout-screenshot-card">
-                <div className="psc-badge">VERIFIED PAYOUT #{String(idx + 1).padStart(2, '0')}</div>
                 <img src={url} alt={`Student Payout Verification Screenshot ${idx + 1}`} loading="lazy" />
               </div>
             ))}

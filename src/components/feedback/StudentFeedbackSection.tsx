@@ -67,7 +67,7 @@ export const StudentFeedbackSection: React.FC<StudentFeedbackSectionProps> = ({
 
   // Viewport intersection observer to avoid running autoslide when out of screen
   useEffect(() => {
-    const section = document.getElementById('testimonials')
+    const section = document.getElementById('student-stories') || document.getElementById('testimonials')
     if (!section) return
 
     // Immediately check if already visible on mount
@@ -95,7 +95,7 @@ export const StudentFeedbackSection: React.FC<StudentFeedbackSectionProps> = ({
       if (document.hidden) {
         setInView(false)
       } else {
-        const section = document.getElementById('testimonials')
+        const section = document.getElementById('student-stories') || document.getElementById('testimonials')
         if (section) {
           const rect = section.getBoundingClientRect()
           setInView(rect.top < window.innerHeight && rect.bottom > 0)
@@ -165,7 +165,7 @@ export const StudentFeedbackSection: React.FC<StudentFeedbackSectionProps> = ({
         return
       }
 
-      const section = document.getElementById('testimonials')
+      const section = document.getElementById('student-stories') || document.getElementById('testimonials')
       if (section) {
         const rect = section.getBoundingClientRect()
         const inViewport = rect.top < window.innerHeight && rect.bottom > 0
@@ -204,10 +204,13 @@ export const StudentFeedbackSection: React.FC<StudentFeedbackSectionProps> = ({
   return (
     <section
       className="fdeck-section"
-      id="testimonials"
-      data-section="testimonials"
-      aria-label="Student Testimonials and Real Results"
+      id="student-stories"
+      data-section="student-stories"
+      aria-label="Student Stories and Real Results"
     >
+      {/* Anchor fallback for existing testimonials links */}
+      <div id="testimonials" aria-hidden="true" style={{ position: 'absolute', top: 0, pointerEvents: 'none' }} />
+
       {/* Ambient background accents */}
       <div className="fdeck-bg-radial" aria-hidden="true" />
       <div className="fdeck-bg-grid" aria-hidden="true" />
@@ -216,7 +219,7 @@ export const StudentFeedbackSection: React.FC<StudentFeedbackSectionProps> = ({
       <div className="fdeck-header">
         <div className="fdeck-tag">
           <span className="fdeck-pulse-dot" />
-          <span>{String(total).padStart(2, '0')} / STUDENT REVIEWS</span>
+          <span>{String(total).padStart(2, '0')} / STUDENT STORIES</span>
         </div>
 
         <h2 className="fdeck-title">

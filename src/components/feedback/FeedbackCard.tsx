@@ -7,6 +7,7 @@ interface FeedbackCardProps {
   totalCount: number
   layer: 'active' | 'next' | 'prev' | 'bg' | 'hidden'
   style: React.CSSProperties
+  themeClass?: string
   isDragging?: boolean
   isFlipped?: boolean
   onToggleFlip?: () => void
@@ -24,6 +25,7 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = memo(({
   totalCount,
   layer,
   style,
+  themeClass: propThemeClass,
   isDragging = false,
   isFlipped = false,
   onToggleFlip,
@@ -60,11 +62,12 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = memo(({
 
   const currentProof = feedback.proofImages[activeProofIdx] || feedback.proofImages[0]
   const studentInitial = feedback.name.trim().charAt(0).toUpperCase() || 'S'
+  const themeClass = propThemeClass || 'fdeck-theme-web'
 
   return (
     <div
       ref={cardRef}
-      className={`fdeck-card ${layerClass} ${springClass} ${dragClass} ${flippedClass}`}
+      className={`fdeck-card ${layerClass} ${springClass} ${dragClass} ${flippedClass} ${themeClass}`}
       style={style}
       onClick={onClick}
       onMouseMove={handleMouseMove}
@@ -83,22 +86,18 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = memo(({
           {/* Subtle Dynamic Glare */}
           <div className="fdeck-card-glare" aria-hidden="true" />
 
-          {/* Front Header: Subtle Index + Section Tag */}
-          <div className="fdeck-front-header">
-            <div className="fdeck-header-infinity" aria-label="Infinite student feedback stream">
-              <svg viewBox="0 0 24 24" className="fdeck-infinity-icon" aria-hidden="true">
-                <path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.178-8-12.356-8-5.096 0-5.096 8 0 8 5.178 0 7.261-8 12.356-8z" />
-              </svg>
-              <span className="fdeck-infinity-label">LIVE STREAM</span>
-            </div>
+          {/* Ambient Backdrop Dot Matrix */}
+          <div className="fdeck-ambient-mesh" aria-hidden="true" />
 
+          {/* Front Header: Student Story Tag */}
+          <div className="fdeck-front-header">
             <div className="fdeck-header-badge">
               <span className="fdeck-badge-dot" aria-hidden="true" />
-              <span>STUDENT FEEDBACK</span>
+              <span>STUDENT STORY</span>
             </div>
           </div>
 
-          {/* Front Body: Heroic, Readable Authentic Testimonial */}
+          {/* Front Body: Quote Mark + Testimonial Text */}
           <div className="fdeck-front-body">
             <div className="fdeck-quote-container">
               <span className="fdeck-inline-quote" aria-hidden="true">“</span>
@@ -108,7 +107,10 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = memo(({
             </div>
           </div>
 
-          {/* Front Footer: Monogram Identity + Sleek Real Proof CTA */}
+          {/* Horizontal Technical Divider */}
+          <div className="fdeck-card-divider" aria-hidden="true" />
+
+          {/* Front Footer: Monogram Identity Box + Student Name + Sleek Real Proof CTA */}
           <div className="fdeck-front-footer">
             <div className="fdeck-student-identity">
               <div className="fdeck-avatar-monogram" aria-hidden="true">
@@ -142,6 +144,12 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = memo(({
 
         {/* ── CARD BACK (ORIGINAL SCREENSHOT PROOF) ── */}
         <div className="fdeck-face fdeck-face-back">
+          {/* Subtle Dynamic Glare */}
+          <div className="fdeck-card-glare" aria-hidden="true" />
+
+          {/* Ambient Backdrop Dot Matrix */}
+          <div className="fdeck-ambient-mesh" aria-hidden="true" />
+
           {/* Back Header */}
           <div className="fdeck-back-header">
             <div className="fdeck-back-title-wrap">

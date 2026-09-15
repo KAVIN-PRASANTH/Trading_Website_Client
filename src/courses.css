@@ -293,6 +293,57 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
+   CARD CORNER STUDS & AMBIENT MESH
+   ══════════════════════════════════════════════════════════════ */
+/* Corner Precision Studs */
+.card-corner-stud {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 4;
+  background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #94A3B8 55%, #1E293B 100%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.card-corner-stud.stud-tl { top: 14px; left: 14px; }
+.card-corner-stud.stud-tr { top: 14px; right: 14px; }
+.card-corner-stud.stud-bl { bottom: 14px; left: 14px; }
+.card-corner-stud.stud-br { bottom: 14px; right: 14px; }
+
+.card-theme-blue .card-corner-stud {
+  border-color: rgba(96, 165, 250, 0.7);
+  background: radial-gradient(circle at 35% 35%, #DBEAFE 0%, #3B82F6 55%, #1E3A8A 100%);
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.6);
+}
+
+.card-theme-gold .card-corner-stud {
+  border-color: rgba(251, 191, 36, 0.7);
+  background: radial-gradient(circle at 35% 35%, #FEF08A 0%, #EAB308 55%, #713F12 100%);
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.6);
+}
+
+.prog-card-face:hover .card-corner-stud {
+  transform: scale(1.2);
+}
+
+/* Ambient Micro-Dot Constellation Mesh */
+.card-ambient-mesh {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.22;
+  mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 35%, transparent 92%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 35%, transparent 92%);
+}
+
+/* ══════════════════════════════════════════════════════════════
    INTEGRATED HEADER & TOP META BAR
    ══════════════════════════════════════════════════════════════ */
 .card-top-bar {
@@ -545,25 +596,31 @@
   transition: all 0.2s ease;
 }
 .flip-btn-blue {
-  background: rgba(37, 99, 235, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.25);
-  color: #93c5fd;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.35) 0%, rgba(37, 99, 235, 0.22) 100%);
+  border: 1px solid rgba(96, 165, 250, 0.38);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  color: #BAE6FD;
 }
 .flip-btn-blue:hover {
-  background: rgba(37, 99, 235, 0.2);
-  border-color: rgba(96, 165, 250, 0.5);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.55) 0%, rgba(14, 165, 233, 0.45) 100%);
+  border-color: rgba(147, 197, 253, 0.75);
   color: #ffffff;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
 }
 
 .flip-btn-gold {
-  background: rgba(234, 179, 8, 0.1);
-  border: 1px solid rgba(234, 179, 8, 0.25);
-  color: #facc15;
+  background: linear-gradient(135deg, rgba(120, 53, 15, 0.35) 0%, rgba(217, 119, 6, 0.22) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.38);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  color: #FDE68A;
 }
 .flip-btn-gold:hover {
-  background: rgba(234, 179, 8, 0.2);
-  border-color: rgba(250, 204, 21, 0.5);
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.55) 0%, rgba(245, 158, 11, 0.45) 100%);
+  border-color: rgba(253, 230, 138, 0.75);
   color: #ffffff;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
 }
 
 .flip-rot-icon {
@@ -748,6 +805,53 @@
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.7) !important;
 }
 
+/* Disabled Slide State (When Batch is Live) */
+.slide-track.is-disabled {
+  opacity: 0.88;
+  cursor: not-allowed !important;
+  background: rgba(28, 12, 18, 0.82) !important;
+  border-color: rgba(239, 68, 68, 0.45) !important;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  pointer-events: auto;
+}
+
+.slide-track.is-disabled:hover {
+  border-color: rgba(248, 113, 113, 0.65) !important;
+  box-shadow: 0 0 22px rgba(239, 68, 68, 0.28) !important;
+}
+
+.slide-track.is-disabled .slide-knob {
+  cursor: not-allowed !important;
+  background: linear-gradient(135deg, #7F1D1D 0%, #991B1B 55%, #B91C1C 100%) !important;
+  border-color: rgba(248, 113, 113, 0.6) !important;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  transform: translateX(0px) !important;
+}
+
+.slide-track.is-disabled .slide-text {
+  color: #FECDD3 !important;
+  opacity: 1 !important;
+}
+
+.slide-track.is-disabled .slide-disabled-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 700 11px var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FECDD3;
+}
+
+.slide-track.is-disabled .slide-lock-icon {
+  font-size: 13px;
+}
+
+.knob-icon.lock-mark {
+  font-size: 14px;
+  color: #FFFFFF;
+}
+
 /* ══════════════════════════════════════════════════════════════
    CARD BACK FACE CONTENT & MOUSEPAD DRAG-SCROLL
    ══════════════════════════════════════════════════════════════ */
@@ -768,20 +872,23 @@
 }
 
 .back-close-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-2);
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #E2E8F0;
   font: 600 12px/1 var(--sans);
   border-radius: 8px;
-  padding: 7px 13px;
+  padding: 8px 14px;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
 }
 .back-close-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(96, 165, 250, 0.6);
   color: #ffffff;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.35);
+  transform: translateY(-1px);
 }
 
 /* Mousepad Drag-Scrollable Container */

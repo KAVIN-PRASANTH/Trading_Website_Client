@@ -362,66 +362,89 @@
   z-index: 1;
 }
 
-/* Front Header: Subtle Index + Section Tag */
+/* ── Corner Precision Studs (Removed for clean, modern aesthetic) ── */
+.fdeck-corner-stud {
+  display: none !important;
+}
+
+/* ── Ambient Tech Dot Matrix Constellation ──────────────────── */
+.fdeck-ambient-mesh {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(circle, rgba(56, 189, 248, 0.12) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.18;
+  mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 35%, transparent 92%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 35%, transparent 92%);
+}
+
+/* Front Header: Monospace Index Counter + Section Tag */
 .fdeck-front-header {
   position: relative;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   flex-shrink: 0;
 }
 
-/* Card Header Infinity Stream Indicator */
-.fdeck-header-infinity {
+/* Card Header 01 / 25 Counter Badge */
+.fdeck-card-counter {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 3px 10px 3px 8px;
-  background: rgba(14, 25, 49, 0.7);
-  border: 1px solid rgba(56, 189, 248, 0.28);
+  gap: 6px;
+  font: 700 12px var(--mono);
+  letter-spacing: 0.14em;
+  color: #94A3B8;
+  padding: 4px 11px;
+  background: rgba(10, 20, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.3);
   border-radius: 999px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.fdeck-header-infinity .fdeck-infinity-icon {
-  width: 15px;
-  height: 15px;
-  fill: none;
-  stroke: var(--cyan);
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.5));
+.fdeck-counter-num {
+  color: #EFF6FF;
+  font-weight: 800;
+  letter-spacing: 0.06em;
 }
 
-.fdeck-infinity-label {
-  font: 700 9.5px var(--mono);
-  letter-spacing: 0.14em;
-  color: #BAE6FD;
+.fdeck-counter-sep {
+  color: rgba(148, 163, 184, 0.45);
+  font-weight: 400;
+}
+
+.fdeck-counter-total {
+  color: #64748B;
+  font-weight: 600;
+  letter-spacing: 0.06em;
 }
 
 .fdeck-header-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font: 700 9px var(--mono);
+  font: 700 9.5px var(--mono);
   letter-spacing: 0.16em;
-  color: var(--blue-lt);
+  color: #38BDF8;
   text-transform: uppercase;
-  background: rgba(37, 99, 235, 0.12);
-  border: 1px solid rgba(96, 165, 250, 0.22);
-  padding: 4px 11px;
+  background: rgba(10, 20, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 4px 12px;
   border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .fdeck-badge-dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 6px var(--cyan);
+  background: #06B6D4;
+  box-shadow: 0 0 8px #06B6D4;
 }
 
 /* Front Body: Heroic, Readable Authentic Testimonial */
@@ -433,24 +456,17 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin: 4px 0 16px;
+  margin: 0 0 6px;
   overflow-y: auto;
-  padding-right: 4px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(96, 165, 250, 0.25) transparent;
+  padding-right: 2px;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 
 .fdeck-front-body::-webkit-scrollbar {
-  width: 4px;
-}
-
-.fdeck-front-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.fdeck-front-body::-webkit-scrollbar-thumb {
-  background: rgba(96, 165, 250, 0.25);
-  border-radius: 4px;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .fdeck-quote-container {
@@ -459,20 +475,21 @@
 }
 
 .fdeck-inline-quote {
-  font-family: var(--serif);
-  font-size: clamp(24px, 2.8vw, 30px);
-  line-height: 0.8;
-  color: #60A5FA;
+  font-family: var(--serif), 'Georgia', serif;
+  font-size: 26px;
+  line-height: 1;
+  color: #38BDF8;
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 6px;
   opacity: 0.85;
   user-select: none;
+  filter: drop-shadow(0 2px 8px rgba(56, 189, 248, 0.35));
 }
 
 .fdeck-quote-text {
-  font-size: clamp(13px, 1.25vw, 15px);
-  line-height: 1.5;
-  color: #F8FAFC;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #EFF6FF;
   font-weight: 450;
   letter-spacing: -0.015em;
   margin: 0;
@@ -482,9 +499,20 @@
 
 @media (max-width: 680px) {
   .fdeck-quote-text {
-    font-size: clamp(12.5px, 3.4vw, 14px);
-    line-height: 1.46;
+    font-size: clamp(12.5px, 3.4vw, 13.5px);
+    line-height: 1.5;
   }
+}
+
+/* Technical Horizontal Divider Between Body and Profile Footer */
+.fdeck-card-divider {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.32) 15%, rgba(148, 163, 184, 0.25) 50%, rgba(56, 189, 248, 0.32) 85%, transparent 100%);
+  margin: 8px 0 10px;
+  flex-shrink: 0;
 }
 
 /* Front Footer: Monogram Identity + Sleek Real Proof CTA */
@@ -494,8 +522,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 10px;
-  border-top: 1px solid rgba(59, 130, 246, 0.18);
+  padding-top: 0;
   margin-top: auto;
   gap: 10px;
   flex-shrink: 0;
@@ -1044,22 +1071,27 @@
 
 /* Accessible Arrow Navigation Buttons */
 .fdeck-nav-btn {
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: rgba(9, 18, 38, 0.85);
-  border: 1px solid var(--border-2);
+  background: linear-gradient(145deg, rgba(16, 30, 60, 0.95) 0%, rgba(7, 15, 34, 0.98) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow:
+    0 8px 24px -4px rgba(0, 0, 0, 0.65),
+    0 0 16px rgba(6, 182, 212, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
   display: grid;
   place-items: center;
-  color: var(--text);
+  color: #BAE6FD;
   cursor: pointer;
   transition:
-    transform 0.18s cubic-bezier(0.2, 0.8, 0.25, 1),
-    background 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+    transform 0.2s cubic-bezier(0.2, 0.8, 0.25, 1),
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   /* Remove the ugly iOS/Android tap square */
   -webkit-tap-highlight-color: transparent;
   outline: none;
@@ -1068,35 +1100,39 @@
 }
 
 .fdeck-nav-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 19px;
+  height: 19px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2.2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: transform 0.18s ease;
+  transition: transform 0.2s ease;
   pointer-events: none;
 }
 
 /* Hover only on real pointer devices — never on mobile touch */
 @media (hover: hover) and (pointer: fine) {
   .fdeck-nav-btn:hover {
-    background: rgba(37, 99, 235, 0.25);
-    border-color: var(--blue-lt);
-    color: #fff;
-    transform: scale(1.08);
-    box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+    background: linear-gradient(145deg, #1D4ED8 0%, #2563EB 50%, #0284C7 100%);
+    border-color: rgba(147, 197, 253, 0.85);
+    color: #ffffff;
+    transform: scale(1.12);
+    box-shadow:
+      0 12px 28px -4px rgba(0, 0, 0, 0.7),
+      0 0 28px rgba(6, 182, 212, 0.65),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45);
   }
-  .fdeck-nav-btn.prev:hover svg { transform: translateX(-2px); }
-  .fdeck-nav-btn.next:hover svg { transform: translateX(2px); }
+  .fdeck-nav-btn.prev:hover svg { transform: translateX(-3px); }
+  .fdeck-nav-btn.next:hover svg { transform: translateX(3px); }
 }
 
 /* Clean press feedback for both desktop and mobile */
 .fdeck-nav-btn:active {
   transform: scale(0.92);
-  background: rgba(37, 99, 235, 0.18);
-  border-color: rgba(59, 130, 246, 0.5);
+  background: linear-gradient(145deg, #1E40AF 0%, #1D4ED8 100%);
+  border-color: rgba(96, 165, 250, 0.8);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
   transition: transform 0.08s ease, background 0.08s ease;
 }
 
@@ -1196,47 +1232,56 @@
 .fdeck-autoplay-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
+  gap: 7px;
+  padding: 5px 12px;
   border-radius: 999px;
-  background: rgba(9, 18, 38, 0.7);
-  border: 1px solid var(--border);
-  color: var(--text-3);
-  font: 600 10px var(--mono);
-  letter-spacing: 0.08em;
+  background: rgba(10, 20, 42, 0.85);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: var(--text-2);
+  font: 700 10.5px var(--mono);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.25, 1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   -webkit-tap-highlight-color: transparent;
   outline: none;
   -webkit-appearance: none;
 }
 
-
 .fdeck-autoplay-pill:hover {
-  background: rgba(37, 99, 235, 0.15);
-  border-color: var(--border-2);
-  color: var(--text);
+  background: rgba(37, 99, 235, 0.25);
+  border-color: rgba(96, 165, 250, 0.5);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .fdeck-autoplay-pill.is-active {
-  color: var(--cyan);
-  border-color: rgba(6, 182, 212, 0.35);
-  background: rgba(6, 182, 212, 0.08);
+  color: #BAE6FD;
+  border-color: rgba(56, 189, 248, 0.5);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.22) 0%, rgba(37, 99, 235, 0.2) 100%);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.fdeck-autoplay-pill.is-active:hover {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.35) 0%, rgba(37, 99, 235, 0.32) 100%);
+  border-color: rgba(125, 211, 252, 0.75);
+  color: #FFFFFF;
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.45);
 }
 
 .fdeck-autoplay-dot {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--text-3);
   transition: background 0.25s ease, box-shadow 0.25s ease;
 }
 
 .fdeck-autoplay-pill.is-active .fdeck-autoplay-dot {
-  background: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan);
-  animation: live-pulse 2s infinite;
+  background: #38BDF8;
+  box-shadow: 0 0 10px #38BDF8;
+  animation: live-pulse 1.8s infinite;
 }
 
 .fdeck-autoplay-label {
@@ -1271,6 +1316,79 @@
   display: flex;
   justify-content: center;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   UNIFIED WEBSITE SIGNATURE THEME (Midnight Precision / ICT Blue & Cyan)
+   Clean, institutional, premium glassmorphism matching the rest of the site
+   ══════════════════════════════════════════════════════════════ */
+.fdeck-card,
+.fdeck-card.fdeck-theme-web {
+  --card-accent: #38BDF8;
+  --card-glow: rgba(56, 189, 248, 0.25);
+}
+
+.fdeck-face-front {
+  background: #060E1E !important;
+  background-image:
+    radial-gradient(ellipse 95% 75% at 50% 0%, rgba(37, 99, 235, 0.22) 0%, transparent 70%),
+    linear-gradient(168deg, rgba(10, 20, 42, 0.98) 0%, rgba(4, 10, 22, 0.99) 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.22) !important;
+  border-top: 1px solid rgba(147, 197, 253, 0.45) !important;
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.82),
+    0 10px 24px -6px rgba(2, 6, 23, 0.6),
+    0 0 28px -4px rgba(37, 99, 235, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+.fdeck-card.layer-active .fdeck-face-front {
+  border-color: rgba(56, 189, 248, 0.38) !important;
+  border-top-color: rgba(186, 230, 253, 0.65) !important;
+  box-shadow:
+    0 28px 56px -12px rgba(0, 0, 0, 0.88),
+    0 12px 28px -6px rgba(2, 6, 23, 0.7),
+    0 0 36px -2px rgba(37, 99, 235, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+.fdeck-card .fdeck-avatar-monogram {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.6) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
+  color: #BAE6FD !important;
+}
+
+.fdeck-card .fdeck-inline-quote {
+  color: #38BDF8 !important;
+}
+
+.fdeck-card .fdeck-proof-btn {
+  background: linear-gradient(135deg, rgba(14, 25, 49, 0.95) 0%, rgba(6, 13, 27, 0.98) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+  color: #BAE6FD !important;
+}
+
+.fdeck-card .fdeck-proof-radar {
+  background: #06B6D4 !important;
+  box-shadow: 0 0 8px #06B6D4 !important;
+}
+
+.fdeck-card .fdeck-proof-btn-text {
+  color: #BAE6FD !important;
+}
+
+.fdeck-card .fdeck-header-badge {
+  color: #38BDF8 !important;
+  background: rgba(10, 20, 42, 0.85) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.fdeck-card .fdeck-badge-dot {
+  background: #06B6D4 !important;
+  box-shadow: 0 0 8px #06B6D4 !important;
+}
+
 
 /* ══════════════════════════════════════════════════════════════
    ACCESSIBILITY & REDUCED MOTION

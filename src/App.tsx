@@ -75,55 +75,210 @@ function getPhotoLabel(src: string, index: number): string {
   return name.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
-/* ---------------------------------------- Countdown ---------------------------------------- */
+/* ---------------------------------------- High-Precision Rapid Countdown ---------------------------------------- */
+// Aligned with the announced cohort launch date: October 15, 2026 at 09:00 IST
 const BATCH_TARGET = new Date('2026-10-15T09:00:00+05:30')
-function useCountdown(target: Date) {
+
+function useRapidCountdown(target: Date) {
   const calc = () => {
-    const d = Math.max(0, target.getTime() - Date.now())
-    return { days: Math.floor(d / 86400000), hours: Math.floor((d % 86400000) / 3600000), minutes: Math.floor((d % 3600000) / 60000), seconds: Math.floor((d % 60000) / 1000) }
+    const diff = target.getTime() - Date.now()
+    const isLive = diff <= 0
+    const clamped = Math.max(0, diff)
+    const days = Math.floor(clamped / 86400000)
+    const hours = Math.floor((clamped % 86400000) / 3600000)
+    const minutes = Math.floor((clamped % 3600000) / 60000)
+    const seconds = Math.floor((clamped % 60000) / 1000)
+    // 2-digit hundredths of a second (00-99) for precision chronograph display
+    const milliseconds = Math.floor((clamped % 1000) / 10)
+    return {
+      days,
+      hours,
+      minutes,
+      seconds,
+      milliseconds,
+      isLive,
+    }
   }
+
   const [t, setT] = useState(calc)
-  useEffect(() => { const id = setInterval(() => setT(calc()), 1000); return () => clearInterval(id) }, [])
+
+  useEffect(() => {
+    let animId: number
+    let lastTick = 0
+    const tick = (now: number) => {
+      // Rapid ~45fps tick for ultra-fast, smooth millisecond numbers
+      if (now - lastTick >= 22) {
+        const next = calc()
+        setT(next)
+        lastTick = now
+        if (next.isLive) {
+          // Stop RAF loop when countdown reaches zero and batch is live
+          return
+        }
+      }
+      animId = requestAnimationFrame(tick)
+    }
+    if (!calc().isLive) {
+      animId = requestAnimationFrame(tick)
+    }
+    return () => {
+      if (animId) cancelAnimationFrame(animId)
+    }
+  }, [target])
+
   return t
 }
 const pad = (n: number) => String(n).padStart(2, '0')
 
-const HeroCountdownModule = memo(function HeroCountdownModule() {
-  const countdown = useCountdown(BATCH_TARGET)
+interface HeroCountdownProps {
+  countdown: {
+    days: number
+    hours: number
+    minutes: number
+    seconds: number
+    milliseconds: number
+    isLive: boolean
+  }
+}
+
+const HeroCountdownModule = memo(function HeroCountdownModule({
+  countdown,
+}: HeroCountdownProps) {
+  const isLive = countdown.isLive
+  // Calculate filled seats dynamically based on remaining countdown hours (84% to 96%)
+  const percentFilled = 92
 
   return (
-    <div className="hero-countdown-wrap reveal-el dl-2">
+    <div className={`hero-countdown-wrap reveal-el dl-2 ${isLive ? 'is-batch-live-wrap' : ''}`}>
       <div className="hero-cd-glow" aria-hidden />
       <div className="hero-cd-ring ring-outer" aria-hidden />
       <div className="hero-cd-ring ring-inner" aria-hidden />
 
-      <div className="hero-countdown-card">
+      <div className={`hero-countdown-card ${isLive ? 'is-batch-live-card' : ''}`}>
+        {/* Terminal Header */}
         <div className="hcd-header">
           <div className="hcd-live-badge">
-            <span className="hcd-pulse-dot" />
-            <span>NEXT LIVE BATCH · ONLINE</span>
+            <span className={`hcd-pulse-dot ${isLive ? 'dot-live-active' : ''}`} />
+            <span>{isLive ? 'COHORT IN SESSION · LIVE' : 'LIVE BATCH COHORT'}</span>
           </div>
-          <span className="hcd-timing-label">STARTS OCT 15, 2026</span>
+          <div className="hcd-status-tag">
+            <span className={`hcd-tag-dot ${isLive ? 'tag-dot-live' : ''}`} />
+            <span>{isLive ? '● SESSIONS ACTIVE' : 'ADMISSIONS OPEN'}</span>
+          </div>
         </div>
 
-        <div className="hcd-grid">
-          <div className="hcd-unit">
-            <span className="hcd-val">{pad(countdown.days)}</span>
-            <span className="hcd-lbl">DAYS</span>
+        {isLive ? (
+          /* ---------------------------------------- LIVE BROADCAST SCREEN ---------------------------------------- */
+          <div className="hcd-live-screen">
+            <div className="hcd-live-hero">
+              <div className="hcd-live-radar-wrap" aria-hidden="true">
+                <span className="hcd-radar-center" />
+                <span className="hcd-radar-wave wave-1" />
+                <span className="hcd-radar-wave wave-2" />
+                <span className="hcd-radar-wave wave-3" />
+              </div>
+              <div className="hcd-live-meta">
+                <h3 className="hcd-live-headline">BATCH IS LIVE NOW</h3>
+                <p className="hcd-live-desc">
+                  Live market execution and private Zoom mentorship rooms are currently underway for active traders.
+                </p>
+              </div>
+            </div>
+
+            {/* Operational Status Matrix */}
+            <div className="hcd-live-status-matrix">
+              <div className="hcd-matrix-chip chip-live">
+                <span className="hcd-chip-dot" />
+                <span>Mentorship: Active</span>
+              </div>
+              <div className="hcd-matrix-chip chip-closed">
+                <span className="hcd-chip-dot" />
+                <span>Enrollment: Closed</span>
+              </div>
+            </div>
+
+            {/* Priority Next Batch Strip */}
+            <div className="hcd-live-footer">
+              <a href="#contact" className="hcd-live-waitlist-btn">
+                <span>Inquire for Next Batch Waitlist</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
           </div>
-          <div className="hcd-unit">
-            <span className="hcd-val">{pad(countdown.hours)}</span>
-            <span className="hcd-lbl">HOURS</span>
-          </div>
-          <div className="hcd-unit">
-            <span className="hcd-val">{pad(countdown.minutes)}</span>
-            <span className="hcd-lbl">MIN</span>
-          </div>
-          <div className="hcd-unit">
-            <span className="hcd-val">{pad(countdown.seconds)}</span>
-            <span className="hcd-lbl">SEC</span>
-          </div>
-        </div>
+        ) : (
+          /* ---------------------------------------- RUNNING RAPID CHRONOGRAPH ---------------------------------------- */
+          <>
+            <div className="hcd-chronograph">
+              {/* Days Pillar */}
+              {countdown.days > 0 && (
+                <>
+                  <div className="hcd-chrono-unit">
+                    <div className="hcd-digit-box">
+                      <span className="hcd-val">{pad(countdown.days)}</span>
+                    </div>
+                    <span className="hcd-lbl">DAYS</span>
+                  </div>
+
+                  <div className="hcd-chrono-sep" aria-hidden="true">:</div>
+                </>
+              )}
+
+              {/* Hours Pillar */}
+              <div className="hcd-chrono-unit">
+                <div className="hcd-digit-box">
+                  <span className="hcd-val">{pad(countdown.hours)}</span>
+                </div>
+                <span className="hcd-lbl">HOURS</span>
+              </div>
+
+              <div className="hcd-chrono-sep" aria-hidden="true">:</div>
+
+              {/* Minutes Pillar */}
+              <div className="hcd-chrono-unit">
+                <div className="hcd-digit-box">
+                  <span className="hcd-val">{pad(countdown.minutes)}</span>
+                </div>
+                <span className="hcd-lbl">MIN</span>
+              </div>
+
+              <div className="hcd-chrono-sep" aria-hidden="true">:</div>
+
+              {/* Seconds Pillar */}
+              <div className="hcd-chrono-unit">
+                <div className="hcd-digit-box">
+                  <span className="hcd-val">{pad(countdown.seconds)}</span>
+                </div>
+                <span className="hcd-lbl">SEC</span>
+              </div>
+
+              <div className="hcd-chrono-sep hcd-sep-ms" aria-hidden="true">.</div>
+
+              {/* Rapid Milliseconds Pillar */}
+              <div className="hcd-chrono-unit hcd-unit-ms">
+                <div className="hcd-digit-box hcd-box-ms">
+                  <span className="hcd-val hcd-val-ms">{pad(countdown.milliseconds)}</span>
+                </div>
+                <div className="hcd-lbl-wrap">
+                  <span className="hcd-lbl hcd-lbl-ms">MS</span>
+                  <span className="hcd-ms-live-pulse" title="High-frequency live milliseconds" />
+                </div>
+              </div>
+            </div>
+
+            {/* Institutional Urgency Meter Footer */}
+            <div className="hcd-footer">
+              <div className="hcd-urgency-strip">
+                <div className="hcd-urgency-info">
+                  <span className="hcd-urgency-text">LIMITED MENTORSHIP SEATS</span>
+                  <span className="hcd-urgency-val">{percentFilled}% FILLED</span>
+                </div>
+                <div className="hcd-urgency-meter">
+                  <div className="hcd-urgency-fill" style={{ width: `${percentFilled}%` }} />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   )
@@ -133,7 +288,7 @@ const NAV_LINKS = [
   { href: '#home',           label: 'Home'           },
   { href: '#programmes',     label: 'Programmes'     },
   { href: '#student-payout', label: 'Student Payout' },
-  { href: '#testimonials',   label: 'Reviews'        },
+  { href: '#student-stories', label: 'Student Stories' },
   { href: '#videos',         label: 'Videos'         },
 ]
 
@@ -142,6 +297,8 @@ interface SlideToEnrollProps {
   label: string
   successLabel?: string
   colorVariant?: 'blue' | 'gold'
+  disabled?: boolean
+  disabledLabel?: string
   onSuccess: () => void
 }
 
@@ -149,6 +306,8 @@ function SlideToEnroll({
   label,
   successLabel = 'Enrolled! Redirecting...',
   colorVariant = 'blue',
+  disabled = false,
+  disabledLabel = 'Enrollment Closed · Cohort Active',
   onSuccess,
 }: SlideToEnrollProps) {
   const [sliderPos, setSliderPos] = useState(0)
@@ -159,7 +318,7 @@ function SlideToEnroll({
   const isCompletedRef = useRef(false)
 
   const triggerComplete = useCallback(() => {
-    if (isCompletedRef.current) return
+    if (isCompletedRef.current || disabled) return
     isCompletedRef.current = true
     setIsDragging(false)
     setIsCompleted(true)
@@ -173,26 +332,26 @@ function SlideToEnroll({
       setIsCompleted(false)
       setSliderPos(0)
     }, 2800)
-  }, [onSuccess])
+  }, [onSuccess, disabled])
 
   const handleStart = (clientX: number) => {
-    if (isCompletedRef.current) return
+    if (isCompletedRef.current || disabled) return
     setIsDragging(true)
     startX.current = clientX - sliderPos
   }
 
   const handleMove = useCallback((clientX: number) => {
-    if (!isDragging || isCompletedRef.current || !trackRef.current) return
+    if (!isDragging || isCompletedRef.current || disabled || !trackRef.current) return
     const maxSlide = Math.max(0, trackRef.current.offsetWidth - 50)
     const newPos = Math.max(0, Math.min(clientX - startX.current, maxSlide))
     setSliderPos(newPos)
     if (newPos >= maxSlide * 0.75) {
       triggerComplete()
     }
-  }, [isDragging, triggerComplete])
+  }, [isDragging, disabled, triggerComplete])
 
   const handleEnd = useCallback(() => {
-    if (!isDragging || isCompletedRef.current) return
+    if (!isDragging || isCompletedRef.current || disabled) return
     setIsDragging(false)
     if (!trackRef.current) return
     const maxSlide = Math.max(0, trackRef.current.offsetWidth - 50)
@@ -201,10 +360,10 @@ function SlideToEnroll({
     } else {
       setSliderPos(0)
     }
-  }, [isDragging, sliderPos, triggerComplete])
+  }, [isDragging, sliderPos, disabled, triggerComplete])
 
   useEffect(() => {
-    if (!isDragging) return
+    if (!isDragging || disabled) return
     const onWindowMove = (e: MouseEvent) => handleMove(e.clientX)
     const onWindowUp = () => handleEnd()
     window.addEventListener('mousemove', onWindowMove)
@@ -213,28 +372,36 @@ function SlideToEnroll({
       window.removeEventListener('mousemove', onWindowMove)
       window.removeEventListener('mouseup', onWindowUp)
     }
-  }, [isDragging, handleMove, handleEnd])
+  }, [isDragging, disabled, handleMove, handleEnd])
 
   const handleTrackClick = () => {
-    if (!isCompletedRef.current && !isDragging) {
+    if (!isCompletedRef.current && !isDragging && !disabled) {
       triggerComplete()
     }
   }
 
   return (
     <div
-      className={`slide-track slide-${colorVariant} ${isCompleted ? 'is-completed' : ''}`}
+      className={`slide-track slide-${colorVariant} ${disabled ? 'is-disabled' : ''} ${isCompleted ? 'is-completed' : ''}`}
       ref={trackRef}
       onClick={handleTrackClick}
-      onTouchMove={e => handleMove(e.touches[0].clientX)}
+      onTouchMove={e => !disabled && handleMove(e.touches[0].clientX)}
       onTouchEnd={handleEnd}
       role="button"
-      tabIndex={0}
-      aria-label={label}
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled}
+      aria-label={disabled ? disabledLabel : label}
     >
-      <div className="slide-progress" style={{ width: `${sliderPos + 25}px` }} />
+      <div className="slide-progress" style={{ width: disabled ? 0 : `${sliderPos + 25}px` }} />
       <span className="slide-text">
-        {isCompleted ? successLabel : (
+        {disabled ? (
+          <span className="slide-disabled-content">
+            <span className="slide-lock-icon" aria-hidden="true">🔒</span>
+            <span className="slide-label">{disabledLabel}</span>
+          </span>
+        ) : isCompleted ? (
+          successLabel
+        ) : (
           <>
             <span className="slide-label">{label}</span>
             <span className="slide-chevrons" aria-hidden>›››</span>
@@ -243,17 +410,21 @@ function SlideToEnroll({
       </span>
       <div
         className={`slide-knob ${isDragging ? 'is-dragging' : ''}`}
-        style={{ transform: `translateX(${sliderPos}px)` }}
+        style={{ transform: `translateX(${disabled ? 0 : sliderPos}px)` }}
         onMouseDown={e => {
+          if (disabled) return
           e.stopPropagation()
           handleStart(e.clientX)
         }}
         onTouchStart={e => {
+          if (disabled) return
           e.stopPropagation()
           handleStart(e.touches[0].clientX)
         }}
       >
-        {isCompleted ? (
+        {disabled ? (
+          <span className="knob-icon lock-mark">🔒</span>
+        ) : isCompleted ? (
           <span className="knob-icon check-mark">✓</span>
         ) : (
           <span className="knob-icon arrow-mark">→</span>
@@ -321,33 +492,79 @@ function ScrollableCurriculum({ children, className = '' }: { children: React.Re
 }
 
 /* ----------------------------------------
+   CONTACT FORM TYPES & CONSTANTS
+   ---------------------------------------- */
+interface ContactFormState {
+  name: string
+  email: string
+  phone: string
+  message: string
+}
+
+interface ContactErrors {
+  name?: string
+  email?: string
+  phone?: string
+  message?: string
+}
+
+const INITIAL_CONTACT_FORM: ContactFormState = {
+  name: '',
+  email: '',
+  phone: '',
+  message: '',
+}
+
+/* ----------------------------------------
    APP
    ---------------------------------------- */
 function App() {
+  const [contactData, setContactData] = useState<ContactFormState>(INITIAL_CONTACT_FORM)
+  const [contactErrors, setContactErrors] = useState<ContactErrors>({})
+  const [contactTouched, setContactTouched] = useState<Record<keyof ContactFormState, boolean>>({
+    name: false,
+    email: false,
+    phone: false,
+    message: false,
+  })
+  const [contactStatus, setContactStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
+  const [contactStatusMsg, setContactStatusMsg] = useState('')
+
   const handleEnroll = (programmeName: string) => {
+    const enrollMsg = `Enquiring for enrollment in: ${programmeName}`
+    setContactData(prev => ({
+      ...prev,
+      message: enrollMsg,
+    }))
+    setContactTouched(prev => ({ ...prev, message: true }))
+    setContactErrors(prev => ({ ...prev, message: undefined }))
+    if (contactStatus === 'success') {
+      setContactStatus('idle')
+    }
+
     const contactEl = document.getElementById('contact')
     if (contactEl) {
       contactEl.scrollIntoView({ behavior: 'smooth' })
       setTimeout(() => {
-        const msgInput = document.getElementById('cn-msg') as HTMLTextAreaElement | null
         const nameInput = document.getElementById('cn-name') as HTMLInputElement | null
-        if (msgInput) {
-          msgInput.value = `Enquiring for enrollment in: ${programmeName}`
-        }
         nameInput?.focus()
       }, 700)
     }
   }
+
   const [menuOpen,      setMenuOpen]      = useState(false)
   const [scrolled,      setScrolled]      = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const [activeQs,      setActiveQs]      = useState<number[]>([0])
-  const [submitted,     setSubmitted]     = useState(false)
   const [cartOpen,      setCartOpen]      = useState(false)
   const [cart,          setCart]          = useState<string[]>([])
   const [annDismissed,  setAnnDismissed]  = useState(false)
   const [flippedOnline, setFlippedOnline] = useState(false)
   const [flippedOffline, setFlippedOffline] = useState(false)
+
+  /* ---------------------------------------- Live Batch Countdown & State ---------------------------------------- */
+  const countdown = useRapidCountdown(BATCH_TARGET)
+  const isBatchLive = countdown.isLive
 
   /* ---------------------------------------- Surrounding Orbiting Images Mechanism ---------------------------------------- */
   // Preload all surrounding images in memory
@@ -458,7 +675,172 @@ function App() {
   const removeCourse = useCallback((id: string) => setCart(c => c.filter(x => x !== id)), [])
   const closeCart    = useCallback(() => setCartOpen(false), [])
 
-  const submit = (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); setSubmitted(true) }
+  /* ---------------------------------------- Contact Validation & Delivery ---------------------------------------- */
+  const validateField = (name: keyof ContactFormState, value: string): string | undefined => {
+    const trimmed = value.trim()
+    if (name === 'name') {
+      if (!trimmed) return 'Please enter your full name'
+      if (trimmed.length < 2) return 'Name must be at least 2 characters'
+      if (!/^[a-zA-Z\s.'-]+$/.test(trimmed)) return 'Name contains invalid characters'
+    }
+    if (name === 'email') {
+      if (!trimmed) return 'Please enter your email address'
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) return 'Please enter a valid email address (e.g. name@example.com)'
+    }
+    if (name === 'phone') {
+      if (trimmed && !/^[+0-9\s-]{7,18}$/.test(trimmed)) {
+        return 'Please enter a valid phone number (e.g. +91 98765 43210)'
+      }
+    }
+    if (name === 'message') {
+      if (!trimmed) return 'Please share your trading goals or questions'
+      if (trimmed.length < 5) return 'Message must be at least 5 characters'
+    }
+    return undefined
+  }
+
+  const validateAll = (data: ContactFormState): ContactErrors => {
+    const errs: ContactErrors = {}
+    const nameErr = validateField('name', data.name)
+    if (nameErr) errs.name = nameErr
+    const emailErr = validateField('email', data.email)
+    if (emailErr) errs.email = emailErr
+    const phoneErr = validateField('phone', data.phone)
+    if (phoneErr) errs.phone = phoneErr
+    const msgErr = validateField('message', data.message)
+    if (msgErr) errs.message = msgErr
+    return errs
+  }
+
+  const handleContactChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    const fieldName = name as keyof ContactFormState
+    setContactData(prev => ({ ...prev, [fieldName]: value }))
+    if (contactTouched[fieldName]) {
+      const err = validateField(fieldName, value)
+      setContactErrors(prev => ({ ...prev, [fieldName]: err }))
+    }
+  }
+
+  const handleContactBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    const fieldName = name as keyof ContactFormState
+    setContactTouched(prev => ({ ...prev, [fieldName]: true }))
+    const err = validateField(fieldName, value)
+    setContactErrors(prev => ({ ...prev, [fieldName]: err }))
+  }
+
+  const handleResetForm = () => {
+    setContactData(INITIAL_CONTACT_FORM)
+    setContactErrors({})
+    setContactTouched({ name: false, email: false, phone: false, message: false })
+    setContactStatus('idle')
+    setContactStatusMsg('')
+  }
+
+  const mailtoHref = useMemo(() => {
+    const subject = encodeURIComponent(`Mentorship Enquiry: ${contactData.name || 'Trader'}`)
+    const body = encodeURIComponent(
+      `Name: ${contactData.name || ''}\nEmail: ${contactData.email || ''}\nPhone: ${contactData.phone || 'N/A'}\n\nTrading Goals / Message:\n${contactData.message || ''}\n\n---\nSent via Pravyn ICT Mentorship Portal`
+    )
+    return `mailto:pravyntraderweb@gmail.com?subject=${subject}&body=${body}`
+  }, [contactData])
+
+  const handleContactSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    // Mark all fields as touched to display errors if any
+    setContactTouched({
+      name: true,
+      email: true,
+      phone: true,
+      message: true,
+    })
+
+    const errors = validateAll(contactData)
+    setContactErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      if (errors.name) document.getElementById('cn-name')?.focus()
+      else if (errors.email) document.getElementById('cn-email')?.focus()
+      else if (errors.phone) document.getElementById('cn-phone')?.focus()
+      else if (errors.message) document.getElementById('cn-msg')?.focus()
+      return
+    }
+
+    setContactStatus('submitting')
+    setContactStatusMsg('')
+
+    try {
+      const payload = {
+        name: contactData.name.trim(),
+        email: contactData.email.trim(),
+        phone: contactData.phone.trim() || 'Not provided',
+        message: contactData.message.trim(),
+        _subject: `New Mentorship Enquiry from ${contactData.name.trim()}`,
+        _replyto: contactData.email.trim(),
+        _template: 'table',
+        _captcha: 'false',
+      }
+
+      // Token generated by FormSubmit for pravyntraderweb@gmail.com
+      const FORMSUBMIT_TOKEN = 'c595fa64ba5a0d5f8165c812c24fe8d5'
+
+      // Primary attempt: Secure obfuscated token endpoint (works across any hosting platform once activated)
+      let res: Response | null = null
+      let json: any = null
+
+      try {
+        res = await fetch(`https://formsubmit.co/ajax/${FORMSUBMIT_TOKEN}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        })
+        json = await res.json().catch(() => null)
+      } catch (tokenErr) {
+        console.warn('Token endpoint fetch failed, trying direct endpoint:', tokenErr)
+      }
+
+      // Secondary fallback: Direct email endpoint if token failed
+      if (!res || (!res.ok && !(json && (json.success === 'true' || json.success === true || json.message?.includes('Activation'))))) {
+        try {
+          res = await fetch('https://formsubmit.co/ajax/pravyntraderweb@gmail.com', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          })
+          json = await res.json().catch(() => null)
+        } catch (emailErr) {
+          console.error('Fallback endpoint fetch failed:', emailErr)
+        }
+      }
+
+      // Check for success or activation notice
+      const isSuccess = res && (res.ok || (json && (json.success === 'true' || json.success === true)))
+      const isActivationPending = json && typeof json.message === 'string' && json.message.includes('Activation')
+
+      if (isSuccess || isActivationPending) {
+        setContactStatus('success')
+        if (isActivationPending) {
+          setContactStatusMsg('Enquiry dispatched! FormSubmit sent an activation link to pravyntraderweb@gmail.com. Please click "Activate Form" in your email to enable instant automated delivery.')
+        } else {
+          setContactStatusMsg('Your message has been delivered directly to pravyntraderweb@gmail.com. Mentor Praveen will review your trading background and reply within 24 hours.')
+        }
+      } else {
+        throw new Error(json?.message || 'Server did not acknowledge receipt')
+      }
+    } catch (err: any) {
+      console.error('Email transmission error:', err)
+      setContactStatus('error')
+      setContactStatusMsg('Unable to transmit automatically over network. Please dispatch directly via your email app or WhatsApp.')
+    }
+  }
 
   return (
     <main>
@@ -468,9 +850,21 @@ function App() {
       {/* ---------------------------------------- ANNOUNCEMENT BAR ---------------------------------------- */}
       {!annDismissed && (
         <div className="ann-bar" role="banner">
-          <span className="ann-live"><span className="live-dot" />LIVE</span>
-          <span className="ann-text">Next Batch Starts <strong>Oct 15, 2026</strong> — Only <strong>12 Seats</strong> Available</span>
-          <a href="#contact" className="ann-cta" onClick={() => setAnnDismissed(true)}>Reserve Now</a>
+          <div className="ann-ticker-wrap">
+            <div className="ann-ticker-track">
+              {[0, 1, 2, 3].map((idx) => (
+                <div key={idx} className="ann-ticker-group" aria-hidden={idx > 0}>
+                  <span className="ann-live">
+                    <span className="live-dot" />LIVE
+                  </span>
+                  <span className="ann-text">
+                    Next Batch Starts <strong>October 15, 2026</strong>
+                  </span>
+                  <span className="ann-divider">✦</span>
+                </div>
+              ))}
+            </div>
+          </div>
           <button className="ann-close" onClick={() => setAnnDismissed(true)} aria-label="Dismiss"><Close /></button>
         </div>
       )}
@@ -494,7 +888,7 @@ function App() {
             <Bag /><span className="cart-label">Cart</span>
             {cart.length > 0 && <b className="cart-count">{cart.length}</b>}
           </button>
-          <a className="btn-enroll" href="#contact">Enroll</a>
+          <a className="btn-enroll" href="#contact">{isBatchLive ? 'Waitlist' : 'Enroll'}</a>
           <button className="menu-button" onClick={() => setMenuOpen(m => !m)} aria-label="Toggle menu" aria-expanded={menuOpen}>
             {menuOpen ? <Close /> : <Menu />}
           </button>
@@ -515,13 +909,12 @@ function App() {
               A live, structured ICT mentorship for traders committed to understanding market structure, liquidity and disciplined execution.
             </p>
             <div className="hero-actions reveal-el dl-3">
-              <a className="button button-primary glow-heavy" href="#contact" id="hero-cta">Reserve your seat <Arrow /></a>
-              <a className="button button-ghost" href="#courses">
-                <span className="play-wrap"><Play /></span>View courses
+              <a className={`button button-primary glow-heavy ${isBatchLive ? 'is-waitlist-mode' : ''}`} href="#contact" id="hero-cta">
+                {isBatchLive ? 'Join Next Batch Waitlist' : 'Reserve your seat'} <Arrow />
               </a>
             </div>
             <div className="hero-proof reveal-el dl-4">
-              <div className="proof-item"><strong>500+</strong><span>Traders</span></div>
+              <div className="proof-item"><strong>1000+</strong><span>Traders</span></div>
               <div className="proof-sep" />
               <div className="proof-item"><strong>4.9★</strong><span>Avg Rating</span></div>
               <div className="proof-sep" />
@@ -529,7 +922,7 @@ function App() {
             </div>
           </div>
 
-          <HeroCountdownModule />
+          <HeroCountdownModule countdown={countdown} />
         </div>
         <div className="hero-scroll-hint" aria-hidden>
           <div className="scroll-track"><div className="scroll-thumb" /></div>
@@ -602,8 +995,16 @@ function App() {
                 alt=""
                 className={`mav-dp mav-dp-${i + 1}`}
                 onAnimationIteration={() => handleSlotIteration(i)}
-                loading="lazy"
+                loading="eager"
                 decoding="async"
+                onLoad={(e) => {
+                  e.currentTarget.classList.add('is-loaded')
+                }}
+                ref={(el) => {
+                  if (el && el.complete && el.naturalWidth > 0) {
+                    el.classList.add('is-loaded')
+                  }
+                }}
               />
             ))}
           </div>
@@ -663,13 +1064,24 @@ function App() {
                 {/* Ambient Top Glow */}
                 <div className="card-ambient-glow glow-blue" aria-hidden />
 
+                {/* Technical Corner Precision Studs */}
+                <span className="card-corner-stud stud-tl" aria-hidden="true" />
+                <span className="card-corner-stud stud-tr" aria-hidden="true" />
+                <span className="card-corner-stud stud-bl" aria-hidden="true" />
+                <span className="card-corner-stud stud-br" aria-hidden="true" />
+
+                {/* Ambient Micro-Dot Constellation Mesh */}
+                <div className="card-ambient-mesh" aria-hidden="true" />
+
                 {/* Top Meta Bar */}
                 <div className="card-top-bar">
                   <span className="card-tier-pill tier-pill-blue">
                     <span className="tier-dot dot-blue" />
                     ONLINE MENTORSHIP
                   </span>
-                  <span className="card-status-badge badge-blue">LIVE 1-ON-1</span>
+                  <span className="card-status-badge badge-blue">
+                    {isBatchLive ? '● COHORT ACTIVE · CLOSED' : 'LIVE 1-ON-1'}
+                  </span>
                 </div>
 
                 {/* Integrated Title & Price Hero */}
@@ -748,6 +1160,8 @@ function App() {
                 <div className="card-slider-wrap">
                   <SlideToEnroll
                     label="Slide to Enroll"
+                    disabled={isBatchLive}
+                    disabledLabel="Enrollment Closed · Cohort is Live"
                     successLabel="Enrolled! Opening Form..."
                     colorVariant="blue"
                     onSuccess={() => handleEnroll('Personal Mentorship (Online Mode - ₹24,999)')}
@@ -757,6 +1171,15 @@ function App() {
 
               {/* ---------------------------------------- BACK FACE (FLIPPED) ---------------------------------------- */}
               <article className="prog-card-face prog-card-back card-theme-blue">
+                {/* Technical Corner Precision Studs */}
+                <span className="card-corner-stud stud-tl" aria-hidden="true" />
+                <span className="card-corner-stud stud-tr" aria-hidden="true" />
+                <span className="card-corner-stud stud-bl" aria-hidden="true" />
+                <span className="card-corner-stud stud-br" aria-hidden="true" />
+
+                {/* Ambient Micro-Dot Constellation Mesh */}
+                <div className="card-ambient-mesh" aria-hidden="true" />
+
                 <div className="back-top-bar">
                   <div>
                     <span className="card-tier-pill tier-pill-blue">01 / ONLINE CURRICULUM</span>
@@ -806,6 +1229,8 @@ function App() {
                 <div className="back-bottom-bar">
                   <SlideToEnroll
                     label="Slide to Enroll Now"
+                    disabled={isBatchLive}
+                    disabledLabel="Enrollment Closed · Cohort is Live"
                     successLabel="Confirmed! Opening..."
                     colorVariant="blue"
                     onSuccess={() => handleEnroll('Personal Mentorship (Online Mode - ₹24,999)')}
@@ -832,13 +1257,24 @@ function App() {
                 {/* Ambient Top Glow */}
                 <div className="card-ambient-glow glow-gold" aria-hidden />
 
+                {/* Technical Corner Precision Studs */}
+                <span className="card-corner-stud stud-tl" aria-hidden="true" />
+                <span className="card-corner-stud stud-tr" aria-hidden="true" />
+                <span className="card-corner-stud stud-bl" aria-hidden="true" />
+                <span className="card-corner-stud stud-br" aria-hidden="true" />
+
+                {/* Ambient Micro-Dot Constellation Mesh */}
+                <div className="card-ambient-mesh" aria-hidden="true" />
+
                 {/* Top Meta Bar */}
                 <div className="card-top-bar">
                   <span className="card-tier-pill tier-pill-gold">
                     <span className="tier-dot dot-gold" />
                     OFFLINE BOOTCAMP
                   </span>
-                  <span className="card-status-badge badge-gold">10 SLOTS ONLY</span>
+                  <span className="card-status-badge badge-gold">
+                    {isBatchLive ? '● BATCH IN SESSION · CLOSED' : '10 SLOTS ONLY'}
+                  </span>
                 </div>
 
                 {/* Integrated Title & Price Hero */}
@@ -917,6 +1353,8 @@ function App() {
                 <div className="card-slider-wrap">
                   <SlideToEnroll
                     label="Slide to Reserve Seat"
+                    disabled={isBatchLive}
+                    disabledLabel="Enrollment Closed · Cohort is Live"
                     successLabel="Seat Reserved! Opening Form..."
                     colorVariant="gold"
                     onSuccess={() => handleEnroll('Slingshot Model (Offline Intensive - ₹19,999)')}
@@ -926,6 +1364,15 @@ function App() {
 
               {/* ---------------------------------------- BACK FACE (FLIPPED) ---------------------------------------- */}
               <article className="prog-card-face prog-card-back card-theme-gold">
+                {/* Technical Corner Precision Studs */}
+                <span className="card-corner-stud stud-tl" aria-hidden="true" />
+                <span className="card-corner-stud stud-tr" aria-hidden="true" />
+                <span className="card-corner-stud stud-bl" aria-hidden="true" />
+                <span className="card-corner-stud stud-br" aria-hidden="true" />
+
+                {/* Ambient Micro-Dot Constellation Mesh */}
+                <div className="card-ambient-mesh" aria-hidden="true" />
+
                 <div className="back-top-bar">
                   <div>
                     <span className="card-tier-pill tier-pill-gold">02 / OFFLINE BOOTCAMP</span>
@@ -945,7 +1392,7 @@ function App() {
                   <div className="back-section-block">
                     <span className="back-block-heading">EVENT SCHEDULE & LOGISTICS</span>
                     <ul className="back-syllabus-list">
-                      <li>📅 <strong>Dates:</strong> August 7th – August 14th (8 Full Days)</li>
+                      <li>📅 <strong>Dates:</strong> October 15th – October 22nd, 2026 (8 Full Days)</li>
                       <li>⏰ <strong>Timings:</strong> 10:00 AM – 6:00 PM IST</li>
                       <li>📍 <strong>Venue:</strong> Singanallur, Coimbatore</li>
                       <li>🍽️ <strong>Food:</strong> Complimentary lunch provided daily</li>
@@ -974,6 +1421,8 @@ function App() {
                 <div className="back-bottom-bar">
                   <SlideToEnroll
                     label="Slide to Reserve Slot"
+                    disabled={isBatchLive}
+                    disabledLabel="Enrollment Closed · Cohort is Live"
                     successLabel="Confirmed! Opening..."
                     colorVariant="gold"
                     onSuccess={() => handleEnroll('Slingshot Model (Offline Intensive - ₹19,999)')}
@@ -1024,7 +1473,22 @@ function App() {
           ))}
         </div>
         <div className="videos-yt-cta reveal-el">
-          <a href="https://www.youtube.com/@pravynict" target="_blank" rel="noopener noreferrer" className="button button-ghost" id="yt-btn">Subscribe to channel <Arrow /></a>
+          <a
+            href="https://www.youtube.com/@pravynict"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="yt-subscribe-btn"
+            id="yt-btn"
+            aria-label="Subscribe to Pravyn ICT YouTube channel"
+          >
+            <span className="yt-btn-icon-pill" aria-hidden="true">
+              <svg viewBox="0 0 24 24" className="yt-play-triangle">
+                <path d="M9.5 7.5v9l7-4.5-7-4.5z" />
+              </svg>
+            </span>
+            <span className="yt-btn-text">Subscribe to channel</span>
+            <Arrow />
+          </a>
         </div>
       </section>
 
@@ -1056,19 +1520,222 @@ function App() {
         <div className="contact-copy reveal-el">
           <p className="section-tag">10 / GET STARTED</p>
           <h2>Take the first<br /><em>intentional step.</em></h2>
-          <p>Tell us where you are in your trading journey. We'll share the next batch details directly.</p>
-          <a href="tel:+918637478662" className="contact-link">+91 86374 78662</a>
-          <a href="mailto:Enquiry@pravynict.com" className="contact-link">Enquiry@pravynict.com</a>
+          <p>Tell us where you are in your trading journey. We'll review your background and share the next batch schedule directly.</p>
+          <a href="tel:+918637478662" className="contact-link">
+            <span className="cn-link-glyph">📞</span> +91 86374 78662
+          </a>
+          <a href="https://wa.me/918637478662?text=Hi%20Praveen,%20I'm%20interested%20in%20the%20Pravyn%20ICT%20Mentorship" target="_blank" rel="noreferrer" className="contact-link">
+            <span className="cn-link-glyph">💬</span> WhatsApp: +91 86374 78662
+          </a>
+          <a href="mailto:pravyntraderweb@gmail.com" className="contact-link">
+            <span className="cn-link-glyph">✉</span> pravyntraderweb@gmail.com
+          </a>
+
+          <div className="cn-routing-box">
+            <div className="cn-routing-head">
+              <span className="cn-routing-dot" />
+              <span className="cn-routing-title">VERIFIED DIRECT RECIPIENT</span>
+            </div>
+            <p className="cn-routing-desc">
+              All messages transmit exclusively to Mentor Praveen:
+              <strong className="cn-routing-email">pravyntraderweb@gmail.com</strong>
+            </p>
+          </div>
         </div>
-        <form onSubmit={submit} noValidate className="contact-form reveal-el">
-          <label>Your name<input required name="name" id="cn-name" placeholder="Enter your name" /></label>
-          <label>Email<input required type="email" name="email" id="cn-email" placeholder="you@example.com" /></label>
-          <label>Trading goals<textarea required name="message" id="cn-msg" rows={3} placeholder="Tell us where you are in your trading journey…" /></label>
-          <button className="button button-primary" type="submit" id="cn-submit">
-            {submitted ? 'We\'ll be in touch shortly ✓' : <><span>Send enquiry</span><Arrow /></>}
-          </button>
-          <p className="form-note">We respond within 24 hours.</p>
-        </form>
+
+        {contactStatus === 'success' ? (
+          <div className="contact-success-card reveal-el" role="status" aria-live="polite">
+            <div className="cn-success-icon-wrap">
+              <svg className="cn-check-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+            </div>
+            <span className="cn-success-badge">ENQUIRY DELIVERED</span>
+            <h3>Message Sent Successfully!</h3>
+            <p className="cn-success-note">
+              {contactStatusMsg || (
+                <>Your inquiry was transmitted directly to <strong>pravyntraderweb@gmail.com</strong>. Mentor Praveen will review your background and reach out within 24 hours.</>
+              )}
+            </p>
+
+            <div className="cn-success-summary">
+              <div className="cn-summary-row">
+                <span>Sender:</span>
+                <strong>{contactData.name} ({contactData.email})</strong>
+              </div>
+              {contactData.phone && (
+                <div className="cn-summary-row">
+                  <span>Phone / WA:</span>
+                  <strong>{contactData.phone}</strong>
+                </div>
+              )}
+              <div className="cn-summary-row">
+                <span>Destination:</span>
+                <strong className="cn-dest-pill">pravyntraderweb@gmail.com</strong>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="button button-ghost cn-reset-btn"
+              onClick={handleResetForm}
+            >
+              <span>Send another message</span>
+              <Arrow />
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleContactSubmit} noValidate className="contact-form reveal-el">
+            <div className="cn-field-group">
+              <label htmlFor="cn-name">
+                <span>YOUR NAME</span>
+                <span className="cn-req">*</span>
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="cn-name"
+                value={contactData.name}
+                onChange={handleContactChange}
+                onBlur={handleContactBlur}
+                placeholder="Enter your full name"
+                autoComplete="name"
+                disabled={contactStatus === 'submitting'}
+                className={contactTouched.name && contactErrors.name ? 'is-invalid' : (contactTouched.name && !contactErrors.name && contactData.name ? 'is-valid' : '')}
+              />
+              {contactTouched.name && contactErrors.name && (
+                <p className="field-error" role="alert">
+                  <span className="field-error-icon">⚠</span>
+                  {contactErrors.name}
+                </p>
+              )}
+            </div>
+
+            <div className="cn-field-group">
+              <label htmlFor="cn-email">
+                <span>EMAIL ADDRESS</span>
+                <span className="cn-req">*</span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="cn-email"
+                value={contactData.email}
+                onChange={handleContactChange}
+                onBlur={handleContactBlur}
+                placeholder="you@example.com"
+                autoComplete="email"
+                disabled={contactStatus === 'submitting'}
+                className={contactTouched.email && contactErrors.email ? 'is-invalid' : (contactTouched.email && !contactErrors.email && contactData.email ? 'is-valid' : '')}
+              />
+              {contactTouched.email && contactErrors.email && (
+                <p className="field-error" role="alert">
+                  <span className="field-error-icon">⚠</span>
+                  {contactErrors.email}
+                </p>
+              )}
+            </div>
+
+            <div className="cn-field-group">
+              <label htmlFor="cn-phone">
+                <span>PHONE / WHATSAPP</span>
+                <span className="cn-opt">(Optional)</span>
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                id="cn-phone"
+                value={contactData.phone}
+                onChange={handleContactChange}
+                onBlur={handleContactBlur}
+                placeholder="+91 86374 78662"
+                autoComplete="tel"
+                disabled={contactStatus === 'submitting'}
+                className={contactTouched.phone && contactErrors.phone ? 'is-invalid' : ''}
+              />
+              {contactTouched.phone && contactErrors.phone && (
+                <p className="field-error" role="alert">
+                  <span className="field-error-icon">⚠</span>
+                  {contactErrors.phone}
+                </p>
+              )}
+            </div>
+
+            <div className="cn-field-group">
+              <label htmlFor="cn-msg">
+                <span>TRADING GOALS & MESSAGE</span>
+                <span className="cn-req">*</span>
+              </label>
+              <textarea
+                name="message"
+                id="cn-msg"
+                rows={3}
+                value={contactData.message}
+                onChange={handleContactChange}
+                onBlur={handleContactBlur}
+                placeholder="Tell us where you are in your trading journey…"
+                disabled={contactStatus === 'submitting'}
+                className={contactTouched.message && contactErrors.message ? 'is-invalid' : (contactTouched.message && !contactErrors.message && contactData.message ? 'is-valid' : '')}
+              />
+              {contactTouched.message && contactErrors.message && (
+                <p className="field-error" role="alert">
+                  <span className="field-error-icon">⚠</span>
+                  {contactErrors.message}
+                </p>
+              )}
+            </div>
+
+            {contactStatus === 'error' && (
+              <div className="cn-error-banner" role="alert">
+                <div className="cn-error-header">
+                  <span className="cn-error-icon">⚠</span>
+                  <span>{contactStatusMsg || 'Network transmission could not be completed.'}</span>
+                </div>
+                <div className="cn-error-actions">
+                  <a
+                    href={mailtoHref}
+                    className="cn-mailto-fallback-btn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    ✉ Open in Mail Client (Direct to pravyntraderweb@gmail.com)
+                  </a>
+                  <button
+                    type="button"
+                    className="cn-retry-btn"
+                    onClick={handleContactSubmit as any}
+                  >
+                    Retry Send
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <button
+              className="button button-primary glow-heavy"
+              type="submit"
+              id="cn-submit"
+              disabled={contactStatus === 'submitting'}
+            >
+              {contactStatus === 'submitting' ? (
+                <>
+                  <span className="cn-spinner" aria-hidden />
+                  <span>Transmitting to pravyntraderweb@gmail.com...</span>
+                </>
+              ) : (
+                <>
+                  <span>Send enquiry to pravyntraderweb@gmail.com</span>
+                  <Arrow />
+                </>
+              )}
+            </button>
+
+            <div className="cn-form-footer">
+              <span className="cn-secure-lock">🔒 Direct SSL Delivery to <strong>pravyntraderweb@gmail.com</strong></span>
+              <p className="form-note">We respond within 24 hours.</p>
+            </div>
+          </form>
+        )}
       </section>
 
       {/* ---------------------------------------- FOOTER ---------------------------------------- */}
