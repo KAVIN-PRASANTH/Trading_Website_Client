@@ -194,10 +194,155 @@ export const FeedbackDeck = forwardRef<FeedbackDeckHandle, FeedbackDeckProps>(
       [goNext, goPrev, goTo, flipBack]
     )
 
-    /* ---------------------------------------- Fluid Gesture & Pointer Events ---------------------------------------- */
+    /* ─────────────────────────────────────────────────────────────────
+       STABLE REF — keeps latest callbacks reachable inside native
+       touch listeners without stale closures or re-adding listeners
+    ───────────────────────────────────────────────────────────────── */
+    const touchCbRef = useRef({
+      goNext,
+      goPrev,
+      onInteractionStart,
+      onInteractionEnd,
+      isCardFlipped,
+      total,
+      setDragOffset,
+      setIsDragging,
+      stackRef,
+      lastActionTimeRef,
+    })
+    // Sync every render
+    touchCbRef.current = {
+      goNext, goPrev, onInteractionStart, onInteractionEnd,
+      isCardFlipped, total, setDragOffset, setIsDragging,
+      stackRef, lastActionTimeRef,
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       NATIVE TOUCH HANDLER (mobile-only)
+       ─ touchmove is registered with { passive: false } so we can call
+         e.preventDefault() to stop page scroll ONLY when the gesture
+         is confirmed horizontal.
+       ─ Vertical swipes fall through and let the browser scroll normally.
+    ───────────────────────────────────────────────────────────────── */
+    useEffect(() => {
+      const el = stackRef.current
+      if (!el) return
+
+      // Per-gesture state (closure vars, not React state)
+      let tracking = false
+      let horizontal = false
+      let startX = 0, startY = 0
+      let lastX = 0, lastTime = 0
+      let velocity = 0
+      let currentDx = 0
+
+      const onTouchStart = (e: TouchEvent) => {
+        const cb = touchCbRef.current
+        if (e.touches.length !== 1 || cb.isCardFlipped || cb.total <= 1) return
+        const t = e.touches[0]
+        startX = lastX = t.clientX
+        startY = t.clientY
+        lastTime = Date.now()
+        velocity = 0
+        currentDx = 0
+        tracking = true
+        horizontal = false
+      }
+
+      const onTouchMove = (e: TouchEvent) => {
+        if (!tracking || e.touches.length !== 1) return
+        const cb = touchCbRef.current
+        const t = e.touches[0]
+        const dx = t.clientX - startX
+        const dy = t.clientY - startY
+        const now = Date.now()
+
+        // Velocity sampling
+        const dt = now - lastTime
+        if (dt > 8) {
+          velocity = (t.clientX - lastX) / dt
+          lastX = t.clientX
+          lastTime = now
+        }
+        currentDx = dx
+
+        if (!horizontal) {
+          const absX = Math.abs(dx)
+          const absY = Math.abs(dy)
+          if (absX < 5 && absY < 5) return  // dead zone — ignore micro tremors
+
+          if (absX >= absY * 1.05) {
+            // ✅ Horizontal intent confirmed — take control
+            horizontal = true
+            e.preventDefault()           // ← stops page scroll for this gesture
+            cb.setDragOffset({ x: dx, y: 0 })
+            cb.setIsDragging(true)
+            cb.onInteractionStart?.()
+          } else {
+            // ✅ Vertical intent — release entirely, browser scrolls the page
+            tracking = false
+            return
+          }
+        }
+
+        if (horizontal) {
+          e.preventDefault()             // ← keep blocking scroll during drag
+          cb.setDragOffset({ x: dx, y: 0 })
+        }
+      }
+
+      const onTouchEnd = () => {
+        if (!tracking) return
+        const cb = touchCbRef.current
+        const wasHorizontal = horizontal
+        tracking = false
+        horizontal = false
+        cb.setIsDragging(false)
+
+        if (wasHorizontal) {
+          cb.onInteractionEnd?.()
+          const cardWidth = cb.stackRef.current?.offsetWidth || 320
+          const threshold = Math.min(cardWidth * 0.18, 55)
+          const isSwipeLeft  = currentDx < -threshold || (velocity < -0.25 && currentDx < -12)
+          const isSwipeRight = currentDx >  threshold || (velocity >  0.25 && currentDx >  12)
+          cb.setDragOffset({ x: 0, y: 0 })
+          if (isSwipeLeft)       cb.goNext()
+          else if (isSwipeRight) cb.goPrev()
+        } else {
+          cb.setDragOffset({ x: 0, y: 0 })
+        }
+      }
+
+      const onTouchCancel = () => {
+        const cb = touchCbRef.current
+        tracking = false
+        horizontal = false
+        cb.setIsDragging(false)
+        cb.setDragOffset({ x: 0, y: 0 })
+        cb.onInteractionEnd?.()
+      }
+
+      // touchstart: passive=true (don't block browser's initial scroll decision)
+      // touchmove:  passive=false (MUST be able to call preventDefault)
+      el.addEventListener('touchstart',  onTouchStart,  { passive: true })
+      el.addEventListener('touchmove',   onTouchMove,   { passive: false })
+      el.addEventListener('touchend',    onTouchEnd,    { passive: true })
+      el.addEventListener('touchcancel', onTouchCancel, { passive: true })
+
+      return () => {
+        el.removeEventListener('touchstart',  onTouchStart)
+        el.removeEventListener('touchmove',   onTouchMove)
+        el.removeEventListener('touchend',    onTouchEnd)
+        el.removeEventListener('touchcancel', onTouchCancel)
+      }
+    }, []) // runs once on mount — reads latest values via touchCbRef.current
+
+    /* ─────────────────────────────────────────────────────────────────
+       MOUSE POINTER EVENTS (desktop drag — touch is handled above)
+    ───────────────────────────────────────────────────────────────── */
     const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-      // Strictly prevent drag while viewing proof
-      if (total <= 1 || e.button !== 0 || isCardFlipped) return
+      if (e.pointerType !== 'mouse') return   // touch handled by native listeners
+      if (total <= 1 || isCardFlipped || e.button !== 0) return
       pointerIdRef.current = e.pointerId
       startCoordRef.current = { x: e.clientX, y: e.clientY, time: Date.now() }
       lastSampleRef.current = { x: e.clientX, time: Date.now() }
@@ -207,48 +352,36 @@ export const FeedbackDeck = forwardRef<FeedbackDeckHandle, FeedbackDeckProps>(
     }
 
     const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.pointerType !== 'mouse') return
       if (!isTrackingRef.current || pointerIdRef.current !== e.pointerId || isCardFlipped) return
 
       const dx = e.clientX - startCoordRef.current.x
       const dy = e.clientY - startCoordRef.current.y
       const now = Date.now()
-
       const dt = now - lastSampleRef.current.time
-      if (dt > 12) {
+      if (dt > 8) {
         velocityRef.current = (e.clientX - lastSampleRef.current.x) / dt
         lastSampleRef.current = { x: e.clientX, time: now }
       }
 
       if (!isHorizontalGestureRef.current) {
-        const absX = Math.abs(dx)
-        const absY = Math.abs(dy)
-
-        // Ignore micro tremors / taps
-        if (absX < 8 && absY < 8) return
-
-        // Confirm horizontal intent vs vertical page scroll
-        if (absX > absY * 1.15 && absX >= 8) {
+        const absX = Math.abs(dx), absY = Math.abs(dy)
+        if (absX < 5 && absY < 5) return
+        if (absX >= absY * 1.05) {
           isHorizontalGestureRef.current = true
           setIsDragging(true)
           onInteractionStart?.()
-          try {
-            e.currentTarget.setPointerCapture(e.pointerId)
-          } catch {
-            // Ignore
-          }
+          try { e.currentTarget.setPointerCapture(e.pointerId) } catch { /* ok */ }
         } else {
-          // User is scrolling the page vertically! Release tracking so natural page scroll continues effortlessly
           isTrackingRef.current = false
           return
         }
       }
-
-      if (isHorizontalGestureRef.current) {
-        setDragOffset({ x: dx, y: dy * 0.12 })
-      }
+      if (isHorizontalGestureRef.current) setDragOffset({ x: dx, y: dy * 0.06 })
     }
 
     const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.pointerType !== 'mouse') return
       if (!isTrackingRef.current && !isHorizontalGestureRef.current) return
 
       const wasHorizontal = isHorizontalGestureRef.current
@@ -256,48 +389,27 @@ export const FeedbackDeck = forwardRef<FeedbackDeckHandle, FeedbackDeckProps>(
       isHorizontalGestureRef.current = false
       setIsDragging(false)
       pointerIdRef.current = null
-
       try {
-        if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+        if (e.currentTarget.hasPointerCapture(e.pointerId))
           e.currentTarget.releasePointerCapture(e.pointerId)
-        }
-      } catch {
-        // Ignore
-      }
+      } catch { /* ok */ }
 
       if (wasHorizontal) {
         onInteractionEnd?.()
-
         const dx = dragOffset.x
-        const cardWidth = stackRef.current?.offsetWidth || 340
-        const threshold = Math.min(cardWidth * 0.22, 70)
+        const cardWidth = stackRef.current?.offsetWidth || 320
+        const threshold = Math.min(cardWidth * 0.2, 60)
         const vx = velocityRef.current
-
-        const isSwipeLeft = dx < -threshold || (vx < -0.32 && dx < -16)
-        const isSwipeRight = dx > threshold || (vx > 0.32 && dx > 16)
-
         setDragOffset({ x: 0, y: 0 })
-
-        if (isSwipeLeft) {
-          goNext()
-        } else if (isSwipeRight) {
-          goPrev()
-        }
+        if (dx < -threshold || (vx < -0.28 && dx < -12))      goNext()
+        else if (dx > threshold || (vx > 0.28 && dx > 12))    goPrev()
       } else {
         setDragOffset({ x: 0, y: 0 })
       }
     }
 
     const handlePointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
-      if (pointerIdRef.current === e.pointerId) {
-        try {
-          if (e.currentTarget.hasPointerCapture(e.pointerId)) {
-            e.currentTarget.releasePointerCapture(e.pointerId)
-          }
-        } catch {
-          // Ignore
-        }
-      }
+      if (e.pointerType !== 'mouse') return
       isTrackingRef.current = false
       isHorizontalGestureRef.current = false
       setIsDragging(false)
@@ -306,34 +418,32 @@ export const FeedbackDeck = forwardRef<FeedbackDeckHandle, FeedbackDeckProps>(
       onInteractionEnd?.()
     }
 
-    /* ---------------------------------------- Wheel Support ---------------------------------------- */
+    /* ─────────────────────────────────────────────────────────────────
+       TRACKPAD / WHEEL (horizontal scroll → slide)
+    ───────────────────────────────────────────────────────────────── */
     const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-      // Strictly prevent wheel navigation while viewing proof
       if (wheelLockRef.current || total <= 1 || isCardFlipped) return
-
       if (Math.abs(e.deltaX) > 38 && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
         wheelLockRef.current = true
         onInteractionStart?.()
-        if (e.deltaX > 0) {
-          goNext()
-        } else {
-          goPrev()
-        }
-        setTimeout(() => {
-          wheelLockRef.current = false
-          onInteractionEnd?.()
-        }, 450)
+        e.deltaX > 0 ? goNext() : goPrev()
+        setTimeout(() => { wheelLockRef.current = false; onInteractionEnd?.() }, 450)
       }
     }
 
     return (
       <div
-        className={`fdeck-stack ${isCardFlipped ? 'is-viewing-proof' : ''}`}
+        className={`fdeck-stack ${isCardFlipped ? 'is-viewing-proof' : ''} ${isDragging ? 'is-dragging' : ''}`}
         ref={stackRef}
         onWheel={handleWheel}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
         role="region"
         aria-roledescription="3d carousel"
         aria-label="Student Testimonials Card Stack"
+
       >
         {testimonials.map((item, index) => {
           let transform = ''
@@ -448,10 +558,6 @@ export const FeedbackDeck = forwardRef<FeedbackDeckHandle, FeedbackDeckProps>(
               isFlipped={isHero && isCardFlipped}
               onToggleFlip={isHero ? handleToggleFlip : undefined}
               onViewFullProof={onViewFullProof}
-              onPointerDown={isHero ? handlePointerDown : undefined}
-              onPointerMove={isHero ? handlePointerMove : undefined}
-              onPointerUp={isHero ? handlePointerUp : undefined}
-              onPointerCancel={isHero ? handlePointerCancel : undefined}
             />
           )
         })}

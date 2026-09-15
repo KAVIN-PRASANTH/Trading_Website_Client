@@ -1,4 +1,4 @@
-import React, { FormEvent, memo, useCallback, useEffect, useRef, useState } from 'react'
+import React, { FormEvent, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { StudentPayoutSection } from './components/payout/StudentPayoutSection'
 import { StudentFeedbackSection } from './components/feedback/StudentFeedbackSection'
 
@@ -44,6 +44,36 @@ const videos = [
   { id: 'v2', title: 'Liquidity Sweeps Explained – Smart Money Concepts',    duration: '22:15', views: '18.7K', desc: 'Why price hunts your stop and how to position with institutions, not against them.',        tag: 'Liquidity',        grad: 'b' },
   { id: 'v3', title: 'Precision Entry Using Order Blocks – Live Trade Walk', duration: '31:08', views: '42.1K', desc: 'Real-time walkthrough of a precision ICT entry using order blocks in a live session.',     tag: 'Live Trade',       grad: 'c' },
 ]
+
+/* ---------------------------------------- Dynamic Mentor Images Loop ---------------------------------------- */
+// Center portrait is fixed permanently as /MentorPic/IMG_6107.PNG (never changes)
+const MAIN_CENTER_IMAGE = '/MentorPic/IMG_6107.PNG'
+
+// Automatically discovers all image files inside public/MentorPic/ at build & dev time.
+const mentorPicGlob = import.meta.glob('/public/MentorPic/*.{png,PNG,jpg,JPG,jpeg,JPEG,webp,WEBP,avif,AVIF,svg,SVG}')
+
+// Surrounding background images strictly excluding IMG_6107 so center is never repeated in the orbit
+const SURROUNDING_IMAGES: string[] = Object.keys(mentorPicGlob)
+  .map((k) => k.replace(/^\/public/, ''))
+  .filter((src) => !src.includes('6107') && src !== MAIN_CENTER_IMAGE)
+  .sort((a, b) => a.localeCompare(b))
+
+function getPhotoLabel(src: string, index: number): string {
+  const name = src.split('/').pop()?.replace(/\.[^.]+$/, '') || `Photo ${index + 1}`
+  if (name.includes('6107') || name.includes('107')) return 'Lead Mentor'
+  if (name.includes('6127') || name.includes('127')) return 'Market Execution'
+  if (name.toLowerCase() === 'main') return 'Structure & Delivery'
+  if (name.includes('6301')) return 'ICT Frameworks'
+  if (name.includes('1860')) return 'Trader Mindset'
+  if (name.includes('7278')) return 'Market Mastery'
+  if (name.includes('5645')) return 'Chart Breakdown'
+  if (name.includes('5651')) return 'Institutional Flow'
+  if (name.includes('6056')) return 'Risk Protocol'
+  if (name.includes('6057')) return 'Session Analysis'
+  if (name.includes('6095')) return 'Precision Entries'
+  if (name.includes('8017')) return 'Strategic Growth'
+  return name.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+}
 
 /* ---------------------------------------- Countdown ---------------------------------------- */
 const BATCH_TARGET = new Date('2026-10-15T09:00:00+05:30')
@@ -319,6 +349,47 @@ function App() {
   const [flippedOnline, setFlippedOnline] = useState(false)
   const [flippedOffline, setFlippedOffline] = useState(false)
 
+  /* ---------------------------------------- Surrounding Orbiting Images Mechanism ---------------------------------------- */
+  // Preload all surrounding images in memory
+  useEffect(() => {
+    SURROUNDING_IMAGES.forEach((src) => {
+      const img = new Image()
+      img.src = src
+    })
+  }, [])
+
+  // 6 orbital slots initialized with the first 6 unique images
+  const [slotImages, setSlotImages] = useState<string[]>(() => {
+    return SURROUNDING_IMAGES.slice(0, 6)
+  })
+
+  // Pointer tracking next unique candidate from pool
+  const nextPoolIndexRef = useRef(6)
+
+  // Callback triggered ONLY when an orbital slot finishes its 18s animation cycle (at 100% / 0%).
+  // At 100% / 0%, the slot element is at opacity: 0, scale: 0.15, translate(-50%, -50%) deep inside behind the center.
+  // The swap happens when the slot is completely invisible.
+  // The newly assigned image will then smoothly emerge from IN to OUT, strictly eliminating any pop in the outer orbit!
+  const handleSlotIteration = useCallback((slotIndex: number) => {
+    if (SURROUNDING_IMAGES.length <= 6) return
+    setSlotImages((prev) => {
+      // Collect images currently assigned to all OTHER slots to strictly prevent duplicate images on screen
+      const currentlyUsed = new Set(prev.filter((_, idx) => idx !== slotIndex))
+
+      let candidateIdx = nextPoolIndexRef.current % SURROUNDING_IMAGES.length
+      let attempts = 0
+      while (currentlyUsed.has(SURROUNDING_IMAGES[candidateIdx]) && attempts < SURROUNDING_IMAGES.length) {
+        candidateIdx = (candidateIdx + 1) % SURROUNDING_IMAGES.length
+        attempts++
+      }
+
+      nextPoolIndexRef.current = (candidateIdx + 1) % SURROUNDING_IMAGES.length
+      const updated = [...prev]
+      updated[slotIndex] = SURROUNDING_IMAGES[candidateIdx]
+      return updated
+    })
+  }, [])
+
   /* ---------------------------------------- Body scroll lock when cart open ---------------------------------------- */
   useEffect(() => {
     document.body.style.overflow = cartOpen ? 'hidden' : ''
@@ -507,39 +578,47 @@ function App() {
       <section className="mentor-section" id="mentor" data-section="mentor">
         <div className="mentor-visual reveal-el">
           {/*
-            Depth-emergence loop:
-            Images start tiny+deeply blurred in the background, grow toward the viewer,
-            drift to an orbital position, then fade back into the deep — looping forever.
-            6 ghost instances (2 src images × 3 orbital slots) staggered by 3s each.
+            Depth-emergence loop — ALL 6 unique browser-compatible photos:
+            IMG_1860, IMG_5484, IMG_6107, IMG_6127, IMG_6301, IMG_7278
+            Each image gets its own orbital slot (tl, tr, br, bl, ml, mr).
+            main.PNG stays fixed as the crisp center portrait.
           */}
           <div className="mav-depth-stage" aria-hidden>
-            {/* Background glow + grid */}
             <div className="mav-core-glow" />
             <div className="mav-bg-grid" />
-
-            {/* Orbit trail rings */}
             <div className="mav-orbit mav-orbit-a" />
             <div className="mav-orbit mav-orbit-b" />
 
-            {/* ── 6 depth-emerging ghost images ── */}
-            {/* Each cycles: scale(0.08) blur(20px) opacity(0) → emerges → drifts orbital position → fades */}
-            <img src="/MentorPic/IMG_6127.PNG" alt="" className="mav-dp mav-dp-1" loading="lazy" decoding="async" />
-            <img src="/MentorPic/IMG_6107.PNG" alt="" className="mav-dp mav-dp-2" loading="lazy" decoding="async" />
-            <img src="/MentorPic/IMG_6127.PNG" alt="" className="mav-dp mav-dp-3" loading="lazy" decoding="async" />
-            <img src="/MentorPic/IMG_6107.PNG" alt="" className="mav-dp mav-dp-4" loading="lazy" decoding="async" />
-            <img src="/MentorPic/IMG_6127.PNG" alt="" className="mav-dp mav-dp-5" loading="lazy" decoding="async" />
-            <img src="/MentorPic/IMG_6107.PNG" alt="" className="mav-dp mav-dp-6" loading="lazy" decoding="async" />
+            {/*
+              Dynamic outer orbital background images:
+              Iterates folder images, strictly excluding center image to guarantee ZERO repetition.
+              Swaps image ONLY when the slot is deep inside behind center at 0 opacity,
+              ensuring every image smoothly emerges from IN to OUT, stays clear, and returns from OUT to IN!
+            */}
+            {slotImages.map((src, i) => (
+              <img
+                key={`mav-slot-${i}`}
+                src={src}
+                alt=""
+                className={`mav-dp mav-dp-${i + 1}`}
+                onAnimationIteration={() => handleSlotIteration(i)}
+                loading="lazy"
+                decoding="async"
+              />
+            ))}
           </div>
 
-          {/* Hero portrait — always in front, crisp */}
+          {/* Center portrait — Fixed permanently as IMG_6107.PNG */}
           <div className="mav-hero-wrap">
-            <div className="mav-ring mav-ring-outer" aria-hidden />
-            <div className="mav-ring mav-ring-inner" aria-hidden />
-            <img
-              className="mav-hero-portrait"
-              src="/MentorPic/IMG_6107.PNG"
-              alt="Pravyn — Lead Mentor"
-            />
+            <div className="mav-center-portal">
+              <div className="mav-ring mav-ring-outer" aria-hidden />
+              <div className="mav-ring mav-ring-inner" aria-hidden />
+              <img
+                className="mav-hero-portrait"
+                src={MAIN_CENTER_IMAGE}
+                alt="Pravyn — Lead Mentor"
+              />
+            </div>
           </div>
 
           {/* Stat strip */}
@@ -551,6 +630,7 @@ function App() {
         </div>
 
         <div className="mentor-content">
+
           <p className="section-tag reveal-el">02 / YOUR MENTOR</p>
           <h2 className="reveal-el">Built for the trader<br />you intend <em>to become.</em></h2>
           <p className="reveal-el">Pravyn ICT is guided by an experienced practitioner focused on market structure, liquidity and institutional price action. Every session is grounded in real execution logic, clear frameworks and accountability—not predictions.</p>

@@ -1054,12 +1054,17 @@
   color: var(--text);
   cursor: pointer;
   transition:
-    transform 0.22s cubic-bezier(0.2, 0.8, 0.25, 1),
-    background 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
+    transform 0.18s cubic-bezier(0.2, 0.8, 0.25, 1),
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  /* Remove the ugly iOS/Android tap square */
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .fdeck-nav-btn svg {
@@ -1070,19 +1075,29 @@
   stroke-width: 2.2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: transform 0.2s ease;
+  transition: transform 0.18s ease;
+  pointer-events: none;
 }
 
-.fdeck-nav-btn:hover {
-  background: rgba(37, 99, 235, 0.25);
-  border-color: var(--blue-lt);
-  color: #fff;
-  transform: scale(1.08);
-  box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+/* Hover only on real pointer devices — never on mobile touch */
+@media (hover: hover) and (pointer: fine) {
+  .fdeck-nav-btn:hover {
+    background: rgba(37, 99, 235, 0.25);
+    border-color: var(--blue-lt);
+    color: #fff;
+    transform: scale(1.08);
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+  }
+  .fdeck-nav-btn.prev:hover svg { transform: translateX(-2px); }
+  .fdeck-nav-btn.next:hover svg { transform: translateX(2px); }
 }
 
+/* Clean press feedback for both desktop and mobile */
 .fdeck-nav-btn:active {
-  transform: scale(0.96);
+  transform: scale(0.92);
+  background: rgba(37, 99, 235, 0.18);
+  border-color: rgba(59, 130, 246, 0.5);
+  transition: transform 0.08s ease, background 0.08s ease;
 }
 
 .fdeck-nav-btn:focus-visible {
@@ -1090,13 +1105,6 @@
   outline-offset: 3px;
 }
 
-.fdeck-nav-btn.prev:hover svg {
-  transform: translateX(-2px);
-}
-
-.fdeck-nav-btn.next:hover svg {
-  transform: translateX(2px);
-}
 
 /* Infinity Stream Controls Badge */
 .fdeck-counter-badge.fdeck-infinity-badge {
@@ -1199,7 +1207,11 @@
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  -webkit-appearance: none;
 }
+
 
 .fdeck-autoplay-pill:hover {
   background: rgba(37, 99, 235, 0.15);

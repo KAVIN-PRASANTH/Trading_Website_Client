@@ -106,23 +106,24 @@ export const StudentFeedbackSection: React.FC<StudentFeedbackSectionProps> = ({
     return () => document.removeEventListener('visibilitychange', onVisibilityChange)
   }, [])
 
-  // Smooth Auto-Slide with relaxed, comfortable reading delay (3.2 seconds)
-  // Strictly pauses when user is viewing proof, dragging, or HOVERING with mouse!
+  // Smooth Auto-Slide — 1.5s interval, pauses on hold/drag, resumes 1s after interaction
   useEffect(() => {
-    if (!isAutoPlay || reducedMotion || isInteracting || isHovered || !inView || total <= 1 || isViewingProof) {
+    const isTouch = window.matchMedia('(hover: none)').matches
+    const hoverPaused = isHovered && !isTouch
+    if (!isAutoPlay || reducedMotion || isInteracting || hoverPaused || !inView || total <= 1 || isViewingProof) {
       return
     }
 
     const timer = setInterval(() => {
-      // If user interacted recently (< 4s ago), wait for next tick
-      if (Date.now() - lastManualInteraction.current < 4000) {
-        return
-      }
+      // Brief 1s cooldown after manual interaction
+      if (Date.now() - lastManualInteraction.current < 1000) return
       deckRef.current?.goNext()
-    }, 5000)
+    }, 1800)
 
     return () => clearInterval(timer)
   }, [isAutoPlay, reducedMotion, isInteracting, isHovered, inView, total, isViewingProof])
+
+
 
   const registerManualInteraction = useCallback(() => {
     lastManualInteraction.current = Date.now()

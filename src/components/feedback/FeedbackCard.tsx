@@ -122,9 +122,6 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = memo(({
             <button
               type="button"
               className="fdeck-proof-btn"
-              onPointerDown={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
@@ -164,7 +161,6 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = memo(({
                     key={i}
                     type="button"
                     className={`fdeck-proof-pill ${activeProofIdx === i ? 'is-active' : ''}`}
-                    onPointerDown={(e) => e.stopPropagation()}
                     onClick={(e) => {
                       e.stopPropagation()
                       setActiveProofIdx(i)
@@ -201,9 +197,6 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = memo(({
             <button
               type="button"
               className="fdeck-back-btn"
-              onPointerDown={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
@@ -221,9 +214,6 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = memo(({
             <button
               type="button"
               className="fdeck-view-full-btn"
-              onPointerDown={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
