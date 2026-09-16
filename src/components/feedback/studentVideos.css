@@ -97,10 +97,13 @@
 /* ══════════════════════════════════════════════════════════════
    ORBIT VIEWPORT & SPATIAL 3D STAGE (DESKTOP PROMINENT SHOWCASE)
    ══════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   ORBIT VIEWPORT & SPATIAL 3D STAGE (DESKTOP PROMINENT SHOWCASE)
+   ══════════════════════════════════════════════════════════════ */
 .sv-orbit-viewport {
   position: relative;
   width: 100%;
-  height: clamp(520px, 65vh, 630px);
+  height: clamp(450px, 52vh, 480px);
   margin: 0 auto;
   perspective: 1400px;
   -webkit-perspective: 1400px;
@@ -192,12 +195,10 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   INDIVIDUAL ORBIT VIDEO CARDS (9:16 REEL FORMAT)
+   INDIVIDUAL ORBIT VIDEO CARDS
    ══════════════════════════════════════════════════════════════ */
 .sv-orbit-card {
   position: absolute;
-  aspect-ratio: 9 / 16; /* Insta Reel Ratio */
-  border-radius: 24px;
   overflow: hidden;
   cursor: pointer;
   background: #020617;
@@ -248,17 +249,19 @@
   transform: scale(1.035);
 }
 
-/* Google Drive Iframe inside active card */
+/* Google Drive Iframe inside active card - seamlessly cropped to eliminate black bars */
 .sv-gdrive-frame {
-  width: 100%;
-  height: 100%;
+  width: 145%;
+  height: 145%;
+  margin-left: -22.5%;
+  margin-top: -22.5%;
   border: none;
   background: #000;
   display: block;
   pointer-events: auto;
 }
 
-/* Cinematic Gradient Scrim (Keeps Text Crisp on Surrounding Cards) */
+/* Cinematic Gradient Scrim */
 .sv-card-scrim {
   position: absolute;
   inset: 0;
@@ -274,85 +277,93 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   SPATIAL 3D SLOTS (ACTIVE HERO CARD IS BIG & WIDE)
+   SPATIAL 3D SLOTS (ACTIVE HERO CARD IS WIDE & PROPORTIONATE)
    ══════════════════════════════════════════════════════════════ */
 
-/* Slot 0: Center Active Hero Reel — Dominant, Majestic, Wide */
+/* Slot 0: Center Active Hero Reel — Wide, Contained Height, Zero Navbar Overlap */
 .sv-orbit-card.slot-0 {
-  height: clamp(460px, 56vh, 530px);
-  width: auto;
-  aspect-ratio: 9 / 16;
-  transform: translate3d(0, 0, 110px) scale(1.18);
+  height: 430px;
+  width: clamp(350px, 28vw, 380px);
+  aspect-ratio: auto;
+  transform: translate3d(0, 0, 80px);
+  border-radius: 22px;
+  border: 2px solid rgba(56, 189, 248, 0.75);
+  box-shadow:
+    0 25px 65px rgba(0, 0, 0, 0.92),
+    0 0 45px rgba(56, 189, 248, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
   z-index: 40;
   opacity: 1;
   filter: none;
-  border: 2px solid rgba(56, 189, 248, 0.75);
-  box-shadow:
-    0 32px 85px rgba(0, 0, 0, 0.94),
-    0 0 55px rgba(56, 189, 248, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  overflow: hidden;
+  background: #000;
 }
 
 .sv-orbit-card.slot-0:hover {
-  transform: translate3d(0, 0, 120px) scale(1.20);
-  border-color: rgba(56, 189, 248, 0.9);
+  transform: translate3d(0, 0, 90px);
+  border-color: rgba(56, 189, 248, 0.95);
   box-shadow:
-    0 36px 95px rgba(0, 0, 0, 0.96),
-    0 0 65px rgba(56, 189, 248, 0.52);
+    0 30px 80px rgba(0, 0, 0, 0.95),
+    0 0 55px rgba(56, 189, 248, 0.48);
 }
 
 /* Slot 1: Right Near */
 .sv-orbit-card.slot-1 {
-  height: clamp(300px, 38vh, 350px);
-  width: auto;
-  aspect-ratio: 9 / 16;
-  transform: translate3d(clamp(280px, 25vw, 340px), 18px, -65px) scale(0.82) rotateY(-18deg);
+  height: 320px;
+  width: 180px;
+  aspect-ratio: auto;
+  border-radius: 16px;
+  transform: translate3d(clamp(280px, 24vw, 320px), 15px, -50px) rotateY(-18deg);
   z-index: 25;
-  opacity: 0.75;
-  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.7));
+  opacity: 0.78;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.75));
 }
 
 /* Slot 5: Left Near */
 .sv-orbit-card.slot-5 {
-  height: clamp(300px, 38vh, 350px);
-  width: auto;
-  aspect-ratio: 9 / 16;
-  transform: translate3d(clamp(-340px, -25vw, -280px), 18px, -65px) scale(0.82) rotateY(18deg);
+  height: 320px;
+  width: 180px;
+  aspect-ratio: auto;
+  border-radius: 16px;
+  transform: translate3d(clamp(-320px, -24vw, -280px), 15px, -50px) rotateY(18deg);
   z-index: 25;
-  opacity: 0.75;
-  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.7));
+  opacity: 0.78;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.75));
 }
 
 /* Slot 2: Right Far */
 .sv-orbit-card.slot-2 {
-  height: clamp(240px, 30vh, 280px);
-  width: auto;
-  aspect-ratio: 9 / 16;
-  transform: translate3d(clamp(480px, 39vw, 560px), -10px, -150px) scale(0.68) rotateY(-26deg);
+  height: 250px;
+  width: 140px;
+  aspect-ratio: auto;
+  border-radius: 14px;
+  transform: translate3d(clamp(470px, 38vw, 520px), -5px, -110px) rotateY(-25deg);
   z-index: 15;
   opacity: 0.45;
-  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.75));
 }
 
 /* Slot 4: Left Far */
 .sv-orbit-card.slot-4 {
-  height: clamp(240px, 30vh, 280px);
-  width: auto;
-  aspect-ratio: 9 / 16;
-  transform: translate3d(clamp(-560px, -39vw, -480px), -10px, -150px) scale(0.68) rotateY(26deg);
+  height: 250px;
+  width: 140px;
+  aspect-ratio: auto;
+  border-radius: 14px;
+  transform: translate3d(clamp(-520px, -38vw, -470px), -5px, -110px) rotateY(25deg);
   z-index: 15;
   opacity: 0.45;
-  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.75));
 }
 
 /* Slot 3: Top Zenith Far */
 .sv-orbit-card.slot-3 {
-  height: clamp(190px, 24vh, 220px);
-  width: auto;
-  aspect-ratio: 9 / 16;
-  transform: translate3d(0, -95px, -220px) scale(0.55);
+  height: 200px;
+  width: 110px;
+  aspect-ratio: auto;
+  border-radius: 12px;
+  transform: translate3d(0, -75px, -200px) scale(0.65);
   z-index: 10;
-  opacity: 0.25;
+  opacity: 0.18;
   filter: blur(1px) drop-shadow(0 12px 25px rgba(0, 0, 0, 0.65));
 }
 
@@ -369,140 +380,34 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   ACTIVE CARD TOP ACTIONS (THEATER & ACTIVE BADGE)
-   ══════════════════════════════════════════════════════════════ */
-.sv-card-top-actions {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  right: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 10;
-  pointer-events: auto;
-}
-
-.sv-active-reel-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(3, 8, 22, 0.88);
-  border: 1px solid rgba(56, 189, 248, 0.45);
-  color: #38bdf8;
-  font: 700 9.5px var(--mono, monospace);
-  letter-spacing: 0.12em;
-  padding: 4px 10px;
-  border-radius: 999px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-.sv-expand-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(3, 8, 22, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  color: #fff;
-  font: 600 11px var(--sans, sans-serif);
-  padding: 4px 11px;
-  border-radius: 999px;
-  cursor: pointer;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: all 0.2s ease;
-}
-
-.sv-expand-btn:hover {
-  background: rgba(56, 189, 248, 0.25);
-  border-color: rgba(56, 189, 248, 0.65);
-  color: #38bdf8;
-  transform: scale(1.05);
-}
-
-/* ══════════════════════════════════════════════════════════════
-   CARD CAPTION & STUDENT IDENTITY
+   CARD CAPTION & STUDENT IDENTITY (CLEAN, NO CLUTTER)
    ══════════════════════════════════════════════════════════════ */
 .sv-card-caption {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 14px 16px;
-  z-index: 6;
+  padding: 14px 18px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.4) 65%, transparent 100%);
+  z-index: 10;
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  text-align: left;
+  align-items: center;
   pointer-events: none;
 }
 
-.sv-card-caption.is-active-caption {
-  background: linear-gradient(to top, rgba(2, 6, 23, 0.95) 0%, rgba(2, 6, 23, 0.7) 65%, transparent 100%);
-  padding: 26px 18px 16px;
-}
-
-.sv-caption-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
 .sv-caption-name {
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 700;
-  color: #fff;
-  letter-spacing: -0.01em;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .sv-orbit-card.is-surrounding .sv-caption-name {
-  font-size: 12.5px;
-}
-
-.sv-live-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font: 700 9px/1 var(--mono, monospace);
-  letter-spacing: 0.1em;
-  color: #34d399;
-  background: rgba(16, 185, 129, 0.16);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  padding: 2.5px 7px;
-  border-radius: 999px;
-  text-transform: uppercase;
-}
-
-.sv-pulse-pip {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 6px #10b981;
-}
-
-.sv-caption-sub {
-  font-size: 12px;
-  color: var(--text-2, #94a3b8);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.sv-orbit-card.is-surrounding .sv-caption-sub {
-  font-size: 11px;
-}
-
-.sv-caption-sep {
-  color: rgba(255, 255, 255, 0.2);
-}
-
-.sv-caption-cohort {
-  color: #38bdf8;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -513,7 +418,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: clamp(18px, 2.8vh, 28px);
+  margin-top: clamp(16px, 2.5vh, 24px);
   position: relative;
   z-index: 10;
 }
@@ -540,7 +445,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   CINEMATIC THEATER MODAL VIDEO PLAYER — 9:16 INSTAGRAM REEL
+   CINEMATIC THEATER MODAL VIDEO PLAYER
    ══════════════════════════════════════════════════════════════ */
 
 /* Hide navbar & announcement bar completely when modal is active */
@@ -578,7 +483,6 @@ body.sv-modal-active .ann-bar {
   to { opacity: 1; }
 }
 
-/* 9:16 Vertical Reel Player Shell */
 .sv-modal-shell.sv-modal-reel {
   position: relative !important;
   width: min(390px, 92vw) !important;
@@ -722,34 +626,43 @@ body.sv-modal-active .ann-bar {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   RESPONSIVE SCALING & BREAKPOINTS (9:16 REEL)
+   RESPONSIVE SCALING & BREAKPOINTS
    ══════════════════════════════════════════════════════════════ */
 
 /* Medium Screens & Laptops (max-width: 1140px) */
 @media (max-width: 1140px) {
   .sv-orbit-viewport {
-    height: clamp(440px, 56vh, 520px);
+    height: clamp(420px, 50vh, 460px);
   }
 
   .sv-orbit-card.slot-0 {
-    height: clamp(380px, 48vh, 440px);
-    transform: translate3d(0, 0, 80px) scale(1.12);
+    width: 320px;
+    height: 390px;
+    transform: translate3d(0, 0, 60px);
   }
 
   .sv-orbit-card.slot-1 {
-    transform: translate3d(clamp(210px, 20vw, 260px), 14px, -50px) scale(0.8) rotateY(-16deg);
+    width: 155px;
+    height: 280px;
+    transform: translate3d(clamp(210px, 22vw, 250px), 12px, -45px) rotateY(-16deg);
   }
 
   .sv-orbit-card.slot-5 {
-    transform: translate3d(clamp(-260px, -20vw, -210px), 14px, -50px) scale(0.8) rotateY(16deg);
+    width: 155px;
+    height: 280px;
+    transform: translate3d(clamp(-250px, -22vw, -210px), 12px, -45px) rotateY(16deg);
   }
 
   .sv-orbit-card.slot-2 {
-    transform: translate3d(clamp(360px, 33vw, 440px), -8px, -120px) scale(0.66) rotateY(-22deg);
+    width: 120px;
+    height: 220px;
+    transform: translate3d(clamp(340px, 34vw, 390px), -5px, -95px) rotateY(-22deg);
   }
 
   .sv-orbit-card.slot-4 {
-    transform: translate3d(clamp(-440px, -33vw, -360px), -8px, -120px) scale(0.66) rotateY(22deg);
+    width: 120px;
+    height: 220px;
+    transform: translate3d(clamp(-390px, -34vw, -340px), -5px, -95px) rotateY(22deg);
   }
 }
 
@@ -761,7 +674,7 @@ body.sv-modal-active .ann-bar {
   }
 
   .sv-orbit-viewport {
-    height: clamp(360px, 50vh, 420px);
+    height: clamp(370px, 50vh, 420px);
     perspective: 900px;
     -webkit-perspective: 900px;
   }
@@ -771,35 +684,45 @@ body.sv-modal-active .ann-bar {
     height: 300px;
   }
 
-  /* Active Center Hero Reel on Mobile */
+  /* Active Center Hero Card on Mobile */
   .sv-orbit-card.slot-0 {
-    height: clamp(320px, 46vh, 370px);
-    width: auto;
-    aspect-ratio: 9 / 16;
-    transform: translate3d(0, 0, 40px) scale(1.05);
-    z-index: 30;
-    opacity: 1;
-    display: block !important;
+    width: min(280px, 72vw);
+    height: clamp(340px, 46vh, 380px);
+    aspect-ratio: auto;
+    transform: translate3d(0, 0, 40px);
+    border-radius: 18px;
+    border: 2px solid rgba(56, 189, 248, 0.8);
     box-shadow: 0 22px 50px rgba(0, 0, 0, 0.9), 0 0 35px rgba(37, 99, 235, 0.4);
+    display: block !important;
   }
 
-  /* Right Peeking Reel */
+  .sv-orbit-card.slot-0 .sv-gdrive-frame {
+    width: 145%;
+    height: 145%;
+    margin-left: -22.5%;
+    margin-top: -22.5%;
+    border: none;
+  }
+
+  /* Right Peeking Card */
   .sv-orbit-card.slot-1 {
-    height: clamp(260px, 38vh, 310px);
-    width: auto;
-    aspect-ratio: 9 / 16;
-    transform: translate3d(clamp(150px, 42vw, 195px), 8px, -30px) scale(0.82) rotateY(-15deg);
+    width: min(130px, 34vw);
+    height: clamp(260px, 36vh, 300px);
+    aspect-ratio: auto;
+    border-radius: 14px;
+    transform: translate3d(clamp(150px, 44vw, 195px), 10px, -30px) rotateY(-15deg);
     z-index: 20;
     opacity: 0.72;
     display: block !important;
   }
 
-  /* Left Peeking Reel */
+  /* Left Peeking Card */
   .sv-orbit-card.slot-5 {
-    height: clamp(260px, 38vh, 310px);
-    width: auto;
-    aspect-ratio: 9 / 16;
-    transform: translate3d(clamp(-195px, -42vw, -150px), 8px, -30px) scale(0.82) rotateY(15deg);
+    width: min(130px, 34vw);
+    height: clamp(260px, 36vh, 300px);
+    aspect-ratio: auto;
+    border-radius: 14px;
+    transform: translate3d(clamp(-195px, -44vw, -150px), 10px, -30px) rotateY(15deg);
     z-index: 20;
     opacity: 0.72;
     display: block !important;

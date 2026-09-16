@@ -299,12 +299,8 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
   countdown,
 }: HeroCountdownProps) {
   const [isFlipped, setIsFlipped] = useState(false)
-  const [simulatedDays, setSimulatedDays] = useState<number | null>(null)
 
-  const effectiveDays = simulatedDays !== null ? simulatedDays : countdown.days
-  const effectiveIsLive = simulatedDays !== null ? simulatedDays <= 0 : countdown.isLive
-
-  const stats = computeCohortSeatStats(effectiveDays, effectiveIsLive)
+  const stats = computeCohortSeatStats(countdown.days, countdown.isLive)
   const isLive = stats.isLive
 
   // Handle mobile card tap to toggle flip (disabled in live mode)
@@ -357,7 +353,7 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
                 <div className="hcd-live-meta">
                   <h3 className="hcd-live-headline">BATCH IS LIVE NOW</h3>
                   <p className="hcd-live-desc">
-                    Live market execution and private Zoom mentorship rooms are currently underway for active traders.
+                    Live market execution and in-person classroom mentorship sessions are currently underway for active traders in Coimbatore.
                   </p>
                 </div>
               </div>
@@ -416,11 +412,11 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
               {/* 5-Pillar Chronograph Display */}
               <div className="hcd-chronograph">
                 {/* Days Pillar */}
-                {effectiveDays > 0 && (
+                {countdown.days > 0 && (
                   <>
                     <div className="hcd-chrono-unit">
                       <div className="hcd-digit-box">
-                        <span className="hcd-val">{pad(effectiveDays)}</span>
+                        <span className="hcd-val">{pad(countdown.days)}</span>
                       </div>
                       <span className="hcd-lbl">DAYS</span>
                     </div>
@@ -544,8 +540,8 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
               {/* 20-Seat Visual Grid */}
               <div className="hcd-seat-grid-container">
                 <div className="hcd-seat-grid-header">
-                  <span>CAPACITY INVENTORY (1 SEAT / DAY AUTO-LOCK)</span>
-                  <span>CAP: 20 SEATS</span>
+                  <span>SEAT ALLOCATION INVENTORY</span>
+                  <span>CAP: 20 TRADERS</span>
                 </div>
                 <div className="hcd-seat-grid">
                   {Array.from({ length: 20 }, (_, idx) => {
@@ -570,19 +566,19 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
               <div className="hcd-back-specs-grid">
                 <div className="hcd-spec-card">
                   <span className="hcd-spec-k">CLASS START</span>
-                  <span className="hcd-spec-v">15 OCT 2026 · 09:00 IST</span>
+                  <span className="hcd-spec-v">15 OCT 2026 · 10:00 AM</span>
                 </div>
                 <div className="hcd-spec-card">
-                  <span className="hcd-spec-k">DAILY DECREMENT</span>
-                  <span className="hcd-spec-v">1 Slot / Day Decreased</span>
+                  <span className="hcd-spec-k">FORMAT</span>
+                  <span className="hcd-spec-v">Offline · Classroom</span>
                 </div>
                 <div className="hcd-spec-card">
-                  <span className="hcd-spec-k">ADMISSIONS WINDOW</span>
-                  <span className="hcd-spec-v">20-Day Cohort Window</span>
+                  <span className="hcd-spec-k">LOCATION</span>
+                  <span className="hcd-spec-v">Coimbatore Desk</span>
                 </div>
               </div>
 
-              {/* Back Footer with Direct CTA + Preview Bar */}
+              {/* Back Footer with Direct CTA */}
               <div className="hcd-back-footer">
                 <div className="hcd-back-cta-row">
                   <a
@@ -593,51 +589,6 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
                     <span>{stats.availableSeats > 0 ? `Reserve Seat #${Math.min(20, stats.filledSeats + 1)} Now` : 'Inquire for Waitlist'}</span>
                     <span aria-hidden="true">→</span>
                   </a>
-                </div>
-
-                {/* Day Simulator Pills to effortlessly preview calculation */}
-                <div className="hcd-preview-bar" onClick={(e) => e.stopPropagation()}>
-                  <span className="hcd-preview-lbl">Simulate:</span>
-                  <button
-                    type="button"
-                    className={`hcd-prev-btn ${simulatedDays === null ? 'is-active' : ''}`}
-                    onClick={() => setSimulatedDays(null)}
-                    title="Live real-time based on class start date"
-                  >
-                    Real ({countdown.days}d)
-                  </button>
-                  <button
-                    type="button"
-                    className={`hcd-prev-btn ${simulatedDays === 15 ? 'is-active' : ''}`}
-                    onClick={() => setSimulatedDays(15)}
-                    title="Simulate 15 days remaining (25% filled)"
-                  >
-                    15d (25%)
-                  </button>
-                  <button
-                    type="button"
-                    className={`hcd-prev-btn ${simulatedDays === 5 ? 'is-active' : ''}`}
-                    onClick={() => setSimulatedDays(5)}
-                    title="Simulate 5 days remaining (75% filled)"
-                  >
-                    5d (75%)
-                  </button>
-                  <button
-                    type="button"
-                    className={`hcd-prev-btn ${simulatedDays === 1 ? 'is-active' : ''}`}
-                    onClick={() => setSimulatedDays(1)}
-                    title="Simulate 1 day remaining (95% filled)"
-                  >
-                    1d (95%)
-                  </button>
-                  <button
-                    type="button"
-                    className={`hcd-prev-btn ${simulatedDays === 0 ? 'is-active' : ''}`}
-                    onClick={() => setSimulatedDays(0)}
-                    title="Simulate live broadcast"
-                  >
-                    Live (100%)
-                  </button>
                 </div>
               </div>
             </div>

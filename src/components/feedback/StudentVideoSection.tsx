@@ -245,7 +245,7 @@ export const StudentVideoSection: React.FC = () => {
           onPointerCancel={handlePointerUp}
           onWheel={handleWheel}
           role="region"
-          aria-label="Student Stories 9:16 Video Orbit - Drag or click to slide"
+          aria-label="Student Stories Video Orbit - Drag or click to slide"
           tabIndex={0}
         >
           {/* Subtle Ambient Radial Lighting */}
@@ -314,10 +314,10 @@ export const StudentVideoSection: React.FC = () => {
                   aria-current={isActive ? 'true' : 'false'}
                 >
                   <div className="sv-card-inner">
-                    {/* Media Surface: 9:16 Instagram Reel format */}
+                    {/* Media Surface */}
                     <div className="sv-video-frame-wrap">
                       {isActive ? (
-                        /* Active card embeds Google Drive player automatically without obstructive play buttons */
+                        /* Active card embeds Google Drive player filling cleanly */
                         <iframe
                           key={`gdrive-player-${item.id}`}
                           src={`https://drive.google.com/file/d/${item.gdriveId}/preview`}
@@ -326,7 +326,7 @@ export const StudentVideoSection: React.FC = () => {
                           title={`Student feedback reel by ${item.name}`}
                         />
                       ) : (
-                        /* Surrounding 3D cards render lightweight high-res vertical poster */
+                        /* Surrounding 3D cards render clean vertical poster */
                         <img
                           className="sv-video-preview sv-preview-img"
                           src={item.poster}
@@ -334,58 +334,12 @@ export const StudentVideoSection: React.FC = () => {
                           loading="eager"
                         />
                       )}
-                      {/* Subtle scrim only on surrounding cards to keep active reel pristine */}
                       {!isActive && <div className="sv-card-scrim" />}
                     </div>
 
-                    {/* Active Reel Top Header Actions */}
-                    {isActive && (
-                      <div className="sv-card-top-actions">
-                        <span className="sv-active-reel-badge">
-                          <span className="sv-pulse-pip" />
-                          NOW PLAYING
-                        </span>
-                        <button
-                          type="button"
-                          className="sv-expand-btn"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleOpenVideo(item)
-                          }}
-                          title="Open Fullscreen Theater"
-                          aria-label="Open Fullscreen Theater"
-                        >
-                          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="15 3 21 3 21 9" />
-                            <polyline points="9 21 3 21 3 15" />
-                            <line x1="21" y1="3" x2="14" y2="10" />
-                            <line x1="3" y1="21" x2="10" y2="14" />
-                          </svg>
-                          <span>Theater</span>
-                        </button>
-                      </div>
-                    )}
-
-                    {/* Student Identity Overlay */}
-                    <div className={`sv-card-caption ${isActive ? 'is-active-caption' : ''}`}>
-                      <div className="sv-caption-top">
-                        <span className="sv-caption-name">{item.name}</span>
-                        {isActive && (
-                          <span className="sv-live-badge">
-                            <span className="sv-pulse-pip" />
-                            VERIFIED
-                          </span>
-                        )}
-                      </div>
-                      <div className="sv-caption-sub">
-                        <span>{item.role}</span>
-                        {isActive && (
-                          <>
-                            <span className="sv-caption-sep">•</span>
-                            <span className="sv-caption-cohort">{item.cohort}</span>
-                          </>
-                        )}
-                      </div>
+                    {/* Student Identity: Minimal, clean, name only */}
+                    <div className="sv-card-caption">
+                      <span className="sv-caption-name">{item.name}</span>
                     </div>
                   </div>
                 </div>
@@ -409,7 +363,7 @@ export const StudentVideoSection: React.FC = () => {
       </div>
 
       {/* ═══════════════════════════════════════════════════════
-          CINEMATIC THEATER MODAL VIDEO PLAYER — 9:16 REEL FORMAT
+          CINEMATIC THEATER MODAL VIDEO PLAYER
           (Mounted to document.body via React Portal)
           ═══════════════════════════════════════════════════════ */}
       {activeVideo &&
@@ -429,7 +383,7 @@ export const StudentVideoSection: React.FC = () => {
                     <span>●</span> VERIFIED STUDENT REEL
                   </span>
                   <h4 className="sv-modal-student-name">
-                    {activeVideo.name} — {activeVideo.cohort}
+                    {activeVideo.name}
                   </h4>
                 </div>
                 <button
@@ -445,7 +399,7 @@ export const StudentVideoSection: React.FC = () => {
                 </button>
               </div>
 
-              {/* 9:16 Vertical Reel Player Shell */}
+              {/* Player Shell */}
               <div className="sv-modal-player-wrap sv-player-reel">
                 <iframe
                   src={`https://drive.google.com/file/d/${activeVideo.gdriveId}/preview`}
@@ -458,7 +412,7 @@ export const StudentVideoSection: React.FC = () => {
               {/* Modal Footer */}
               <div className="sv-modal-foot">
                 <div className="sv-modal-foot-left">
-                  <span>Authentic 9:16 student reel</span>
+                  <span>Authentic student reel</span>
                   <span>•</span>
                   <span>Pravyn ICT Community</span>
                 </div>
