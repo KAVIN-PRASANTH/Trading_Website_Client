@@ -3,11 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Pravyn ICT — learn institutional trading concepts with structure, discipline, and live market context." />
-    <title>Pravyn ICT — Trade With Precision</title>
+    <meta name="description" content="Pravyn ICT — Trading Leaders Community. Learn institutional trading concepts with structure, discipline, and live market context." />
+    <title>Pravyn ICT — Trading Leaders Community</title>
+    <link rel="icon" type="image/png" href="/logo/logo.png" />
+    <link rel="apple-touch-icon" href="/logo/logo.png" />
+    <style>
+      /* Instant zero-delay pre-render splash */
+      #initial-loader {
+        position: fixed; inset: 0; z-index: 999999;
+        background: #020617;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 16px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #fff;
+      }
+      #initial-loader img {
+        width: 80px; height: 80px; border-radius: 50%;
+        box-shadow: 0 0 35px rgba(56, 189, 248, 0.45);
+        animation: init-pulse 1.4s infinite ease-in-out;
+      }
+      @keyframes init-pulse {
+        0%, 100% { transform: scale(1); opacity: 0.9; }
+        50% { transform: scale(1.05); opacity: 1; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="initial-loader" aria-hidden="true">
+        <img src="/logo/logo.png" alt="Loading Trading Leaders Community..." />
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+

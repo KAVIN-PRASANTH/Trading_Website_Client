@@ -29,3 +29,8 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Heavy video media files (use Google Drive / CDN instead of git)
+*.MOV
+*.mov
+*.mp4
