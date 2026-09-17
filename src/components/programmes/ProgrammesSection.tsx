@@ -1,5 +1,11 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import {
+  MENTORSHIP_PLANS,
+  MentorshipPlan,
+  initiateRazorpayCheckout,
+  getRazorpayKey,
+} from '../../services/razorpay'
 
 /* --------------------------------------------------------------------------
    CoinDCX-Style Slide-To-Enroll Component (Preserved Exact Interaction & Visuals)
@@ -152,22 +158,60 @@ export function SlideToEnroll({
    -------------------------------------------------------------------------- */
 interface ProgrammesSectionProps {
   isBatchLive: boolean
-  onEnroll: (programmeName: string) => void
+  onEnroll?: (programmeName: string) => void
 }
 
-export function ProgrammesSection({ isBatchLive, onEnroll }: ProgrammesSectionProps) {
+export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
   const [activeModal, setActiveModal] = useState<'online' | 'offline' | null>(null)
+  const [pendingPlan, setPendingPlan] = useState<MentorshipPlan | null>(null)
+  const [successPayment, setSuccessPayment] = useState<{
+    plan: MentorshipPlan
+    paymentId: string
+  } | null>(null)
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
+
+  const executeRazorpay = (plan: MentorshipPlan) => {
+    setCheckoutLoading(true)
+    initiateRazorpayCheckout({
+      plan,
+      onSuccess: (response, enrolledPlan) => {
+        setCheckoutLoading(false)
+        setPendingPlan(null)
+        setSuccessPayment({
+          plan: enrolledPlan,
+          paymentId: response.razorpay_payment_id || `pay_${Date.now()}`,
+        })
+      },
+      onDismiss: () => {
+        setCheckoutLoading(false)
+      },
+      onError: (err) => {
+        console.warn('Razorpay checkout notice:', err)
+        setCheckoutLoading(false)
+      },
+    })
+  }
+
+  const handleEnrollClick = (plan: MentorshipPlan) => {
+    const currentKey = getRazorpayKey()
+    if (currentKey === 'rzp_test_placeholder_key') {
+      // Show helper dialog explaining gateway readiness and providing test options
+      setPendingPlan(plan)
+    } else {
+      executeRazorpay(plan)
+    }
+  }
 
   // Body scroll lock while modal is open
   useEffect(() => {
-    if (activeModal) {
+    if (activeModal || pendingPlan || successPayment) {
       const prevOverflow = document.body.style.overflow
       document.body.style.overflow = 'hidden'
       return () => {
         document.body.style.overflow = prevOverflow
       }
     }
-  }, [activeModal])
+  }, [activeModal, pendingPlan, successPayment])
 
   // Escape key to close modal
   useEffect(() => {
@@ -293,9 +337,9 @@ export function ProgrammesSection({ isBatchLive, onEnroll }: ProgrammesSectionPr
                 label="Slide to Enroll"
                 disabled={isBatchLive}
                 disabledLabel="Enrollment Closed · Cohort is Live"
-                successLabel="Enrolled! Opening Form..."
+                successLabel="Redirecting to Razorpay..."
                 colorVariant="blue"
-                onSuccess={() => onEnroll('Personal Mentorship (Online Mode - ₹24,999)')}
+                onSuccess={() => handleEnrollClick(MENTORSHIP_PLANS.online)}
               />
             </div>
           </article>
@@ -401,9 +445,9 @@ export function ProgrammesSection({ isBatchLive, onEnroll }: ProgrammesSectionPr
                 label="Slide to Reserve Seat"
                 disabled={isBatchLive}
                 disabledLabel="Enrollment Closed · Cohort is Live"
-                successLabel="Seat Reserved! Opening Form..."
+                successLabel="Redirecting to Razorpay..."
                 colorVariant="gold"
-                onSuccess={() => onEnroll('Slingshot Model (Offline Intensive - ₹19,999)')}
+                onSuccess={() => handleEnrollClick(MENTORSHIP_PLANS.offline)}
               />
             </div>
           </article>
@@ -663,16 +707,149 @@ export function ProgrammesSection({ isBatchLive, onEnroll }: ProgrammesSectionPr
                 label={activeModal === 'online' ? 'Slide to Enroll' : 'Slide to Reserve Seat'}
                 disabled={isBatchLive}
                 disabledLabel="Enrollment Closed · Cohort is Live"
-                successLabel={activeModal === 'online' ? 'Enrolled! Opening Form...' : 'Seat Reserved! Opening Form...'}
+                successLabel="Redirecting to Razorpay..."
                 colorVariant={activeModal === 'online' ? 'blue' : 'gold'}
                 onSuccess={() => {
-                  const target = activeModal === 'online'
-                    ? 'Personal Mentorship (Online Mode - ₹24,999)'
-                    : 'Slingshot Model (Offline Intensive - ₹19,999)'
+                  const plan = activeModal === 'online' ? MENTORSHIP_PLANS.online : MENTORSHIP_PLANS.offline
                   setActiveModal(null)
-                  onEnroll(target)
+                  handleEnrollClick(plan)
                 }}
               />
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════
+         RAZORPAY GATEWAY HELPER MODAL (FOR CREDENTIALS / TEST FLOW)
+         ══════════════════════════════════════════════════════════════ */}
+      {pendingPlan && typeof document !== 'undefined' && createPortal(
+        <div
+          className="rzp-modal-backdrop"
+          onClick={() => setPendingPlan(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className={`rzp-dialog ${pendingPlan.colorVariant === 'gold' ? 'theme-gold' : ''}`}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="rzp-header">
+              <span className={`rzp-badge ${pendingPlan.colorVariant === 'gold' ? 'gold' : ''}`}>
+                <span>◆</span> RAZORPAY GATEWAY
+              </span>
+              <button
+                type="button"
+                className="rzp-close"
+                onClick={() => setPendingPlan(null)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="rzp-plan-card">
+              <div className="rzp-plan-name">{pendingPlan.name}</div>
+              <div className="rzp-plan-desc">{pendingPlan.description}</div>
+              <div className="rzp-amount-row">
+                <span className="rzp-amount-label">Direct Enrollment Fee</span>
+                <span className={`rzp-amount-val ${pendingPlan.colorVariant === 'gold' ? 'gold' : ''}`}>
+                  ₹{pendingPlan.price.toLocaleString('en-IN')}
+                </span>
+              </div>
+            </div>
+
+            <div className="rzp-info-box">
+              <strong>Gateway Configuration Ready:</strong> Razorpay Standard Checkout SDK is fully integrated. Add your Key ID in <code>.env</code> (<code>VITE_RAZORPAY_KEY_ID</code>) to begin accepting real UPI, Cards & Netbanking payments.
+            </div>
+
+            <div className="rzp-actions">
+              <button
+                type="button"
+                className={`rzp-btn-primary ${pendingPlan.colorVariant === 'gold' ? 'gold' : ''}`}
+                disabled={checkoutLoading}
+                onClick={() => executeRazorpay(pendingPlan)}
+              >
+                {checkoutLoading ? 'Opening Razorpay Gateway...' : 'Launch Razorpay Gateway Modal →'}
+              </button>
+
+              <button
+                type="button"
+                className="rzp-btn-secondary"
+                onClick={() => {
+                  const mockPayId = 'pay_sim_' + Math.random().toString(36).substring(2, 9).toUpperCase()
+                  setPendingPlan(null)
+                  setSuccessPayment({
+                    plan: pendingPlan,
+                    paymentId: mockPayId,
+                  })
+                }}
+              >
+                Simulate Successful Payment (Test Flow)
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════
+         PAYMENT SUCCESS & ENROLLMENT CONFIRMATION MODAL
+         ══════════════════════════════════════════════════════════════ */}
+      {successPayment && typeof document !== 'undefined' && createPortal(
+        <div
+          className="rzp-modal-backdrop"
+          onClick={() => setSuccessPayment(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className={`rzp-dialog ${successPayment.plan.colorVariant === 'gold' ? 'theme-gold' : ''}`}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="rzp-success-badge">✓</div>
+            <h3 className="rzp-success-title">Enrollment Confirmed!</h3>
+            <p className="rzp-success-sub">
+              Your payment has been received. You are now officially enrolled in the {successPayment.plan.name} cohort.
+            </p>
+
+            <div className="rzp-receipt-card">
+              <div className="rzp-receipt-row">
+                <span className="rzp-receipt-label">Programme</span>
+                <span className="rzp-receipt-val">{successPayment.plan.name}</span>
+              </div>
+              <div className="rzp-receipt-row">
+                <span className="rzp-receipt-label">Delivery Format</span>
+                <span className="rzp-receipt-val">{successPayment.plan.mode}</span>
+              </div>
+              <div className="rzp-receipt-row">
+                <span className="rzp-receipt-label">Amount Paid</span>
+                <span className="rzp-receipt-val">₹{successPayment.plan.price.toLocaleString('en-IN')}</span>
+              </div>
+              <div className="rzp-receipt-row">
+                <span className="rzp-receipt-label">Payment ID</span>
+                <span className="rzp-receipt-val">{successPayment.paymentId}</span>
+              </div>
+            </div>
+
+            <div className="rzp-actions">
+              <a
+                href={`https://wa.me/918637478662?text=Hi%20Praveen,%20I%20have%20completed%20my%20enrollment%20for%20${encodeURIComponent(successPayment.plan.name)}.%20Payment%20ID:%20${encodeURIComponent(successPayment.paymentId)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rzp-whatsapp-btn"
+              >
+                <span>Connect with Mentor on WhatsApp →</span>
+              </a>
+
+              <button
+                type="button"
+                className="rzp-btn-secondary"
+                onClick={() => setSuccessPayment(null)}
+              >
+                Return to Dashboard
+              </button>
             </div>
           </div>
         </div>,

@@ -280,7 +280,7 @@ export const StudentFeedbackSection: React.FC<StudentFeedbackSectionProps> = ({
 
       {/* Call To Action */}
       <div className="fdeck-cta-wrap">
-        <a className="button button-primary glow-heavy" href="#contact">
+        <a className="button button-primary glow-heavy" href="#programmes">
           Join the next batch <ArrowRightIcon />
         </a>
       </div>

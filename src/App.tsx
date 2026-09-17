@@ -10,7 +10,6 @@ const Arrow  = () => <svg viewBox="0 0 24 24" aria-hidden><path d="M5 12h13M13 6
 const Play   = () => <svg viewBox="0 0 24 24" aria-hidden><path d="m9 6 9 6-9 6V6Z"/></svg>
 const Menu   = () => <svg viewBox="0 0 24 24" aria-hidden><path d="M4 7h16M4 12h16M4 17h16"/></svg>
 const Close  = () => <svg viewBox="0 0 24 24" aria-hidden><path d="M6 6l12 12M18 6 6 18"/></svg>
-const Bag    = () => <svg viewBox="0 0 24 24" aria-hidden><path d="M5 8h14l-1 12H6L5 8ZM9 9V6a3 3 0 0 1 6 0v3"/></svg>
 const Check  = () => <svg viewBox="0 0 24 24" aria-hidden><path d="M20 6 9 17l-5-5"/></svg>
 const Star   = () => <svg viewBox="0 0 24 24" aria-hidden className="star-icon"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
 
@@ -94,26 +93,31 @@ const questions = [
   ['How are sessions conducted?',     'Training is delivered through live, interactive sessions with real-market examples and mentor-led review. Enquire with us for the current batch schedule.'],
 ]
 
-const courses = [
-  { id: 'core',    number: '01', label: 'FOUNDATION',    title: 'ICT Market Structure',      detail: 'Read intent, ranges and directional bias with absolute clarity.',              lessons: '12 lessons', price: 2999,  variant: 'a' },
-  { id: 'liq',     number: '02', label: 'DEEP DIVE',     title: 'Liquidity & Inducement',     detail: 'Learn where price reaches first and how smart money creates the trap.',         lessons: '9 lessons',  price: 3499,  variant: 'b' },
-  { id: 'entry',   number: '03', label: 'EXECUTION',     title: 'Precision Entry Model',      detail: 'Build a patient, repeatable entry process around high-conviction areas.',        lessons: '10 lessons', price: 3999,  variant: 'c' },
-  { id: 'risk',    number: '04', label: 'PSYCHOLOGY',    title: 'Risk & Trading Psychology',  detail: 'Replace emotional reactions with a clear, sustainable risk protocol.',           lessons: '8 lessons',  price: 2499,  variant: 'd' },
-  { id: 'journal', number: '05', label: 'SYSTEM',        title: 'Trading Journal Blueprint',  detail: 'Turn your data into better decisions with a journal that reveals your edge.',    lessons: '6 lessons',  price: 1999,  variant: 'e' },
-  { id: 'mastery', number: '06', label: 'COMPLETE PATH', title: 'ICT Trader Mastery',         detail: 'The full course collection, sequenced from first principle to live execution.',  lessons: '45 lessons', price: 12999, variant: 'f', featured: true },
-]
-
-const mentorPlans = [
-  { id: 'starter', tier: 'Starter', duration: '1 Month',  sessions: '4 Live Sessions',  price: 4999,  perks: ['Live chart walk-throughs', 'Trade setup reviews', 'WhatsApp support', 'Study materials'], variant: 'mp-a' },
-  { id: 'growth',  tier: 'Growth',  duration: '3 Months', sessions: '12 Live Sessions', price: 12999, perks: ['All Starter benefits', 'Daily pre-market prep', 'Trade journal reviews', 'Session recordings', 'Priority access'], popular: true, variant: 'mp-b' },
-  { id: 'elite',   tier: 'Elite',   duration: '6 Months', sessions: '24 Live Sessions', price: 22999, perks: ['All Growth benefits', '1-on-1 strategy calls', 'Custom trading plan', 'Lifetime materials', 'Alumni community', 'Post-batch support'], variant: 'mp-c' },
-]
 
 const videos = [
-  { id: 'v1', title: 'Understanding Market Structure – ICT Basics',          duration: '18:42', views: '24.3K', desc: 'Learn to identify BOS, CHoCH and market phases like a professional institutional trader.', tag: 'Market Structure', grad: 'a' },
-  { id: 'v2', title: 'Liquidity Sweeps Explained – Smart Money Concepts',    duration: '22:15', views: '18.7K', desc: 'Why price hunts your stop and how to position with institutions, not against them.',        tag: 'Liquidity',        grad: 'b' },
-  { id: 'v3', title: 'Precision Entry Using Order Blocks – Live Trade Walk', duration: '31:08', views: '42.1K', desc: 'Real-time walkthrough of a precision ICT entry using order blocks in a live session.',     tag: 'Live Trade',       grad: 'c' },
+  {
+    id: 'v1',
+    ytId: '1ro8otPMUlo',
+    title: 'Backtesting vs Forward Testing – Which is Best?',
+    tag: 'Strategy',
+    desc: 'Backtesting tells you how a strategy performed — forward testing tells you if it actually works. Learn how to use both the right way to build real confidence in your edge.',
+  },
+  {
+    id: 'v2',
+    ytId: 'Ka8SEdSN2Ww',
+    title: 'Weekly Market Outlook – EURUSD, DXY & XAUUSD',
+    tag: 'Market Outlook',
+    desc: 'A structured pre-week breakdown of EURUSD, DXY and Gold. Learn how to frame your bias before the week opens using institutional market structure and liquidity.',
+  },
+  {
+    id: 'v3',
+    ytId: 'ON1dSoOflEo',
+    title: 'What is SMT? – ICT Smart Money Divergence Explained',
+    tag: 'ICT Concepts',
+    desc: 'SMT (Smart Money Technique) divergence is one of the most powerful confirmation tools in ICT. Understand what it is, how to spot it, and why it matters for your entries.',
+  },
 ]
+
 
 /* ---------------------------------------- Dynamic Mentor Images Loop ---------------------------------------- */
 // Center portrait is fixed permanently as /MentorPic/IMG_6107.PNG (never changes)
@@ -147,7 +151,7 @@ function getPhotoLabel(src: string, index: number): string {
 
 /* ---------------------------------------- High-Precision Rapid Countdown ---------------------------------------- */
 // Aligned with the announced cohort launch date: October 15, 2026 at 09:00 IST
-const BATCH_TARGET = new Date('2026-10-15T09:00:00+05:30')
+const BATCH_TARGET = new Date('2026-09-25T09:00:00+05:30')
 
 function useRapidCountdown(target: Date) {
   const calc = () => {
@@ -372,7 +376,7 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
 
               {/* Priority Next Batch Strip */}
               <div className="hcd-live-footer">
-                <a href="#contact" className="hcd-live-waitlist-btn">
+                <a href="#programmes" className="hcd-live-waitlist-btn">
                   <span>Inquire for Next Batch Waitlist</span>
                   <span aria-hidden="true">→</span>
                 </a>
@@ -566,7 +570,7 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
               <div className="hcd-back-specs-grid">
                 <div className="hcd-spec-card">
                   <span className="hcd-spec-k">CLASS START</span>
-                  <span className="hcd-spec-v">15 OCT 2026 · 10:00 AM</span>
+                  <span className="hcd-spec-v">25 SEP 2026 · 10:00 AM</span>
                 </div>
                 <div className="hcd-spec-card">
                   <span className="hcd-spec-k">FORMAT</span>
@@ -582,7 +586,7 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
               <div className="hcd-back-footer">
                 <div className="hcd-back-cta-row">
                   <a
-                    href="#contact"
+                    href="#programmes"
                     className="hcd-back-claim-btn"
                     onClick={(e) => e.stopPropagation()}
                   >
@@ -746,8 +750,6 @@ function App() {
   const [scrolled,      setScrolled]      = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const [activeQs,      setActiveQs]      = useState<number[]>([0])
-  const [cartOpen,      setCartOpen]      = useState(false)
-  const [cart,          setCart]          = useState<string[]>([])
   const [annDismissed,  setAnnDismissed]  = useState(false)
   const [reviewsDropdownOpen, setReviewsDropdownOpen] = useState(false)
 
@@ -796,11 +798,6 @@ function App() {
     })
   }, [])
 
-  /* ---------------------------------------- Body scroll lock when cart open ---------------------------------------- */
-  useEffect(() => {
-    document.body.style.overflow = cartOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [cartOpen])
 
   /* ---------------------------------------- Header glass on scroll (state-guarded for zero re-render overhead) ---------------------------------------- */
   useEffect(() => {
@@ -857,12 +854,6 @@ function App() {
     targets.forEach(t => t.classList.add('in-view'))
   }, [])
 
-  /* ---------------------------------------- Cart ---------------------------------------- */
-  const cartCourses  = courses.filter(c => cart.includes(c.id))
-  const cartTotal    = cartCourses.reduce((s, c) => s + c.price, 0)
-  const addCourse    = useCallback((id: string) => { if (!cart.includes(id)) setCart(c => [...c, id]); setCartOpen(true) }, [cart])
-  const removeCourse = useCallback((id: string) => setCart(c => c.filter(x => x !== id)), [])
-  const closeCart    = useCallback(() => setCartOpen(false), [])
 
   /* ---------------------------------------- Contact Validation & Delivery ---------------------------------------- */
   const validateField = (name: keyof ContactFormState, value: string): string | undefined => {
@@ -1053,7 +1044,7 @@ function App() {
                     <span className="live-dot" />LIVE
                   </span>
                   <span className="ann-text">
-                    Next Batch Starts <strong>October 15, 2026</strong>
+                    Next Batch Starts <strong>September 25, 2026</strong>
                   </span>
                   <span className="ann-divider">✦</span>
                 </div>
@@ -1093,7 +1084,10 @@ function App() {
                   <a
                     href={href}
                     className={`nav-link-dropdown-trigger ${isProofActive ? 'nav-active' : ''}`}
-                    onClick={() => setReviewsDropdownOpen((prev) => !prev)}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setReviewsDropdownOpen((prev) => !prev)
+                    }}
                     aria-haspopup="true"
                     aria-expanded={reviewsDropdownOpen}
                   >
@@ -1147,12 +1141,16 @@ function App() {
         </nav>
 
         <div className="header-right">
-          <button className="cart-button" onClick={() => setCartOpen(true)} aria-label={`Open cart — ${cart.length} items`}>
-            <Bag /><span className="cart-label">Cart</span>
-            {cart.length > 0 && <b className="cart-count">{cart.length}</b>}
-          </button>
-          <a className="btn-enroll" href="#contact">{isBatchLive ? 'Waitlist' : 'Enroll'}</a>
-          <button className="menu-button" onClick={() => setMenuOpen(m => !m)} aria-label="Toggle menu" aria-expanded={menuOpen}>
+          <a className="btn-enroll" href="#programmes">{isBatchLive ? 'Waitlist' : 'Enroll'}</a>
+          <button
+            className="menu-button"
+            onClick={() => setMenuOpen((m) => {
+              if (!m) setReviewsDropdownOpen(false)
+              return !m
+            })}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+          >
             {menuOpen ? <Close /> : <Menu />}
           </button>
         </div>
@@ -1172,24 +1170,13 @@ function App() {
               A live, structured ICT mentorship for traders committed to understanding market structure, liquidity and disciplined execution.
             </p>
             <div className="hero-actions reveal-el dl-3">
-              <a className={`button button-primary glow-heavy ${isBatchLive ? 'is-waitlist-mode' : ''}`} href="#contact" id="hero-cta">
+              <a className={`button button-primary glow-heavy ${isBatchLive ? 'is-waitlist-mode' : ''}`} href="#programmes" id="hero-cta">
                 {isBatchLive ? 'Join Next Batch Waitlist' : 'Reserve your seat'} <Arrow />
               </a>
-            </div>
-            <div className="hero-proof reveal-el dl-4">
-              <div className="proof-item"><strong>1000+</strong><span>Traders</span></div>
-              <div className="proof-sep" />
-              <div className="proof-item"><strong>4.9★</strong><span>Avg Rating</span></div>
-              <div className="proof-sep" />
-              <div className="proof-item"><strong>Live</strong><span>Sessions</span></div>
             </div>
           </div>
 
           <HeroCountdownModule countdown={countdown} />
-        </div>
-        <div className="hero-scroll-hint" aria-hidden>
-          <div className="scroll-track"><div className="scroll-thumb" /></div>
-          <span>SCROLL</span>
         </div>
       </section>
 
@@ -1299,7 +1286,7 @@ function App() {
           <h2 className="reveal-el">Built for the trader<br />you intend <em>to become.</em></h2>
           <p className="reveal-el">Pravyn ICT is guided by an experienced practitioner focused on market structure, liquidity and institutional price action. Every session is grounded in real execution logic, clear frameworks and accountability—not predictions.</p>
           <blockquote className="reveal-el">"No signals. No jackpots. No false promises."</blockquote>
-          <a className="text-link reveal-el" href="#contact">Start your journey <Arrow /></a>
+          <a className="text-link reveal-el" href="#programmes">Start your journey <Arrow /></a>
         </div>
       </section>
       {/* ---------------------------------------- PROGRAMMES ---------------------------------------- */}
@@ -1360,20 +1347,35 @@ function App() {
           {videos.map(v => (
             <div className="vid-card reveal-el" key={v.id}>
               <div className="vid-thumb">
-                <div className={`vid-art vid-${v.grad}`} />
+                <img
+                  className="vid-yt-thumb"
+                  src={`https://img.youtube.com/vi/${v.ytId}/maxresdefault.jpg`}
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg` }}
+                  alt={v.title}
+                  loading="lazy"
+                />
                 <div className="vid-overlay" />
-                <a className="vid-play" href="https://www.youtube.com/@pravynict" target="_blank" rel="noopener noreferrer" aria-label={`Watch: ${v.title}`}>
+                <a
+                  className="vid-play"
+                  href={`https://www.youtube.com/watch?v=${v.ytId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Watch: ${v.title}`}
+                >
                   <Play />
                 </a>
-                <span className="vid-dur">{v.duration}</span>
+                <span className="vid-yt-badge">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+                  YouTube
+                </span>
                 <span className="vid-tag">{v.tag}</span>
               </div>
               <div className="vid-info">
                 <h3>{v.title}</h3>
                 <p>{v.desc}</p>
                 <div className="vid-foot">
-                  <span>{v.views} views</span>
-                  <a href="https://www.youtube.com/@pravynict" target="_blank" rel="noopener noreferrer" className="vid-link">Watch on YouTube <Arrow /></a>
+                  <span className="vid-yt-channel">Pravyn ICT</span>
+                  <a href={`https://www.youtube.com/watch?v=${v.ytId}`} target="_blank" rel="noopener noreferrer" className="vid-link">Watch on YouTube <Arrow /></a>
                 </div>
               </div>
             </div>
@@ -1430,82 +1432,51 @@ function App() {
             <p className="section-tag">10 / GET STARTED</p>
             <h2>Take the first<br /><em>intentional step.</em></h2>
             <p className="contact-desk-lead">
-              Tell us where you are in your trading journey. We'll review your background and share the next batch schedule directly.
+              Have questions before joining? Reach out directly via WhatsApp for quick answers, or submit your profile below for batch admission review.
             </p>
           </div>
 
-          {/* 3 Balanced Channel Cards */}
+          {/* Crisp Simple Direct Contact Channels */}
           <div className="contact-channels-list">
             {/* WhatsApp Direct */}
             <a
               href="https://wa.me/918637478662?text=Hi%20Praveen,%20I'm%20interested%20in%20the%20Pravyn%20ICT%20Mentorship%20Batch"
               target="_blank"
               rel="noreferrer"
-              className="channel-card card-whatsapp"
+              className="channel-card-crisp card-whatsapp"
               aria-label="Direct WhatsApp Message to Praveen"
             >
-              <div className="channel-icon-box">
+              <div className="ccc-icon ccc-wa">
                 <WhatsAppIcon />
               </div>
-              <div className="channel-info">
-                <div className="channel-meta">
-                  <span className="channel-badge badge-emerald">RECOMMENDED · FASTEST</span>
-                  <span className="channel-title">WhatsApp Direct Concierge</span>
-                </div>
-                <span className="channel-value">+91 86374 78662</span>
-                <span className="channel-subtext">Instant batch queries, fee schedules & fast-track enrollment</span>
+              <div className="ccc-content">
+                <span className="ccc-tag">WhatsApp</span>
+                <strong className="ccc-val">+91 86374 78662</strong>
               </div>
-              <div className="channel-arrow" aria-hidden="true">
-                <Arrow />
-              </div>
+              <span className="ccc-action">Chat on WhatsApp →</span>
             </a>
 
-
             {/* Mentor Inbox Email */}
-            <div className="channel-card card-email">
-              <div className="channel-icon-box">
+            <div className="channel-card-crisp card-email">
+              <div className="ccc-icon ccc-mail">
                 <MailIcon />
               </div>
-              <div className="channel-info">
-                <div className="channel-meta">
-                  <span className="channel-badge badge-indigo">PRIVATE INBOX</span>
-                  <span className="channel-title">Mentor Evaluation Inbox</span>
-                </div>
-                <a href="mailto:pravyntraderweb@gmail.com" className="channel-value email-link">
+              <div className="ccc-content">
+                <span className="ccc-tag">Email Desk</span>
+                <a href="mailto:pravyntraderweb@gmail.com" className="ccc-val email-link">
                   pravyntraderweb@gmail.com
                 </a>
-                <span className="channel-subtext">Submit trading journals, chart breakdowns & detailed queries</span>
               </div>
-              <div className="channel-action-group">
+              <div className="ccc-actions">
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className={`channel-copy-btn ${copiedEmail ? 'copied' : ''}`}
+                  className={`ccc-copy-btn ${copiedEmail ? 'copied' : ''}`}
                   aria-label="Copy mentor email address"
                   title="Copy email to clipboard"
                 >
-                  {copiedEmail ? (
-                    <>
-                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                      <span>Copied</span>
-                    </>
-                  ) : (
-                    <>
-                      <CopyIcon />
-                      <span>Copy</span>
-                    </>
-                  )}
+                  {copiedEmail ? '✓ Copied' : 'Copy'}
                 </button>
-                <a
-                  href="mailto:pravyntraderweb@gmail.com"
-                  className="channel-mail-arrow"
-                  aria-label="Open mail client"
-                  title="Open mail client"
-                >
-                  <ExternalLinkIcon />
-                </a>
               </div>
             </div>
           </div>
@@ -1596,7 +1567,7 @@ function App() {
             <div className="contact-card-head">
               <div className="cch-title-wrap">
                 <span className="cch-dot" />
-                <h3>Direct Mentorship Enquiry</h3>
+                <h3>Mentorship Application</h3>
               </div>
               <span className="cch-badge">
                 <ShieldIcon />
@@ -1705,7 +1676,7 @@ function App() {
                       value={contactData.phone}
                       onChange={handleContactChange}
                       onBlur={handleContactBlur}
-                      placeholder="+91 86374 78662"
+                      placeholder="+91 98765 43210"
                       autoComplete="tel"
                       disabled={contactStatus === 'submitting'}
                       className={
@@ -1777,7 +1748,7 @@ function App() {
                     value={contactData.message}
                     onChange={handleContactChange}
                     onBlur={handleContactBlur}
-                    placeholder="Tell us where you are in your trading journey…"
+                    placeholder="Share your current market experience, traded assets, and learning goals…"
                     disabled={contactStatus === 'submitting'}
                     className={
                       contactTouched.message && contactErrors.message
@@ -1846,7 +1817,7 @@ function App() {
               <div className="contact-form-footer">
                 <div className="cff-note">
                   <span className="cff-dot" />
-                  <span>Direct transmission to <strong>pravyntraderweb@gmail.com</strong>. We respond within 24 hours.</span>
+                  <span>Applications are reviewed personally. You'll receive next steps within 24 hours.</span>
                 </div>
               </div>
             </form>
@@ -1869,72 +1840,8 @@ function App() {
 
       {/* ---------------------------------------- MOBILE STICKY CTA ---------------------------------------- */}
       <div className="mobile-cta" aria-hidden="true">
-        <a href="#courses" className="button button-primary">Explore Courses <Arrow /></a>
+        <a href="#programmes" className="button button-primary">Enroll in Programmes <Arrow /></a>
       </div>
-
-      {/* ---------------------------------------- CART ---------------------------------------- */}
-      {/* Overlay — clicking closes cart */}
-      <div
-        className={`cart-overlay${cartOpen ? ' open' : ''}`}
-        onClick={closeCart}
-        onTouchEnd={closeCart}
-        role="presentation"
-        aria-hidden="true"
-      />
-      <aside className={`cart-drawer${cartOpen ? ' open' : ''}`} aria-label="Shopping cart" role="dialog">
-        <div className="cart-head">
-          <div>
-            <p className="section-tag">YOUR SELECTION</p>
-            <h3>Cart <sup>{cart.length}</sup></h3>
-          </div>
-          <button className="cart-close-btn" onClick={closeCart} aria-label="Close cart"><Close /></button>
-        </div>
-
-        <div className="cart-items-scroll">
-          {cartCourses.length > 0 ? (
-            <>
-              <div className="cart-items">
-                {cartCourses.map(c => (
-                  <div className="cart-item" key={c.id}>
-                    <div className={`cart-chip var-${c.variant}`}>{c.number}</div>
-                    <div className="cart-item-info">
-                      <strong>{c.title}</strong>
-                      <span>{c.lessons}</span>
-                    </div>
-                    <div className="cart-item-right">
-                      <b>₹{c.price.toLocaleString('en-IN')}</b>
-                      <button onClick={() => removeCourse(c.id)} className="cart-remove">Remove</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="cart-total">
-                <span>Total</span><strong>₹{cartTotal.toLocaleString('en-IN')}</strong>
-              </div>
-              <button className="button button-primary cart-checkout">
-                Checkout — Coming Soon <Arrow />
-              </button>
-              <p className="cart-note">Secure payment will be enabled before launch.</p>
-            </>
-          ) : (
-            <div className="cart-empty">
-              <div className="cart-empty-badge">
-                <img src="/logo/logo.png" alt="Trading Leaders Community" className="cart-empty-logo" />
-              </div>
-              <h4>Your cart is empty</h4>
-              <p>Add a mentorship course to start trading with precision.</p>
-              <button onClick={closeCart} className="button button-ghost">
-                Browse courses <Arrow />
-              </button>
-            </div>
-          )}
-
-          {/* Always-visible close button at bottom on mobile */}
-          <button className="cart-close-mobile" onClick={closeCart} aria-label="Close cart">
-            ✕ Close Cart
-          </button>
-        </div>
-      </aside>
     </main>
   )
 }

@@ -34,3 +34,4 @@ pnpm-debug.log*
 *.MOV
 *.mov
 *.mp4
+!public/feedback_vedios/*.mp4
