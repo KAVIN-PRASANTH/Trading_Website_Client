@@ -362,6 +362,46 @@
   z-index: 1;
 }
 
+/* ── Subtle Ambient Trading Graphic Watermark ────────────────── */
+.fdeck-card-trading-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  opacity: 0.16;
+  mix-blend-mode: luminosity;
+  filter: contrast(1.15) brightness(0.85);
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.5s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.fdeck-card.layer-active .fdeck-card-trading-bg {
+  opacity: 0.20;
+}
+
+.fdeck-card.layer-active:hover .fdeck-card-trading-bg {
+  opacity: 0.26;
+  transform: scale(1.025);
+}
+
+/* Card Scrim to maintain pristine contrast and readability */
+.fdeck-card-scrim {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: radial-gradient(
+    ellipse 95% 85% at 50% 45%,
+    rgba(8, 17, 34, 0.45) 0%,
+    rgba(6, 13, 27, 0.88) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* ── Corner Precision Studs (Removed for clean, modern aesthetic) ── */
 .fdeck-corner-stud {
   display: none !important;
@@ -447,7 +487,7 @@
   box-shadow: 0 0 8px #06B6D4;
 }
 
-/* Front Body: Heroic, Readable Authentic Testimonial */
+/* Front Body: Heroic, Readable Authentic Testimonial (Vertically Centered) */
 .fdeck-front-body {
   position: relative;
   z-index: 2;
@@ -455,7 +495,7 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   margin: 0 0 6px;
   overflow-y: auto;
   padding-right: 2px;
@@ -472,6 +512,11 @@
 .fdeck-quote-container {
   position: relative;
   width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .fdeck-inline-quote {
@@ -480,27 +525,28 @@
   line-height: 1;
   color: #38BDF8;
   display: block;
-  margin-bottom: 6px;
-  opacity: 0.85;
+  margin-bottom: 8px;
+  opacity: 0.9;
   user-select: none;
-  filter: drop-shadow(0 2px 8px rgba(56, 189, 248, 0.35));
+  filter: drop-shadow(0 2px 8px rgba(56, 189, 248, 0.4));
 }
 
 .fdeck-quote-text {
-  font-size: 13.5px;
-  line-height: 1.55;
-  color: #EFF6FF;
+  font-size: clamp(13px, 2.1vw, 14.2px);
+  line-height: 1.6;
+  color: #F8FAFC;
   font-weight: 450;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.012em;
   margin: 0;
   white-space: pre-line;
   text-wrap: pretty;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
 }
 
 @media (max-width: 680px) {
   .fdeck-quote-text {
     font-size: clamp(12.5px, 3.4vw, 13.5px);
-    line-height: 1.5;
+    line-height: 1.52;
   }
 }
 

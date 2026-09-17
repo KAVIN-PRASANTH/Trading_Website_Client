@@ -3,7 +3,20 @@ export interface StudentFeedback {
   name: string
   feedback: string
   proofImages: string[]
+  bgImage?: string
 }
+
+export const FEEDBACK_BG_IMAGES: string[] = [
+  '/feedbackBackgroundPic/360_F_1855613286_Y086tclKa4XoZu7GskCZWb68czmu9Fon.webp',
+  '/feedbackBackgroundPic/trading-bg-2.jpg',
+  '/feedbackBackgroundPic/trading-bg-3.jpg',
+  '/feedbackBackgroundPic/trading-bg-7.jpg',
+  '/feedbackBackgroundPic/trading-bg-4.jpg',
+  '/feedbackBackgroundPic/trading-bg-6.jpg',
+  '/feedbackBackgroundPic/trading-bg-1.jpg',
+  '/feedbackBackgroundPic/trading-bg-5.jpg',
+  '/feedbackBackgroundPic/trading-bg-8.jpg',
+]
 
 export const STUDENT_FEEDBACK_DATA: StudentFeedback[] = [
   {
@@ -194,9 +207,10 @@ export const STUDENT_FEEDBACK_DATA: StudentFeedback[] = [
   },
   {
     id: 'trader-gold',
-    name: 'Praveen\'s Student',
+    name: "Praveen's Student",
     feedback:
       'Again ❤️‍🔥🙏. 85$ to 276$ praveen bro 🤜🤛. Following only 15 minutes Dealing range in XAU ⚡❤️‍🔥🫂👍. Clean analysis, zero confusion!',
     proofImages: ['/Student_feedback/xau-trader-01.jpeg'],
+    bgImage: '/feedbackBackgroundPic/trading-bg-7.jpg',
   },
 ]

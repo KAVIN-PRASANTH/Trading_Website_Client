@@ -1,5 +1,5 @@
 import React, { memo, useRef, useState, useEffect } from 'react'
-import { StudentFeedback } from './feedbackData'
+import { StudentFeedback, FEEDBACK_BG_IMAGES } from './feedbackData'
 
 interface FeedbackCardProps {
   feedback: StudentFeedback
@@ -63,6 +63,7 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = memo(({
   const currentProof = feedback.proofImages[activeProofIdx] || feedback.proofImages[0]
   const studentInitial = feedback.name.trim().charAt(0).toUpperCase() || 'S'
   const themeClass = propThemeClass || 'fdeck-theme-web'
+  const cardBgImage = feedback.bgImage || FEEDBACK_BG_IMAGES[index % FEEDBACK_BG_IMAGES.length]
 
   return (
     <div
@@ -83,6 +84,18 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = memo(({
       <div className="fdeck-card-inner">
         {/* ── CARD FRONT ── */}
         <div className="fdeck-face fdeck-face-front">
+          {/* Subtle Ambient Trading Chart Backdrop */}
+          {cardBgImage && (
+            <div
+              className="fdeck-card-trading-bg"
+              style={{ backgroundImage: `url(${cardBgImage})` }}
+              aria-hidden="true"
+            />
+          )}
+
+          {/* Scrim Overlay for Crystal-Clear Readability */}
+          <div className="fdeck-card-scrim" aria-hidden="true" />
+
           {/* Subtle Dynamic Glare */}
           <div className="fdeck-card-glare" aria-hidden="true" />
 
