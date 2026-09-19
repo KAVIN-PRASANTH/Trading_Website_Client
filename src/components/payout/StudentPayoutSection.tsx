@@ -39,21 +39,10 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
   const [isAutoRotating, setIsAutoRotating] = useState(true)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   const [webglSupported, setWebglSupported] = useState(true)
+  const [activeProofImg, setActiveProofImg] = useState<string | null>(null)
 
-  // 4-Way Directional Controller for full 360 rotation on mobile and desktop
+  // Sphere impulse ref preserved for future interactions
   const sphereImpulse = useRef<SphereImpulse>({ vx: 0, vy: 0, continuousDir: null })
-
-  const handleDirectionStart = useCallback((dir: 'up' | 'down' | 'left' | 'right') => {
-    sphereImpulse.current.continuousDir = dir
-    if (dir === 'left') sphereImpulse.current.vy -= 0.018
-    if (dir === 'right') sphereImpulse.current.vy += 0.018
-    if (dir === 'up') sphereImpulse.current.vx += 0.016
-    if (dir === 'down') sphereImpulse.current.vx -= 0.016
-  }, [])
-
-  const handleDirectionEnd = useCallback(() => {
-    sphereImpulse.current.continuousDir = null
-  }, [])
 
   // Check for prefers-reduced-motion and WebGL support on mount
   useEffect(() => {
@@ -82,6 +71,23 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
 
     return () => mql.removeEventListener('change', listener)
   }, [])
+
+  // Lock body scroll and listen for Escape key when lightbox is open
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveProofImg(null)
+      }
+    }
+    if (activeProofImg) {
+      window.addEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = 'hidden'
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [activeProofImg])
 
   return (
     <section
@@ -131,29 +137,7 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
         </div>
       </div>
 
-      {/* Mode Switcher / HUD Bar */}
-      <div className="payout-controls-bar">
-        <div className="payout-focus-preview">
-          <span className="payout-live-pulse" />
-          <span className="focus-label">REAL COMMUNITY RESULTS:</span>
-          <span className="focus-name">VERIFIED STUDENT PAYOUT PROOF</span>
-        </div>
-
-        <div className="payout-nav-actions">
-          {webglSupported && !prefersReducedMotion && (
-            <button
-              type="button"
-              className="payout-mode-toggle"
-              onClick={() => setViewMode((m) => (m === '3d' ? 'grid' : '3d'))}
-              aria-label="Toggle 3D Sphere or Gallery View"
-            >
-              {viewMode === '3d' ? '⊞ Feedback Gallery' : '✦ 3D Payout Sphere'}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Interactive 3D Sphere Experience */}
+      {/* Interactive Floating 3D Proof Field */}
       {viewMode === '3d' && webglSupported ? (
         <WebGLErrorBoundary
           fallback={
@@ -169,84 +153,84 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
           }
         >
           <div className="payout-sphere-stage">
-            <StudentPayoutScene sphereImpulse={sphereImpulse} isAutoRotating={isAutoRotating} />
+            <StudentPayoutScene
+              sphereImpulse={sphereImpulse}
+              isAutoRotating={isAutoRotating}
+              onSelectCard={(url) => setActiveProofImg(url)}
+            />
 
-            {/* 4-Way Directional Controller for full 360 rotation on mobile and desktop */}
-            <div className="payout-dpad-controls" aria-label="3D Sphere Directional Controls">
+            {/* Single clean icon button inside the card stage to switch to grid */}
+            {webglSupported && !prefersReducedMotion && (
               <button
                 type="button"
-                className="dpad-btn dpad-up"
-                aria-label="Roll Sphere Up"
-                title="Roll Up"
-                onPointerDown={() => handleDirectionStart('up')}
-                onPointerUp={handleDirectionEnd}
-                onPointerLeave={handleDirectionEnd}
+                className="payout-stage-toggle-btn"
+                onClick={() => setViewMode('grid')}
+                title="Switch to Grid View"
+                aria-label="Switch to Grid View"
               >
-                ▲
+                <span className="toggle-btn-icon">⊞</span>
+                <span className="toggle-btn-label">Grid</span>
               </button>
-              <div className="dpad-middle-row">
-                <button
-                  type="button"
-                  className="dpad-btn dpad-left"
-                  aria-label="Spin Sphere Left"
-                  title="Spin Left"
-                  onPointerDown={() => handleDirectionStart('left')}
-                  onPointerUp={handleDirectionEnd}
-                  onPointerLeave={handleDirectionEnd}
-                >
-                  ◀
-                </button>
-                <button
-                  type="button"
-                  className={`dpad-center-badge ${!isAutoRotating ? 'paused' : ''}`}
-                  onClick={() => setIsAutoRotating((prev) => !prev)}
-                  title={isAutoRotating ? 'Stop Auto Rotation' : 'Resume Auto Rotation'}
-                  aria-label={isAutoRotating ? 'Stop Auto Rotation' : 'Resume Auto Rotation'}
-                >
-                  <span>{isAutoRotating ? '⏸' : '▶'}</span>
-                </button>
-                <button
-                  type="button"
-                  className="dpad-btn dpad-right"
-                  aria-label="Spin Sphere Right"
-                  title="Spin Right"
-                  onPointerDown={() => handleDirectionStart('right')}
-                  onPointerUp={handleDirectionEnd}
-                  onPointerLeave={handleDirectionEnd}
-                >
-                  ▶
-                </button>
-              </div>
-              <button
-                type="button"
-                className="dpad-btn dpad-down"
-                aria-label="Roll Sphere Down"
-                title="Roll Down"
-                onPointerDown={() => handleDirectionStart('down')}
-                onPointerUp={handleDirectionEnd}
-                onPointerLeave={handleDirectionEnd}
-              >
-                ▼
-              </button>
-            </div>
-
-            {/* Scroll & Drag Guidance Pill */}
-            <div className="payout-drag-hint" aria-hidden>
-              <span className="hint-icon">✦</span>
-              <span className="payout-hint-desktop">Swipe or use 360° buttons to rotate 3D sphere</span>
-              <span className="payout-hint-mobile">Swipe to rotate 360°</span>
-            </div>
+            )}
           </div>
         </WebGLErrorBoundary>
       ) : (
         /* Accessible Feedback Screenshot Gallery View */
         <div className="payout-grid-stage">
+          {webglSupported && !prefersReducedMotion && (
+            <div className="payout-grid-header-actions">
+              <button
+                type="button"
+                className="payout-stage-toggle-btn"
+                onClick={() => setViewMode('3d')}
+                title="Switch to 3D View"
+                aria-label="Switch to 3D View"
+              >
+                <span className="toggle-btn-icon">✦</span>
+                <span className="toggle-btn-label">3D View</span>
+              </button>
+            </div>
+          )}
           <div className="payout-screenshots-grid">
             {FEEDBACK_IMAGE_URLS.map((url, idx) => (
-              <div key={idx} className="payout-screenshot-card">
+              <div
+                key={idx}
+                className="payout-screenshot-card"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setActiveProofImg(url)}
+              >
                 <img src={url} alt={`Student Payout Verification Screenshot ${idx + 1}`} loading="lazy" />
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* High-Resolution Screenshot Modal Lightbox */}
+      {activeProofImg && (
+        <div
+          className="payout-lightbox-backdrop"
+          onClick={() => setActiveProofImg(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Student Payout Certificate Proof"
+        >
+          <div className="payout-lightbox-content" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className="payout-lightbox-close"
+              onClick={() => setActiveProofImg(null)}
+              aria-label="Close proof preview"
+            >
+              ✕
+            </button>
+            <div className="payout-lightbox-img-wrap">
+              <img src={activeProofImg} alt="Verified Student Payout Proof" />
+            </div>
+            <div className="payout-lightbox-footer">
+              <span className="payout-live-pulse" />
+              <span>VERIFIED STUDENT PAYOUT CERTIFICATE & COMMUNITY EVIDENCE</span>
+            </div>
           </div>
         </div>
       )}

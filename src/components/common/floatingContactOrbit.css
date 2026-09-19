@@ -1,0 +1,613 @@
+/* ══════════════════════════════════════════════════════════════
+   PRAVYN ICT — FLOATING CONTACT ORBIT
+   Persistent, Institutional 3D Orbital Contact System
+   WhatsApp · Instagram · Email
+   ══════════════════════════════════════════════════════════════ */
+
+/* Container Anchor — Fixed Bottom-Right */
+.fco-root {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 150;
+  width: 54px;
+  height: 54px;
+  pointer-events: none; /* Only hub and nodes capture events */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Gentle Levitation Float on the Entire Widget */
+.fco-ambient-float {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  animation: fco-drift 6.5s ease-in-out infinite;
+}
+
+@keyframes fco-drift {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3.5px);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CENTRAL FLOATING HUB (COLLAPSED ANCHOR)
+   ══════════════════════════════════════════════════════════════ */
+.fco-hub {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(14, 28, 56, 0.95) 0%, rgba(3, 8, 22, 0.98) 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.28);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.72),
+    0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition:
+    transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+  outline: none;
+  z-index: 20;
+}
+
+.fco-hub:hover {
+  transform: scale(1.06);
+  border-color: rgba(56, 189, 248, 0.65);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.82),
+    0 0 16px rgba(56, 189, 248, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.fco-hub:active {
+  transform: scale(0.96);
+}
+
+.fco-hub:focus-visible {
+  box-shadow:
+    0 0 0 3px rgba(56, 189, 248, 0.4),
+    0 12px 32px rgba(0, 0, 0, 0.72);
+}
+
+/* Active / Open State of Hub */
+.fco-root.is-open .fco-hub {
+  border-color: rgba(56, 189, 248, 0.75);
+  background: radial-gradient(circle at 35% 30%, rgba(18, 36, 72, 0.98) 0%, rgba(4, 10, 26, 0.99) 100%);
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.85),
+    0 0 18px rgba(56, 189, 248, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Hub Icon Transition */
+.fco-hub-icon-wrap {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fco-root.is-open .fco-hub-icon-wrap {
+  transform: rotate(90deg);
+}
+
+.fco-hub-mark {
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fco-hub-mark-spark {
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 1px 4px rgba(56, 189, 248, 0.4));
+}
+
+.fco-hub-mark-close {
+  position: absolute;
+  inset: 0;
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  transform: scale(0.6) rotate(-45deg);
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #f1f5f9;
+}
+
+.fco-root.is-open .fco-hub-mark-spark {
+  opacity: 0;
+  transform: scale(0.6) rotate(45deg);
+}
+
+.fco-root.is-open .fco-hub-mark-close {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Subtle Ping Indicator on Hub when collapsed */
+.fco-hub-ping {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  opacity: 0.6;
+  pointer-events: none;
+  animation: fco-hub-pulse 4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.fco-root.is-open .fco-hub-ping {
+  display: none;
+}
+
+@keyframes fco-hub-pulse {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.6;
+  }
+  50%, 100% {
+    transform: scale(1.22);
+    opacity: 0;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ORBIT STAGE & RADIAL NODES AROUND THE HUB
+   ══════════════════════════════════════════════════════════════ */
+.fco-orbit-stage {
+  position: absolute;
+  bottom: 27px;
+  right: 27px;
+  width: 0;
+  height: 0;
+  perspective: 900px;
+  -webkit-perspective: 900px;
+  pointer-events: none;
+  z-index: 30;
+}
+
+/* Faint Circular Orbit Arc Guide */
+.fco-orbit-wire {
+  position: absolute;
+  bottom: -27px;
+  right: -27px;
+  width: 180px;
+  height: 180px;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: visible;
+  z-index: 0;
+}
+
+.fco-root.is-open .fco-orbit-wire {
+  opacity: 0.85;
+  transform: scale(1);
+}
+
+/* ── Individual Orbit Node Wrap ─────────────────────────────── */
+.fco-node {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  margin-bottom: -22px;
+  margin-right: -22px;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 35;
+  transform: translate3d(0, 0, 0) scale(0.35);
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.32s ease;
+  will-change: transform, opacity;
+}
+
+/* When Open: Nodes Glide Outward in a Perfect Radial Arc Around Hub */
+.fco-root.is-open .fco-node {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Desktop: Equal Radius Arc R ≈ 92px Around Hub (Center to Center) */
+.fco-root.is-open .fco-node-whatsapp {
+  transform: translate3d(-90px, -16px, 0) scale(1);
+  transition-delay: 0.02s;
+}
+
+.fco-root.is-open .fco-node-instagram {
+  transform: translate3d(-63px, -67px, 0) scale(1);
+  transition-delay: 0.06s;
+}
+
+.fco-root.is-open .fco-node-email {
+  transform: translate3d(-10px, -91px, 0) scale(1);
+  transition-delay: 0.1s;
+}
+
+/* ── Continuous Subtle Spatial Orbit Drift (Active when Expanded) ── */
+.fco-root.is-open .fco-orbit-drifter {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation-duration: 16s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.fco-root.is-open .fco-node-whatsapp .fco-orbit-drifter {
+  animation-name: fco-orbit-phase-1;
+  animation-delay: 0s;
+}
+
+.fco-root.is-open .fco-node-instagram .fco-orbit-drifter {
+  animation-name: fco-orbit-phase-2;
+  animation-delay: -5.33s; /* 120 deg offset */
+}
+
+.fco-root.is-open .fco-node-email .fco-orbit-drifter {
+  animation-name: fco-orbit-phase-3;
+  animation-delay: -10.66s; /* 240 deg offset */
+}
+
+/* Orbital Keyframes with Micro Scale & Opacity Depth Modulation */
+@keyframes fco-orbit-phase-1 {
+  0% {
+    transform: translate3d(0, 0, 8px) scale(1.02);
+    filter: brightness(1.04);
+  }
+  25% {
+    transform: translate3d(4px, -5px, 0px) scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: translate3d(0, -7px, -10px) scale(0.96);
+    filter: brightness(0.94);
+  }
+  75% {
+    transform: translate3d(-4px, -2px, 0px) scale(0.99);
+    filter: brightness(0.98);
+  }
+  100% {
+    transform: translate3d(0, 0, 8px) scale(1.02);
+    filter: brightness(1.04);
+  }
+}
+
+@keyframes fco-orbit-phase-2 {
+  0% {
+    transform: translate3d(0, 0, 8px) scale(1.02);
+    filter: brightness(1.04);
+  }
+  25% {
+    transform: translate3d(-5px, 4px, 0px) scale(0.99);
+    filter: brightness(0.98);
+  }
+  50% {
+    transform: translate3d(-7px, 0, -10px) scale(0.96);
+    filter: brightness(0.94);
+  }
+  75% {
+    transform: translate3d(-2px, -4px, 0px) scale(1);
+    filter: brightness(1);
+  }
+  100% {
+    transform: translate3d(0, 0, 8px) scale(1.02);
+    filter: brightness(1.04);
+  }
+}
+
+@keyframes fco-orbit-phase-3 {
+  0% {
+    transform: translate3d(0, 0, 8px) scale(1.02);
+    filter: brightness(1.04);
+  }
+  25% {
+    transform: translate3d(3px, 4px, 0px) scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: translate3d(6px, 0, -10px) scale(0.96);
+    filter: brightness(0.94);
+  }
+  75% {
+    transform: translate3d(2px, -3px, 0px) scale(0.99);
+    filter: brightness(0.98);
+  }
+  100% {
+    transform: translate3d(0, 0, 8px) scale(1.02);
+    filter: brightness(1.04);
+  }
+}
+
+/* Pause animations when hovering an individual node */
+.fco-node:hover .fco-orbit-drifter {
+  animation-play-state: paused;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CONTACT ACTION LINK & BRAND BADGES
+   ══════════════════════════════════════════════════════════════ */
+.fco-action-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  pointer-events: auto;
+  outline: none;
+  z-index: 10;
+}
+
+.fco-icon-shell {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(5, 12, 28, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.22s ease,
+    background 0.22s ease,
+    box-shadow 0.25s ease;
+}
+
+.fco-action-link:hover .fco-icon-shell {
+  transform: scale(1.15) translateY(-2px);
+}
+
+.fco-action-link:active .fco-icon-shell {
+  transform: scale(0.95);
+}
+
+.fco-action-link:focus-visible .fco-icon-shell {
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.5), 0 8px 24px rgba(0, 0, 0, 0.65);
+}
+
+.fco-action-link svg {
+  width: 21px;
+  height: 21px;
+  transition: transform 0.22s ease;
+}
+
+.fco-action-link:hover svg {
+  transform: scale(1.08);
+}
+
+/* ── WhatsApp Brand Styling ──────────────────────────────────── */
+.fco-link-whatsapp .fco-icon-shell {
+  border-color: rgba(34, 197, 94, 0.38);
+  color: #22c55e;
+}
+
+.fco-link-whatsapp:hover .fco-icon-shell {
+  border-color: rgba(34, 197, 94, 0.9);
+  background: rgba(12, 30, 20, 0.96);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.75),
+    0 0 18px rgba(34, 197, 94, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  color: #4ade80;
+}
+
+/* ── Instagram Brand Styling ─────────────────────────────────── */
+.fco-link-instagram .fco-icon-shell {
+  border-color: rgba(244, 114, 182, 0.38);
+  color: #f472b6;
+}
+
+.fco-link-instagram:hover .fco-icon-shell {
+  border-color: rgba(244, 114, 182, 0.9);
+  background: rgba(30, 14, 26, 0.96);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.75),
+    0 0 18px rgba(244, 114, 182, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  color: #fb7185;
+}
+
+/* ── Email Brand Styling ─────────────────────────────────────── */
+.fco-link-email .fco-icon-shell {
+  border-color: rgba(56, 189, 248, 0.38);
+  color: #38bdf8;
+}
+
+.fco-link-email:hover .fco-icon-shell {
+  border-color: rgba(56, 189, 248, 0.9);
+  background: rgba(10, 26, 52, 0.96);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.75),
+    0 0 18px rgba(56, 189, 248, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  color: #7dd3fc;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE SCALING & BREAKPOINTS
+   ══════════════════════════════════════════════════════════════ */
+
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .fco-root {
+    bottom: 24px;
+    right: 24px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .fco-hub {
+    width: 50px;
+    height: 50px;
+  }
+
+  .fco-orbit-stage {
+    bottom: 25px;
+    right: 25px;
+  }
+
+  .fco-node {
+    width: 42px;
+    height: 42px;
+    margin-bottom: -21px;
+    margin-right: -21px;
+  }
+
+  .fco-icon-shell {
+    width: 42px;
+    height: 42px;
+  }
+
+  .fco-action-link svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  /* Tablet Arc R ≈ 80px */
+  .fco-root.is-open .fco-node-whatsapp {
+    transform: translate3d(-78px, -14px, 0) scale(1);
+  }
+
+  .fco-root.is-open .fco-node-instagram {
+    transform: translate3d(-55px, -58px, 0) scale(1);
+  }
+
+  .fco-root.is-open .fco-node-email {
+    transform: translate3d(-9px, -79px, 0) scale(1);
+  }
+}
+
+/* Mobile Screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .fco-root {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    right: 16px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .fco-hub {
+    width: 46px;
+    height: 46px;
+  }
+
+  .fco-hub-icon-wrap {
+    width: 19px;
+    height: 19px;
+  }
+
+  .fco-hub-mark-spark,
+  .fco-hub-mark-close {
+    width: 18px;
+    height: 18px;
+  }
+
+  .fco-orbit-stage {
+    bottom: 23px;
+    right: 23px;
+  }
+
+  .fco-node {
+    width: 38px;
+    height: 38px;
+    margin-bottom: -19px;
+    margin-right: -19px;
+  }
+
+  .fco-icon-shell {
+    width: 38px;
+    height: 38px;
+  }
+
+  .fco-action-link svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  /* Mobile Arc R ≈ 76px Around Hub (Comfortable 10px spacing between icons) */
+  .fco-root.is-open .fco-node-whatsapp {
+    transform: translate3d(-75px, -11px, 0) scale(1);
+  }
+
+  .fco-root.is-open .fco-node-instagram {
+    transform: translate3d(-54px, -54px, 0) scale(1);
+  }
+
+  .fco-root.is-open .fco-node-email {
+    transform: translate3d(-11px, -75px, 0) scale(1);
+  }
+
+  @keyframes fco-drift {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ACCESSIBILITY: RESPECT PREFERS-REDUCED-MOTION
+   ══════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .fco-ambient-float {
+    animation: none !important;
+  }
+
+  .fco-hub-ping {
+    animation: none !important;
+    display: none !important;
+  }
+
+  .fco-root.is-open .fco-orbit-drifter {
+    animation: none !important;
+  }
+
+  .fco-hub,
+  .fco-node,
+  .fco-icon-shell,
+  .fco-action-link,
+  .fco-hub-icon-wrap,
+  .fco-hub-mark-spark,
+  .fco-hub-mark-close,
+  .fco-orbit-wire {
+    transition-duration: 0.05s !important;
+    animation: none !important;
+  }
+}

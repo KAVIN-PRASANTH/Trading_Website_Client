@@ -1,34 +1,35 @@
 /* ══════════════════════════════════════════════════════════════
-   STUDENT FEEDBACK — 3D SWIPEABLE TESTIMONIAL CARD DECK
-   Midnight Precision Cinematic Aesthetic · Physics-Driven Deck
+   STUDENT PROOF — HORIZONTAL RIGHT-TO-LEFT PROOF CARD MARQUEE
+   Authentic WhatsApp Screenshots · Continuous Smooth Conveyor
+   Midnight Precision Cinematic Aesthetic · Pravyn ICT
    ══════════════════════════════════════════════════════════════ */
 
-.fdeck-section {
+.proof-mosaic-section {
   position: relative;
-  padding: var(--py) var(--px);
+  padding: 34px 0 28px;
   overflow: hidden;
-  background: linear-gradient(180deg, var(--bg) 0%, rgba(4, 11, 26, 0.95) 40%, rgba(5, 13, 31, 0.95) 75%, var(--bg) 100%);
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(4, 11, 26, 0.96) 40%, rgba(5, 13, 31, 0.96) 75%, var(--bg) 100%);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
 
-/* Atmospheric Background Glows */
-.fdeck-bg-radial {
+/* Atmospheric Ambient Depth Lighting */
+.proof-bg-radial {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 65% 50% at 50% 45%, rgba(37, 99, 235, 0.12), transparent 70%),
-    radial-gradient(circle at 18% 70%, rgba(6, 182, 212, 0.07), transparent 45%),
-    radial-gradient(circle at 82% 30%, rgba(79, 70, 229, 0.08), transparent 50%);
+    radial-gradient(ellipse 70% 50% at 50% 45%, rgba(37, 99, 235, 0.10), transparent 70%),
+    radial-gradient(circle at 18% 70%, rgba(6, 182, 212, 0.05), transparent 45%),
+    radial-gradient(circle at 82% 30%, rgba(79, 70, 229, 0.06), transparent 50%);
   z-index: 0;
 }
 
-.fdeck-bg-grid {
+.proof-bg-grid {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.18;
+  opacity: 0.10;
   background-image:
     linear-gradient(rgba(59, 130, 246, 0.08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(59, 130, 246, 0.08) 1px, transparent 1px);
@@ -37,31 +38,33 @@
   z-index: 0;
 }
 
-/* Section Header */
-.fdeck-header {
+/* Editorial Section Header */
+.proof-section-header {
   position: relative;
   z-index: 2;
   text-align: center;
-  max-width: 760px;
-  margin: 0 auto 36px;
+  max-width: 800px;
+  margin: 0 auto 16px;
+  padding: 0 var(--px);
 }
 
-.fdeck-tag {
+.proof-section-tag {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font: 10px var(--mono);
-  letter-spacing: 0.18em;
+  font: 700 10.5px/1 var(--sans);
+  letter-spacing: 0.1em;
   color: var(--blue-lt);
-  padding: 6px 14px;
-  background: rgba(37, 99, 235, 0.08);
+  padding: 5px 14px;
+  background: rgba(37, 99, 235, 0.09);
   border: 1px solid var(--border-2);
   border-radius: 999px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   text-transform: uppercase;
 }
 
-.fdeck-pulse-dot {
+.proof-live-pulse {
+  display: inline-block;
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -70,1390 +73,457 @@
   animation: live-pulse 2s infinite;
 }
 
-.fdeck-title {
-  font-size: clamp(34px, 4.2vw, 62px);
-  font-weight: 800;
-  letter-spacing: -0.055em;
-  line-height: 0.98;
-  color: var(--text);
-  margin-bottom: 14px;
+.proof-section-title {
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: #ffffff;
+  margin-bottom: 8px;
+  font-family: var(--sans);
 }
 
-.fdeck-title em {
-  font-style: italic;
-  font-family: var(--serif);
-  font-weight: 600;
-  background: linear-gradient(90deg, #BAE6FD 0%, #60A5FA 50%, #67E8F9 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.fdeck-sub {
-  font-size: 15px;
+.proof-section-sub {
+  font-size: 14px;
   color: var(--text-2);
-  line-height: 1.68;
+  line-height: 1.6;
   max-width: 580px;
-  margin: 0 auto;
-}
-
-/* Rating Proof Strip */
-.fdeck-proof-strip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 18px;
-  padding: 6px 18px;
-  background: rgba(7, 15, 34, 0.7);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-}
-
-.fdeck-stars-group {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.fdeck-star-icon {
-  width: 13px;
-  height: 13px;
-  fill: #F59E0B;
-}
-
-.fdeck-proof-rating {
-  font: 700 13px var(--mono);
-  color: #F59E0B;
-}
-
-.fdeck-proof-sep {
-  width: 1px;
-  height: 12px;
-  background: var(--border-2);
-}
-
-.fdeck-proof-count {
-  font: 11px var(--mono);
-  color: var(--text-2);
-  letter-spacing: 0.04em;
+  margin: 0 auto 12px;
 }
 
 /* ══════════════════════════════════════════════════════════════
-   3D STAGE & DECK WRAPPER
+   HORIZONTAL MARQUEE VIEWPORT & CONTINUOUS CONVEYOR TRACK
    ══════════════════════════════════════════════════════════════ */
-.fdeck-stage {
+
+.proof-marquee-wrapper {
   position: relative;
-  z-index: 2;
   width: 100%;
-  max-width: 1240px;
-  margin: 0 auto;
+  margin: 8px 0 18px;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.proof-marquee-viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 0 14px;
+  /* Smooth edge gradient fade for entering/exiting cards */
+  mask-image: linear-gradient(to right, transparent 0%, #000 3.5%, #000 96.5%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 3.5%, #000 96.5%, transparent 100%);
+}
+
+.proof-marquee-track {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 24px;
+  width: max-content;
+  will-change: transform;
   user-select: none;
   -webkit-user-select: none;
 }
 
-/* Atmospheric subtle backlighting behind the physical deck */
-.fdeck-stage::before {
-  content: '';
-  position: absolute;
-  top: 42%;
-  left: 50%;
-  width: 760px;
-  height: 420px;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.16) 0%, rgba(6, 182, 212, 0.04) 50%, transparent 72%);
-  pointer-events: none;
-  z-index: 0;
-  filter: blur(50px);
+/* ══════════════════════════════════════════════════════════════
+   PROOF MARQUEE CARD (COMPACT READABLE FORMAT)
+   ══════════════════════════════════════════════════════════════ */
+
+.proof-marquee-card {
+  flex-shrink: 0;
+  width: clamp(280px, 21vw, 330px);
+  height: clamp(360px, 40vh, 410px);
+  cursor: pointer;
+  outline: none;
+  transition:
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Stable Card Stack Container — Reduced Size per User Request */
-.fdeck-stack {
+.proof-card-inner {
   position: relative;
-  z-index: 1;
   width: 100%;
-  max-width: 440px;
-  height: 420px;
+  height: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #030816;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 16px 40px -10px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
-  touch-action: pan-y;
+  padding: 8px;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.fdeck-stack.is-viewing-proof .fdeck-card {
-  cursor: default !important;
+/* Unedited Screenshot Object - Authentic, Crisp & Readable */
+.proof-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  border-radius: 10px;
 }
 
-@media (max-width: 680px) {
-  .fdeck-stack {
-    max-width: min(325px, 88vw);
-    height: 400px;
-  }
+/* Subtle physical depth glare */
+.proof-card-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, transparent 40%, rgba(0, 0, 0, 0.22) 100%);
+  border-radius: 14px;
 }
 
-@media (max-width: 420px) {
-  .fdeck-stack {
-    max-width: min(290px, 86vw);
-    height: 390px;
-  }
+/* Minimal hover inspection badge - clean neutral */
+.proof-card-inspect-hint {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(10, 15, 30, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #F1F5F9;
+  font: 600 10.5px/1 var(--sans);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.8);
+}
+
+/* Interactive Hover States - Clean Neutral, NO Blue Border/Glow */
+.proof-marquee-card:hover {
+  transform: scale(1.02) translateY(-3px);
+  z-index: 10;
+}
+
+.proof-marquee-card:hover .proof-card-inner,
+.proof-marquee-card:focus-visible .proof-card-inner {
+  border-color: rgba(255, 255, 255, 0.28);
+  border-top-color: rgba(255, 255, 255, 0.45);
+  box-shadow:
+    0 22px 55px -10px rgba(0, 0, 0, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20);
+}
+
+.proof-marquee-card:hover .proof-card-inspect-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Call to action */
+.proof-cta-wrap {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-top: 12px;
+  padding: 0 var(--px);
 }
 
 /* ══════════════════════════════════════════════════════════════
-   FEEDBACK CARD COMPONENT — 3D CARD FLIP ARCHITECTURE
+   FULLSCREEN PROOF LIGHTBOX MODAL (FULL VIEW)
    ══════════════════════════════════════════════════════════════ */
-.fdeck-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  perspective: 1000px;
-  -webkit-perspective: 1000px;
-  transform-origin: 50% 50%;
-  cursor: grab;
-}
 
-.fdeck-card.layer-active {
-  z-index: 50 !important;
-  pointer-events: auto !important;
-}
-
-.fdeck-card:not(.layer-active) {
-  pointer-events: none !important;
-}
-
-.fdeck-card.is-dragging {
-  cursor: grabbing !important;
-  user-select: none;
-  transition: none !important;
-}
-
-/* Butter-Smooth 60/120fps GPU Spring Transition — Relaxed, Luxurious Glide */
-.fdeck-card.with-spring {
-  transition:
-    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform, opacity;
-}
-
-/* 3D Flip Inner Wrapper — Handles 3D Rotation for the Entire Card */
-.fdeck-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  transition: transform 0.7s cubic-bezier(0.2, 0.85, 0.25, 1);
-  will-change: transform;
-}
-
-/* When card is flipped, inner wrapper rotates 180 degrees smoothly */
-.fdeck-card.is-flipped .fdeck-card-inner {
-  transform: rotateY(180deg) !important;
-}
-
-/* Common Card Face Styling — Clean 2D Plane Surface for Pixel-Perfect Hit-Testing */
-.fdeck-face {
-  position: absolute;
+.proof-lightbox-overlay {
+  position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-  transition: opacity 0.32s ease;
-  will-change: opacity;
-}
-
-/* Front face */
-.fdeck-face-front {
-  transform: rotateY(0deg);
-  z-index: 2;
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.fdeck-card.is-flipped .fdeck-face-front {
-  pointer-events: none !important;
-  opacity: 0;
-}
-
-/* Back face */
-.fdeck-face-back {
-  transform: rotateY(180deg);
-  z-index: 1;
-  opacity: 0;
-  pointer-events: none !important;
-}
-
-.fdeck-card.is-flipped .fdeck-face-back {
-  z-index: 10 !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-/* On peek/background cards, hide the Real Proof button to avoid visual clutter and click confusion */
-.fdeck-card:not(.layer-active) .fdeck-proof-btn {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  visibility: hidden !important;
-}
-
-/* ── CARD FRONT (PREMIUM PHYSICAL TESTIMONIAL) ── */
-.fdeck-face-front {
-  transform: rotateY(0deg);
-  background: #081122;
-  background-image:
-    radial-gradient(ellipse 90% 70% at 50% 0%, rgba(30, 58, 138, 0.35) 0%, transparent 70%),
-    linear-gradient(168deg, rgba(14, 25, 49, 0.98) 0%, rgba(6, 13, 27, 0.99) 100%);
-  border: 1px solid rgba(96, 165, 250, 0.22);
-  border-top: 1px solid rgba(147, 197, 253, 0.45);
-  box-shadow:
-    0 24px 48px -12px rgba(0, 0, 0, 0.78),
-    0 10px 24px -6px rgba(2, 6, 23, 0.6),
-    0 0 28px -4px rgba(37, 99, 235, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
-  padding: clamp(16px, 2.5vw, 22px);
-}
-
-/* Active Card Illumination */
-.fdeck-card.layer-active .fdeck-face-front {
-  border-color: rgba(96, 165, 250, 0.38);
-  border-top-color: rgba(186, 230, 253, 0.65);
-  box-shadow:
-    0 28px 56px -12px rgba(0, 0, 0, 0.82),
-    0 12px 28px -6px rgba(2, 6, 23, 0.7),
-    0 0 36px -2px rgba(37, 99, 235, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5);
-}
-
-.fdeck-card.layer-next .fdeck-face-front,
-.fdeck-card.layer-prev .fdeck-face-front {
-  border-color: rgba(96, 165, 250, 0.20);
-  border-top-color: rgba(147, 197, 253, 0.35);
-}
-
-.fdeck-card.layer-bg .fdeck-face-front {
-  border-color: rgba(96, 165, 250, 0.12);
-  border-top-color: rgba(147, 197, 253, 0.2);
-}
-
-/* Interactive Glare / Sheen Overlay */
-.fdeck-card-glare {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    circle at var(--glare-x, 50%) var(--glare-y, 0%),
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(96, 165, 250, 0.03) 45%,
-    transparent 75%
-  );
-  mix-blend-mode: overlay;
-  z-index: 1;
-}
-
-/* ── Subtle Ambient Trading Graphic Watermark ────────────────── */
-.fdeck-card-trading-bg {
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  opacity: 0.16;
-  mix-blend-mode: luminosity;
-  filter: contrast(1.15) brightness(0.85);
-  pointer-events: none;
-  z-index: 0;
-  transition: opacity 0.5s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  will-change: opacity, transform;
-}
-
-.fdeck-card.layer-active .fdeck-card-trading-bg {
-  opacity: 0.20;
-}
-
-.fdeck-card.layer-active:hover .fdeck-card-trading-bg {
-  opacity: 0.26;
-  transform: scale(1.025);
-}
-
-/* Card Scrim to maintain pristine contrast and readability */
-.fdeck-card-scrim {
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background: radial-gradient(
-    ellipse 95% 85% at 50% 45%,
-    rgba(8, 17, 34, 0.45) 0%,
-    rgba(6, 13, 27, 0.88) 100%
-  );
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ── Corner Precision Studs (Removed for clean, modern aesthetic) ── */
-.fdeck-corner-stud {
-  display: none !important;
-}
-
-/* ── Ambient Tech Dot Matrix Constellation ──────────────────── */
-.fdeck-ambient-mesh {
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  pointer-events: none;
-  z-index: 0;
-  background-image: radial-gradient(circle, rgba(56, 189, 248, 0.12) 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.18;
-  mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 35%, transparent 92%);
-  -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 35%, transparent 92%);
-}
-
-/* Front Header: Monospace Index Counter + Section Tag */
-.fdeck-front-header {
-  position: relative;
-  z-index: 2;
+  z-index: 99999;
+  background: rgba(2, 6, 23, 0.95);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  flex-shrink: 0;
-}
-
-/* Card Header 01 / 25 Counter Badge */
-.fdeck-card-counter {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font: 700 12px var(--mono);
-  letter-spacing: 0.14em;
-  color: #94A3B8;
-  padding: 4px 11px;
-  background: rgba(10, 20, 42, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  border-radius: 999px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.fdeck-counter-num {
-  color: #EFF6FF;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-}
-
-.fdeck-counter-sep {
-  color: rgba(148, 163, 184, 0.45);
-  font-weight: 400;
-}
-
-.fdeck-counter-total {
-  color: #64748B;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-}
-
-.fdeck-header-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font: 700 9.5px var(--mono);
-  letter-spacing: 0.16em;
-  color: #38BDF8;
-  text-transform: uppercase;
-  background: rgba(10, 20, 42, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  padding: 4px 12px;
-  border-radius: 999px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.fdeck-badge-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #06B6D4;
-  box-shadow: 0 0 8px #06B6D4;
-}
-
-/* Front Body: Heroic, Readable Authentic Testimonial (Vertically Centered) */
-.fdeck-front-body {
-  position: relative;
-  z-index: 2;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  margin: 0 0 6px;
-  overflow-y: auto;
-  padding-right: 2px;
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
+  padding: clamp(12px, 3vw, 24px);
+  animation: proof-modal-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.fdeck-front-body::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-}
-
-.fdeck-quote-container {
-  position: relative;
-  width: 100%;
-  margin-top: auto;
-  margin-bottom: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.fdeck-inline-quote {
-  font-family: var(--serif), 'Georgia', serif;
-  font-size: 26px;
-  line-height: 1;
-  color: #38BDF8;
-  display: block;
-  margin-bottom: 8px;
-  opacity: 0.9;
-  user-select: none;
-  filter: drop-shadow(0 2px 8px rgba(56, 189, 248, 0.4));
-}
-
-.fdeck-quote-text {
-  font-size: clamp(13px, 2.1vw, 14.2px);
-  line-height: 1.6;
-  color: #F8FAFC;
-  font-weight: 450;
-  letter-spacing: -0.012em;
-  margin: 0;
-  white-space: pre-line;
-  text-wrap: pretty;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
-}
-
-@media (max-width: 680px) {
-  .fdeck-quote-text {
-    font-size: clamp(12.5px, 3.4vw, 13.5px);
-    line-height: 1.52;
+@keyframes proof-modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-/* Technical Horizontal Divider Between Body and Profile Footer */
-.fdeck-card-divider {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.32) 15%, rgba(148, 163, 184, 0.25) 50%, rgba(56, 189, 248, 0.32) 85%, transparent 100%);
-  margin: 8px 0 10px;
-  flex-shrink: 0;
-}
-
-/* Front Footer: Monogram Identity + Sleek Real Proof CTA */
-.fdeck-front-footer {
-  position: relative;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 0;
-  margin-top: auto;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.fdeck-student-identity {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-
-.fdeck-avatar-monogram {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(30, 58, 138, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
-  border: 1px solid rgba(96, 165, 250, 0.35);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  display: grid;
-  place-items: center;
-  font: 800 13px var(--mono);
-  color: #BAE6FD;
-  flex-shrink: 0;
-  user-select: none;
-}
-
-.fdeck-monogram-sm {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  font-size: 11px;
-}
-
-.fdeck-student-meta {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.fdeck-student-name {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #FFFFFF;
-  letter-spacing: -0.015em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Sleek Real Proof CTA Button */
-.fdeck-proof-btn {
-  position: relative;
-  z-index: 100 !important;
-  pointer-events: auto !important;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(20, 36, 68, 0.95) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.45);
-  color: #BAE6FD;
-  font: 700 10.5px var(--mono);
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  flex-shrink: 0;
-}
-
-.fdeck-proof-radar {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan);
-  animation: live-pulse 1.8s infinite;
-}
-
-.fdeck-proof-btn-text {
-  color: #BAE6FD;
-}
-
-.fdeck-proof-arrow {
-  width: 13px;
-  height: 13px;
-  fill: none;
-  stroke: var(--cyan);
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform 0.22s ease;
-}
-
-.fdeck-proof-btn:hover {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.35) 0%, rgba(6, 182, 212, 0.3) 100%);
-  border-color: var(--cyan);
-  color: #FFFFFF;
-  transform: scale(1.04);
-  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4), 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-.fdeck-proof-btn:hover .fdeck-proof-arrow {
-  transform: translate(2px, -2px);
-}
-
-.fdeck-proof-btn:active {
-  transform: scale(0.97);
-}
-
-/* ── CARD BACK (ORIGINAL PROOF SCREENSHOT) ── */
-.fdeck-face-back {
-  transform: rotateY(180deg);
-  z-index: 1;
-  background: #060e1d;
-  background-image:
-    radial-gradient(ellipse 90% 70% at 50% 0%, rgba(20, 42, 86, 0.4) 0%, transparent 70%),
-    linear-gradient(168deg, rgba(10, 20, 40, 0.98) 0%, rgba(4, 9, 18, 0.99) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  border-top: 1px solid rgba(147, 197, 253, 0.5);
-  box-shadow:
-    0 24px 48px -12px rgba(0, 0, 0, 0.8),
-    0 0 32px -4px rgba(6, 182, 212, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  padding: clamp(12px, 2vw, 16px);
-}
-
-.fdeck-back-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  flex-shrink: 0;
-}
-
-.fdeck-back-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.fdeck-back-names {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.fdeck-proof-tag {
-  font: 700 9px var(--mono);
-  letter-spacing: 0.14em;
-  color: #34D399;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(52, 211, 153, 0.35);
-  padding: 3px 8px;
-  border-radius: 4px;
-  text-transform: uppercase;
-}
-
-.fdeck-proof-student {
-  font: 600 13px var(--sans);
-  color: var(--text-2);
-}
-
-/* Multi-proof screenshot selector */
-.fdeck-multi-proof-selector {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.fdeck-proof-pill {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid var(--border-2);
-  color: var(--text-2);
-  font: 700 10px var(--mono);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.fdeck-proof-pill.is-active {
-  background: var(--blue);
-  border-color: var(--blue-lt);
-  color: #FFFFFF;
-  box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
-}
-
-/* Proof Image Preview Container */
-.fdeck-back-preview {
-  flex: 1;
-  width: 100%;
-  min-height: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #020612;
-  border: 1px solid rgba(59, 130, 246, 0.18);
-  border-radius: var(--r-sm);
-  overflow: hidden;
-  margin-bottom: 12px;
-  position: relative;
-}
-
-.fdeck-proof-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  border-radius: calc(var(--r-sm) - 1px);
-  background: #020612;
-}
-
-/* Back Footer Actions */
-.fdeck-back-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.fdeck-back-btn,
-.fdeck-view-full-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 15px;
-  border-radius: 999px;
-  font: 700 10px var(--mono);
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.fdeck-back-btn {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid var(--border-2);
-  color: var(--text-2);
-}
-
-.fdeck-back-btn:hover {
-  background: rgba(37, 99, 235, 0.22);
-  border-color: var(--blue-mid);
-  color: #FFFFFF;
-}
-
-.fdeck-view-full-btn {
-  background: rgba(6, 182, 212, 0.12);
-  border: 1px solid rgba(6, 182, 212, 0.4);
-  color: var(--cyan);
-}
-
-.fdeck-view-full-btn:hover {
-  background: var(--cyan);
-  color: #020617;
-  box-shadow: 0 0 14px rgba(6, 182, 212, 0.45);
-}
-
-.fdeck-btn-icon {
-  width: 12px;
-  height: 12px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* ── HIGH-RESOLUTION PROOF LIGHTBOX MODAL ── */
-.fdeck-lightbox-overlay {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 9999999 !important;
-  background: rgba(2, 6, 18, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(14px, 3vw, 36px);
-  animation: fdeck-fade-in 0.22s ease-out;
-}
-
-/* Floating Viewport-Fixed Corner Exit Pill */
-.fdeck-lightbox-fixed-close {
+.proof-lightbox-fixed-close {
   position: fixed;
-  top: 18px;
-  right: 22px;
-  z-index: 10000002;
+  top: 20px;
+  right: 24px;
+  z-index: 100000;
+  background: rgba(15, 23, 42, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  padding: 8px 16px;
+  color: #FFFFFF;
+  font: 700 11px var(--mono);
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 18px;
-  background: rgba(15, 23, 42, 0.92);
-  border: 1px solid rgba(56, 189, 248, 0.45);
-  border-radius: 999px;
-  color: #FFFFFF;
-  font: 700 12px var(--mono);
-  letter-spacing: 0.08em;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 20px rgba(56, 189, 248, 0.25);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
 }
 
-.fdeck-lightbox-fixed-close:hover {
-  background: rgba(239, 68, 68, 0.25);
-  border-color: #EF4444;
-  color: #FFFFFF;
-  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.45), 0 0 25px rgba(239, 68, 68, 0.35);
-  transform: translateY(-2px) scale(1.02);
-}
-
-.fdeck-lightbox-fixed-close .fdeck-lightbox-close-icon {
-  font-size: 13px;
-  font-weight: 800;
+.proof-lightbox-fixed-close:hover {
+  background: rgba(30, 41, 59, 0.98);
+  border-color: #38BDF8;
   color: #38BDF8;
-  line-height: 1;
 }
 
-.fdeck-lightbox-fixed-close:hover .fdeck-lightbox-close-icon {
-  color: #EF4444;
-}
-
-.fdeck-lightbox-container {
+.proof-lightbox-container {
   position: relative;
-  max-width: 580px;
   width: 100%;
-  max-height: calc(100vh - 44px);
+  max-width: 720px;
+  max-height: 92vh;
+  background: #060D24;
+  border: 1px solid rgba(59, 130, 246, 0.32);
+  border-radius: 20px;
+  box-shadow: 0 35px 95px rgba(0, 0, 0, 0.95);
   display: flex;
   flex-direction: column;
-  background: #07132a;
-  border: 1px solid rgba(56, 189, 248, 0.38);
-  border-radius: var(--r-lg);
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 40px rgba(6, 182, 212, 0.22);
   overflow: hidden;
-  animation: fdeck-zoom-in 0.26s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.fdeck-lightbox-topbar {
+.proof-lightbox-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
   padding: 12px 18px;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-  background: rgba(9, 21, 46, 0.96);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 20, 44, 0.95);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.proof-lightbox-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.proof-lightbox-student-pill {
+  font: 700 12.5px var(--sans);
+  color: #FFFFFF;
+  background: rgba(37, 99, 235, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.proof-lightbox-badge-pill {
+  font: 600 10.5px var(--mono);
+  color: #38BDF8;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.proof-lightbox-counter {
+  font: 600 11px var(--mono);
+  color: #64748B;
+}
+
+.proof-lightbox-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   flex-shrink: 0;
 }
 
-.fdeck-lightbox-back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: rgba(56, 189, 248, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.28);
+.proof-nav-btn {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
   color: #BAE6FD;
-  font: 700 11px var(--mono);
-  letter-spacing: 0.08em;
+  font: 600 11px var(--sans);
+  padding: 5px 10px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.fdeck-lightbox-back-btn:hover {
-  background: rgba(56, 189, 248, 0.22);
+.proof-nav-btn:hover {
+  background: rgba(37, 99, 235, 0.25);
   border-color: #38BDF8;
   color: #FFFFFF;
-  transform: translateX(-2px);
 }
 
-.fdeck-lightbox-title {
-  font: 700 11px var(--mono);
-  letter-spacing: 0.12em;
-  color: var(--cyan);
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.fdeck-lightbox-close-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+.proof-lightbox-close-btn {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  display: grid;
-  place-items: center;
-  color: #FFFFFF;
+  border-radius: 8px;
+  color: #94A3B8;
+  font-size: 14px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  flex-shrink: 0;
 }
 
-.fdeck-lightbox-close-btn svg {
-  width: 16px;
-  height: 16px;
-  stroke: currentColor;
-  stroke-width: 2.2;
+.proof-lightbox-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #F87171;
 }
 
-.fdeck-lightbox-close-btn:hover {
-  background: rgba(239, 68, 68, 0.25);
-  border-color: #EF4444;
-  color: #EF4444;
-  transform: scale(1.08);
-}
-
-.fdeck-lightbox-body {
-  flex: 1 1 auto;
-  min-height: 0;
+/* Lightbox Image Body with Vertical Scroll for Long Chats */
+.proof-lightbox-body {
+  flex: 1;
   overflow-y: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   padding: 16px;
-  background: #020612;
-  overscroll-behavior: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 6, 18, 0.95);
+  min-height: 280px;
 }
 
-.fdeck-lightbox-img {
+.proof-lightbox-img {
   max-width: 100%;
   height: auto;
-  max-height: calc(100vh - 190px);
+  max-height: calc(85vh - 120px);
   object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.85);
   display: block;
-  border-radius: var(--r-sm);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+  user-select: auto;
+  -webkit-user-select: auto;
 }
 
-.fdeck-lightbox-footer {
+.proof-lightbox-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 18px;
-  border-top: 1px solid rgba(59, 130, 246, 0.18);
-  background: rgba(9, 21, 46, 0.96);
+  padding: 10px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 20, 44, 0.95);
+  font: 500 10.5px var(--mono);
+  color: #94A3B8;
   flex-shrink: 0;
   gap: 12px;
 }
 
-.fdeck-lightbox-footer-btn {
+.proof-footer-left {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.35), rgba(6, 182, 212, 0.35));
-  border: 1px solid rgba(56, 189, 248, 0.45);
-  color: #FFFFFF;
-  font: 700 11.5px var(--mono);
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.fdeck-lightbox-footer-btn:hover {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.65), rgba(6, 182, 212, 0.65));
-  border-color: #38BDF8;
-  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.4);
-  transform: translateY(-1px);
-}
-
-.fdeck-lightbox-hint {
-  font: 500 11px var(--mono);
-  color: var(--text-3);
+  gap: 6px;
   letter-spacing: 0.04em;
 }
 
-@media (max-width: 640px) {
-  .fdeck-lightbox-overlay {
-    padding: 8px;
+.proof-lightbox-hint {
+  color: #64748B;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN (MOBILE & TABLET)
+   ══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .proof-marquee-card {
+    width: clamp(260px, 28vw, 300px);
+    height: clamp(330px, 38vh, 370px);
   }
-  .fdeck-lightbox-container {
-    max-height: 98vh;
-    border-radius: var(--r-md);
+}
+
+@media (max-width: 768px) {
+  .proof-mosaic-section {
+    padding: 28px 0 24px;
   }
-  .fdeck-lightbox-fixed-close {
-    top: 10px;
-    right: 10px;
-    padding: 7px 12px;
-    font-size: 11px;
+
+  .proof-section-header {
+    margin-bottom: 12px;
   }
-  .fdeck-lightbox-topbar {
-    padding: 10px 12px;
+
+  .proof-marquee-viewport {
+    padding: 6px 0 10px;
+    mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
   }
-  .fdeck-lightbox-title {
-    font-size: 9.5px;
+
+  .proof-marquee-track {
+    gap: 16px;
   }
-  .fdeck-lightbox-img {
-    max-height: calc(100vh - 170px);
+
+  .proof-marquee-card {
+    width: clamp(235px, 68vw, 275px);
+    height: clamp(300px, 44vh, 350px);
   }
-  .fdeck-lightbox-footer {
-    padding: 10px 12px;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
+
+  .proof-card-inner {
+    border-radius: 12px;
+    padding: 6px;
   }
-  .fdeck-lightbox-footer-btn {
-    justify-content: center;
+
+  .proof-lightbox-container {
+    max-height: 96vh;
+    border-radius: 16px;
   }
-  .fdeck-lightbox-hint {
-    text-align: center;
+
+  .proof-lightbox-topbar {
+    padding: 10px 14px;
+  }
+
+  .proof-lightbox-body {
+    padding: 10px;
+  }
+
+  .proof-lightbox-img {
+    max-height: calc(90vh - 110px);
+  }
+
+  .proof-lightbox-fixed-close {
+    top: 12px;
+    right: 14px;
+    padding: 6px 12px;
     font-size: 10px;
   }
-}
 
-@keyframes fdeck-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fdeck-zoom-in {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-/* ══════════════════════════════════════════════════════════════
-   NAVIGATION CONTROLS & PROGRESS
-   ══════════════════════════════════════════════════════════════ */
-.fdeck-controls-wrap {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  margin-top: 32px;
-  width: 100%;
-}
-
-.fdeck-controls-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(14px, 3vw, 24px);
-}
-
-/* Accessible Arrow Navigation Buttons */
-.fdeck-nav-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, rgba(16, 30, 60, 0.95) 0%, rgba(7, 15, 34, 0.98) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  box-shadow:
-    0 8px 24px -4px rgba(0, 0, 0, 0.65),
-    0 0 16px rgba(6, 182, 212, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
-  display: grid;
-  place-items: center;
-  color: #BAE6FD;
-  cursor: pointer;
-  transition:
-    transform 0.2s cubic-bezier(0.2, 0.8, 0.25, 1),
-    background 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    color 0.2s ease;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  /* Remove the ugly iOS/Android tap square */
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-.fdeck-nav-btn svg {
-  width: 19px;
-  height: 19px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform 0.2s ease;
-  pointer-events: none;
-}
-
-/* Hover only on real pointer devices — never on mobile touch */
-@media (hover: hover) and (pointer: fine) {
-  .fdeck-nav-btn:hover {
-    background: linear-gradient(145deg, #1D4ED8 0%, #2563EB 50%, #0284C7 100%);
-    border-color: rgba(147, 197, 253, 0.85);
-    color: #ffffff;
-    transform: scale(1.12);
-    box-shadow:
-      0 12px 28px -4px rgba(0, 0, 0, 0.7),
-      0 0 28px rgba(6, 182, 212, 0.65),
-      inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  .proof-lightbox-hint {
+    display: none;
   }
-  .fdeck-nav-btn.prev:hover svg { transform: translateX(-3px); }
-  .fdeck-nav-btn.next:hover svg { transform: translateX(3px); }
 }
 
-/* Clean press feedback for both desktop and mobile */
-.fdeck-nav-btn:active {
-  transform: scale(0.92);
-  background: linear-gradient(145deg, #1E40AF 0%, #1D4ED8 100%);
-  border-color: rgba(96, 165, 250, 0.8);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
-  transition: transform 0.08s ease, background 0.08s ease;
-}
-
-.fdeck-nav-btn:focus-visible {
-  outline: 2px solid var(--cyan);
-  outline-offset: 3px;
-}
-
-
-/* Infinity Stream Controls Badge */
-.fdeck-counter-badge.fdeck-infinity-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 20px;
-  background: rgba(7, 15, 34, 0.88);
-  border: 1px solid rgba(56, 189, 248, 0.38);
-  border-radius: 999px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  user-select: none;
-}
-
-.fdeck-counter-badge.fdeck-infinity-badge .fdeck-infinity-icon {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: var(--cyan);
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.65));
-  animation: fdeck-infinity-pulse 3s infinite ease-in-out;
-}
-
-.fdeck-infinity-text {
-  font: 700 11px var(--mono);
-  letter-spacing: 0.14em;
-  color: #BAE6FD;
-}
-
-@keyframes fdeck-infinity-pulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.5)); }
-  50% { transform: scale(1.09); filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.9)); }
-}
-
-/* Pagination Indicator Dots */
-.fdeck-dots-group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  max-width: min(500px, 92vw);
-  flex-wrap: wrap;
-}
-
-.fdeck-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(59, 130, 246, 0.2);
-  border: 1px solid rgba(59, 130, 246, 0.35);
-  cursor: pointer;
-  transition:
-    width 0.32s cubic-bezier(0.2, 0.8, 0.25, 1),
-    background 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
-  padding: 0;
-}
-
-.fdeck-dot:hover {
-  background: rgba(96, 165, 250, 0.4);
-  border-color: var(--blue-lt);
-}
-
-.fdeck-dot.is-active {
-  width: 24px;
-  background: linear-gradient(90deg, var(--blue), var(--cyan));
-  border-color: var(--cyan);
-  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
-}
-
-.fdeck-dot:focus-visible {
-  outline: 2px solid var(--cyan);
-  outline-offset: 2px;
-}
-
-/* Secondary Controls Row (Dots + Autoplay Indicator) */
-.fdeck-secondary-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.fdeck-autoplay-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: rgba(10, 20, 42, 0.85);
-  border: 1px solid rgba(59, 130, 246, 0.25);
-  color: var(--text-2);
-  font: 700 10.5px var(--mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.25, 1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-  -webkit-appearance: none;
-}
-
-.fdeck-autoplay-pill:hover {
-  background: rgba(37, 99, 235, 0.25);
-  border-color: rgba(96, 165, 250, 0.5);
-  color: #ffffff;
-  transform: translateY(-1px);
-}
-
-.fdeck-autoplay-pill.is-active {
-  color: #BAE6FD;
-  border-color: rgba(56, 189, 248, 0.5);
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.22) 0%, rgba(37, 99, 235, 0.2) 100%);
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.16);
-}
-
-.fdeck-autoplay-pill.is-active:hover {
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.35) 0%, rgba(37, 99, 235, 0.32) 100%);
-  border-color: rgba(125, 211, 252, 0.75);
-  color: #FFFFFF;
-  box-shadow: 0 0 22px rgba(56, 189, 248, 0.45);
-}
-
-.fdeck-autoplay-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--text-3);
-  transition: background 0.25s ease, box-shadow 0.25s ease;
-}
-
-.fdeck-autoplay-pill.is-active .fdeck-autoplay-dot {
-  background: #38BDF8;
-  box-shadow: 0 0 10px #38BDF8;
-  animation: live-pulse 1.8s infinite;
-}
-
-.fdeck-autoplay-label {
-  font-size: 10px;
-}
-
-/* Gesture Interaction Hint */
-.fdeck-gesture-hint {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font: 11px var(--mono);
-  letter-spacing: 0.06em;
-  color: var(--text-3);
-  text-transform: uppercase;
-  margin-top: 4px;
-}
-
-.fdeck-hint-arrow {
-  font-size: 13px;
-  animation: hint-bounce 1.8s infinite ease-in-out;
-}
-
-@keyframes hint-bounce {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(4px); }
-}
-
-/* Bottom CTA */
-.fdeck-cta-wrap {
-  margin-top: 28px;
-  display: flex;
-  justify-content: center;
+@media (max-width: 480px) {
+  .proof-marquee-card {
+    width: 245px;
+    height: 325px;
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════
-   UNIFIED WEBSITE SIGNATURE THEME (Midnight Precision / ICT Blue & Cyan)
-   Clean, institutional, premium glassmorphism matching the rest of the site
+   ACCESSIBILITY: REDUCED MOTION
    ══════════════════════════════════════════════════════════════ */
-.fdeck-card,
-.fdeck-card.fdeck-theme-web {
-  --card-accent: #38BDF8;
-  --card-glow: rgba(56, 189, 248, 0.25);
-}
 
-.fdeck-face-front {
-  background: #060E1E !important;
-  background-image:
-    radial-gradient(ellipse 95% 75% at 50% 0%, rgba(37, 99, 235, 0.22) 0%, transparent 70%),
-    linear-gradient(168deg, rgba(10, 20, 42, 0.98) 0%, rgba(4, 10, 22, 0.99) 100%) !important;
-  border: 1px solid rgba(56, 189, 248, 0.22) !important;
-  border-top: 1px solid rgba(147, 197, 253, 0.45) !important;
-  box-shadow:
-    0 24px 48px -12px rgba(0, 0, 0, 0.82),
-    0 10px 24px -6px rgba(2, 6, 23, 0.6),
-    0 0 28px -4px rgba(37, 99, 235, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.4) !important;
-}
-
-.fdeck-card.layer-active .fdeck-face-front {
-  border-color: rgba(56, 189, 248, 0.38) !important;
-  border-top-color: rgba(186, 230, 253, 0.65) !important;
-  box-shadow:
-    0 28px 56px -12px rgba(0, 0, 0, 0.88),
-    0 12px 28px -6px rgba(2, 6, 23, 0.7),
-    0 0 36px -2px rgba(37, 99, 235, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5) !important;
-}
-
-.fdeck-card .fdeck-avatar-monogram {
-  background: linear-gradient(135deg, rgba(30, 58, 138, 0.6) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
-  border-color: rgba(56, 189, 248, 0.35) !important;
-  color: #BAE6FD !important;
-}
-
-.fdeck-card .fdeck-inline-quote {
-  color: #38BDF8 !important;
-}
-
-.fdeck-card .fdeck-proof-btn {
-  background: linear-gradient(135deg, rgba(14, 25, 49, 0.95) 0%, rgba(6, 13, 27, 0.98) 100%) !important;
-  border-color: rgba(56, 189, 248, 0.4) !important;
-  color: #BAE6FD !important;
-}
-
-.fdeck-card .fdeck-proof-radar {
-  background: #06B6D4 !important;
-  box-shadow: 0 0 8px #06B6D4 !important;
-}
-
-.fdeck-card .fdeck-proof-btn-text {
-  color: #BAE6FD !important;
-}
-
-.fdeck-card .fdeck-header-badge {
-  color: #38BDF8 !important;
-  background: rgba(10, 20, 42, 0.85) !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
-}
-
-.fdeck-card .fdeck-badge-dot {
-  background: #06B6D4 !important;
-  box-shadow: 0 0 8px #06B6D4 !important;
-}
-
-
-/* ══════════════════════════════════════════════════════════════
-   ACCESSIBILITY & REDUCED MOTION
-   ══════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
-  .fdeck-card,
-  .fdeck-card.with-spring,
-  .fdeck-card.is-dismissing {
-    transition: opacity 0.3s ease !important;
-    transform: none !important;
+  .proof-marquee-card {
+    transition: none !important;
   }
 
-  .fdeck-card:not(.layer-active) {
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  .fdeck-hint-arrow,
-  .fdeck-pulse-dot {
+  .proof-live-pulse,
+  .proof-pulse-dot {
     animation: none !important;
   }
 }

@@ -228,11 +228,9 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
     <section className="prog-section" id="programmes" data-section="programmes">
       {/* ── Section Header ────────────────────────────────────────── */}
       <div className="prog-header reveal-el">
-        <p className="section-tag">03 / PROGRAMMES</p>
-        <h2>Two ways to learn.<br /><em>One way to trade with precision.</em></h2>
-        <p className="prog-header-sub">
-          Choose the format that fits the way you learn, practice, and execute.
-        </p>
+        <p className="section-tag">02 / PROGRAMMES</p>
+        <h2>Two ways to learn.</h2>
+        <p className="prog-header-sub">One way to trade with precision.</p>
       </div>
 
       {/* ── Compact Front Cards Grid ──────────────────────────────── */}
@@ -264,10 +262,10 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
             {/* Title & Philosophy Quote */}
             <div className="card-hero-block">
               <h3 className="card-editorial-title title-blue">
-                PERSONAL<br />MENTORSHIP
+                PERSONAL MENTORSHIP
               </h3>
               <p className="card-editorial-quote">
-                “1-to-1 mentorship built around your trading journey and execution.”
+                1-to-1 mentorship built around your trading journey and execution.
               </p>
             </div>
 
@@ -276,47 +274,33 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
               <div className="price-num-row">
                 <span className="price-symbol">₹</span>
                 <span className="price-amount">24,999</span>
-                <span className="price-slash">/-</span>
               </div>
-              <span className="price-cadence">ONE-TIME INVESTMENT</span>
+              <span className="price-cadence">One-time enrollment</span>
             </div>
 
-            {/* Delivery Format Line */}
-            <div className="card-format-line format-line-blue">
-              <span>1-1 SESSIONS</span>
-              <span className="line-sep">•</span>
-              <span>UNLIMITED SESSIONS</span>
-              <span className="line-sep">•</span>
-              <span>BASICS → ADVANCED</span>
-            </div>
-
-            {/* Compact Typographic Benefits Matrix */}
-            <div className="card-editorial-matrix matrix-blue">
-              <div className="matrix-cell">
-                <span className="matrix-label">Format</span>
-                <strong className="matrix-val">1-1 Sessions</strong>
-              </div>
-              <div className="matrix-cell">
-                <span className="matrix-label">Duration</span>
-                <strong className="matrix-val">No Limitations</strong>
-              </div>
-              <div className="matrix-cell">
-                <span className="matrix-label">Execution</span>
-                <strong className="matrix-val">Live Trading Access</strong>
-              </div>
-              <div className="matrix-cell">
-                <span className="matrix-label">Archive</span>
-                <strong className="matrix-val">Class Recordings</strong>
-              </div>
-              <div className="matrix-cell">
-                <span className="matrix-label">Framework</span>
-                <strong className="matrix-val">Personalised Model</strong>
-              </div>
-              <div className="matrix-cell">
-                <span className="matrix-label">Guidance</span>
-                <strong className="matrix-val">Mentor Follow-up</strong>
-              </div>
-            </div>
+            {/* Clean Checkmark Feature List */}
+            <ul className="card-feature-checklist checklist-blue">
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>Personal 1-on-1 Sessions (Unlimited Duration)</span>
+              </li>
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>Live Trading Access & Execution Context</span>
+              </li>
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>Complete Class Recordings Archive</span>
+              </li>
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>Personalised Institutional Trading Model</span>
+              </li>
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>Direct Mentor Accountability & Follow-up</span>
+              </li>
+            </ul>
 
             {/* Secondary Action: View Full Details ↗ */}
             <button
@@ -372,10 +356,10 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
             {/* Title & Philosophy Quote */}
             <div className="card-hero-block">
               <h3 className="card-editorial-title title-gold">
-                SLINGSHOT<br />MODEL
+                SLINGSHOT MODEL
               </h3>
               <p className="card-editorial-quote">
-                “Master our XAUUSD execution model.”
+                Master our institutional XAUUSD execution model.
               </p>
             </div>
 
@@ -384,47 +368,33 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
               <div className="price-num-row">
                 <span className="price-symbol symbol-gold">₹</span>
                 <span className="price-amount amount-gold">19,999</span>
-                <span className="price-slash slash-gold">/-</span>
               </div>
-              <span className="price-cadence">ONE-TIME FEE</span>
+              <span className="price-cadence">One-time enrollment</span>
             </div>
 
-            {/* Delivery Format Line */}
-            <div className="card-format-line format-line-gold">
-              <span>8 DAYS · AUG 07 – AUG 14</span>
-              <span className="line-sep">•</span>
-              <span>10 AM — 6 PM</span>
-              <span className="line-sep">•</span>
-              <span>20 SLOTS ONLY</span>
-            </div>
-
-            {/* Compact Typographic Benefits Matrix */}
-            <div className="card-editorial-matrix matrix-gold">
-              <div className="matrix-cell">
-                <span className="matrix-label">System</span>
-                <strong className="matrix-val">XAUUSD Strategy</strong>
-              </div>
-              <div className="matrix-cell">
-                <span className="matrix-label">Risk/Reward</span>
-                <strong className="matrix-val">Proper 2–3R Trades</strong>
-              </div>
-              <div className="matrix-cell">
-                <span className="matrix-label">Frequency</span>
-                <strong className="matrix-val">5–7 Entries / Week</strong>
-              </div>
-              <div className="matrix-cell">
-                <span className="matrix-label">Environment</span>
-                <strong className="matrix-val">Live Classroom</strong>
-              </div>
-              <div className="matrix-cell">
-                <span className="matrix-label">Hospitality</span>
-                <strong className="matrix-val">Lunch Included</strong>
-              </div>
-              <div className="matrix-cell">
-                <span className="matrix-label">Location</span>
-                <strong className="matrix-val">Coimbatore</strong>
-              </div>
-            </div>
+            {/* Clean Checkmark Feature List */}
+            <ul className="card-feature-checklist checklist-gold">
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>Proprietary XAUUSD Strategy & Execution</span>
+              </li>
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>High-Probability 2–3R Trades (5–7 Setups / Wk)</span>
+              </li>
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>In-Person Classroom Cohort in Coimbatore</span>
+              </li>
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>Course Materials, Daily Hospitality & Lunch</span>
+              </li>
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>Strictly Capped Cohort (20 Traders Max)</span>
+              </li>
+            </ul>
 
             {/* Secondary Action: View Full Details ↗ */}
             <button

@@ -1,132 +1,155 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { useFrame, ThreeEvent } from '@react-three/fiber'
 import * as THREE from 'three'
 import { getOrCreateFeedbackCardTexture } from './feedbackTextureGenerator'
 
+export interface CarouselMotion {
+  progress: number
+  dragDistance: number
+}
+
 interface AchievementCard3DProps {
   imageUrl: string
-  position: [number, number, number]
-  normal: [number, number, number]
   index: number
-  sphereRadius: number
-  cardWidth?: number
-  cardHeight?: number
+  totalCards: number
+  cardWidth: number
+  cardHeight: number
+  Rx: number
+  Rz: number
+  zOffset: number
+  isMobile: boolean
+  motionRef: React.MutableRefObject<CarouselMotion>
+  onSelect?: (url: string) => void
+  onHoverChange?: (hovered: boolean) => void
 }
 
 export const AchievementCard3D: React.FC<AchievementCard3DProps> = React.memo(({
   imageUrl,
-  position,
-  normal,
-  sphereRadius,
-  cardWidth: propCardWidth,
-  cardHeight: propCardHeight,
   index,
+  totalCards,
+  cardWidth,
+  cardHeight,
+  Rx,
+  Rz,
+  zOffset,
+  isMobile,
+  motionRef,
+  onSelect,
+  onHoverChange,
 }) => {
-  const meshRef = useRef<THREE.Group>(null)
-  const materialRef = useRef<THREE.MeshBasicMaterial>(null)
+  const groupRef = useRef<THREE.Group>(null)
   const borderMatRef = useRef<THREE.MeshStandardMaterial>(null)
-  const isHoveredRef = useRef(false)
+  const frontMatRef = useRef<THREE.MeshBasicMaterial>(null)
+  const [isHovered, setIsHovered] = useState(false)
 
-  // 1. Generate / Retrieve cached texture for real student feedback screenshot
+  // 1. Texture with high-resolution screenshot
   const texture = useMemo(() => getOrCreateFeedbackCardTexture(imageUrl, index), [imageUrl, index])
 
-  // 2. Compute initial rotation so card faces outward from sphere center
-  const initialQuat = useMemo(() => {
-    const q = new THREE.Quaternion()
-    const norm = new THREE.Vector3(...normal).normalize()
-    q.setFromUnitVectors(new THREE.Vector3(0, 0, 1), norm)
-    return q
-  }, [normal])
-
-  // Adaptive portrait dimensions for mobile feedback screenshots (800x1120 ratio: 1 : 1.4)
-  const cardWidth = useMemo(
-    () => propCardWidth ?? sphereRadius * 0.38,
-    [propCardWidth, sphereRadius]
-  )
-  const cardHeight = useMemo(
-    () => propCardHeight ?? cardWidth * 1.4,
-    [propCardHeight, cardWidth]
-  )
-
-  // Temporary vectors for per-frame calculations
-  const worldPos = useMemo(() => new THREE.Vector3(), [])
-  const targetScale = useMemo(() => new THREE.Vector3(1, 1, 1), [])
-
-  useFrame(() => {
-    const group = meshRef.current
+  // 2. Direct GPU transform update in Three.js frame loop - zero React re-render overhead!
+  useFrame((state) => {
+    const group = groupRef.current
     if (!group) return
 
-    // Get card world position
-    group.getWorldPosition(worldPos)
+    const t = state.clock.getElapsedTime()
+    const progress = motionRef.current.progress
 
-    // Normalize z into [0, 1] relative to the actual sphere radius
-    const frontZ = worldPos.z
-    const proximity = THREE.MathUtils.clamp((frontZ + sphereRadius) / (sphereRadius * 2), 0, 1)
+    // Normalized circular position u in [0, 1)
+    let u = ((index / totalCards) + progress) % 1
+    if (u < 0) u += 1
 
-    // 1. Scale boost when front & when hovered (zero React re-render)
-    const baseScale = THREE.MathUtils.lerp(0.85, 1.15, Math.pow(proximity, 1.8))
-    const hoverBoost = isHoveredRef.current ? 1.06 : 1.0
-    const finalScale = baseScale * hoverBoost
+    const theta = (u - 0.5) * 2 * Math.PI
+    const cosVal = Math.cos(theta)
+    const opacity = cosVal >= 0 ? 1.0 : Math.max(0, 1.0 + cosVal * 1.8)
 
-    targetScale.set(finalScale, finalScale, finalScale)
-    group.scale.lerp(targetScale, 0.1)
-
-    // 2. Material Opacity on Screenshot (Crystal clear front cards, soft rear cards)
-    if (materialRef.current) {
-      const targetOpacity = THREE.MathUtils.lerp(0.4, 1.0, Math.pow(proximity, 1.3))
-      materialRef.current.opacity = THREE.MathUtils.lerp(materialRef.current.opacity, targetOpacity, 0.1)
+    if (opacity <= 0.02) {
+      group.visible = false
+      return
     }
+    group.visible = true
 
-    // 3. Edge Design: Backing slab border glow
+    // Organic weightless floating levitation
+    const floatY = Math.sin(t * 1.7 + index * 1.2) * 0.12
+    const floatRotX = Math.cos(t * 1.3 + index * 1.1) * 0.03
+    const floatRotZ = Math.sin(t * 1.1 + index * 1.4) * 0.02
+
+    // Track position
+    const x = Rx * Math.sin(theta)
+    const z = Rz * Math.cos(theta) + zOffset
+
+    // Amphitheater rotation: flat to user when front-facing (|theta| < 0.20)
+    const rotY = Math.abs(theta) < 0.20 ? 0 : -Math.sin(theta) * 0.40
+
+    // Prominence scale for front card
+    const frontFocus = Math.max(0, cosVal)
+    const baseScale = isMobile
+      ? 0.90 + Math.pow(frontFocus, 1.4) * 0.36
+      : 0.82 + Math.pow(frontFocus, 1.6) * 0.52
+
+    const hoverZ = isHovered ? 0.35 : 0
+    const hoverScale = isHovered ? 1.08 : 1.0
+    const s = baseScale * hoverScale
+
+    group.position.set(x, floatY, z + hoverZ)
+    group.rotation.set(floatRotX, rotY, floatRotZ)
+    group.scale.set(s, s, s)
+
+    if (frontMatRef.current) {
+      frontMatRef.current.opacity = opacity
+    }
     if (borderMatRef.current) {
-      const borderOpacity = THREE.MathUtils.lerp(0.35, 0.95, proximity)
-      borderMatRef.current.opacity = borderOpacity
-      borderMatRef.current.emissiveIntensity = isHoveredRef.current ? 0.5 : THREE.MathUtils.lerp(0.08, 0.28, proximity)
+      borderMatRef.current.opacity = opacity * 0.95
     }
   })
 
   const handlePointerOver = (e: ThreeEvent<PointerEvent>) => {
+    // Avoid touch events getting permanently stuck in hover state on mobile
+    if ((e.nativeEvent as PointerEvent).pointerType === 'touch') return
     e.stopPropagation()
-    isHoveredRef.current = true
+    setIsHovered(true)
+    if (onHoverChange) onHoverChange(true)
+    document.body.style.cursor = 'pointer'
   }
 
   const handlePointerOut = () => {
-    isHoveredRef.current = false
+    setIsHovered(false)
+    if (onHoverChange) onHoverChange(false)
+    document.body.style.cursor = 'default'
   }
 
-  // Scale corner clips proportionally with card
-  const clipSize = Math.max(0.05, cardWidth * 0.05)
-  const slabDepth = Math.max(0.015, cardWidth * 0.012)
-  const accentColor = '#38BDF8'
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation()
+    // Suppress click if user was dragging / sliding
+    if (motionRef.current.dragDistance > 8) return
+    if (onSelect) onSelect(imageUrl)
+  }
+
+  const slabDepth = 0.016
 
   return (
     <group
-      ref={meshRef}
-      position={position}
-      quaternion={initialQuat}
+      ref={groupRef}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}
+      onClick={handleClick}
     >
-      {/* Background backing slab for 3D physical depth & Edge Design */}
+      {/* Subtle Sleek Dark Backing Slab */}
       <mesh position={[0, 0, -slabDepth / 2]}>
-        <boxGeometry args={[cardWidth + cardWidth * 0.024, cardHeight + cardHeight * 0.024, slabDepth]} />
+        <boxGeometry args={[cardWidth, cardHeight, slabDepth]} />
         <meshStandardMaterial
           ref={borderMatRef}
-          color="#061129"
-          emissive={accentColor}
-          emissiveIntensity={0.12}
+          color="#040816"
           metalness={0.7}
           roughness={0.3}
           transparent
-          opacity={0.85}
+          opacity={0.95}
         />
       </mesh>
 
-      {/* Front Face: Authentic Screenshot (NO white glare layer, NO washed-out overlay) */}
+      {/* Front Face: Clean Authentic Student Payout Screenshot */}
       <mesh position={[0, 0, 0.005]}>
         <planeGeometry args={[cardWidth, cardHeight, 1, 1]} />
         <meshBasicMaterial
-          ref={materialRef}
+          ref={frontMatRef}
           map={texture}
           transparent
           opacity={1.0}
@@ -134,24 +157,7 @@ export const AchievementCard3D: React.FC<AchievementCard3DProps> = React.memo(({
           side={THREE.FrontSide}
         />
       </mesh>
-
-      {/* Subtle Metallic Corner Clips */}
-      <mesh position={[cardWidth / 2, cardHeight / 2, 0.01]}>
-        <planeGeometry args={[clipSize, clipSize]} />
-        <meshBasicMaterial color={accentColor} transparent opacity={0.6} />
-      </mesh>
-      <mesh position={[-cardWidth / 2, cardHeight / 2, 0.01]}>
-        <planeGeometry args={[clipSize, clipSize]} />
-        <meshBasicMaterial color={accentColor} transparent opacity={0.6} />
-      </mesh>
-      <mesh position={[cardWidth / 2, -cardHeight / 2, 0.01]}>
-        <planeGeometry args={[clipSize, clipSize]} />
-        <meshBasicMaterial color={accentColor} transparent opacity={0.6} />
-      </mesh>
-      <mesh position={[-cardWidth / 2, -cardHeight / 2, 0.01]}>
-        <planeGeometry args={[clipSize, clipSize]} />
-        <meshBasicMaterial color={accentColor} transparent opacity={0.6} />
-      </mesh>
     </group>
   )
 })
+

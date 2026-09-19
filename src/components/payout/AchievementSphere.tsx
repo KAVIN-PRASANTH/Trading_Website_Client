@@ -2,32 +2,27 @@ import React, { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { FEEDBACK_IMAGE_URLS } from './feedbackImages'
-import { AchievementCard3D } from './AchievementCard3D'
+import { AchievementCard3D, CarouselMotion } from './AchievementCard3D'
 
 export interface SphereImpulse {
   vx: number
   vy: number
   continuousDir: 'up' | 'down' | 'left' | 'right' | null
+  step?: (dir: 1 | -1) => void
 }
 
 interface AchievementSphereProps {
   sphereImpulse?: React.MutableRefObject<SphereImpulse>
   autoRotateSpeed?: number
   isAutoRotating?: boolean
-}
-
-interface CardLayout {
-  id: string
-  imageUrl: string
-  position: [number, number, number]
-  normal: [number, number, number]
-  index: number
+  onSelectCard?: (url: string) => void
 }
 
 export const AchievementSphere: React.FC<AchievementSphereProps> = ({
   sphereImpulse,
-  autoRotateSpeed = 0.0032,
+  autoRotateSpeed = 0.038,
   isAutoRotating = true,
+  onSelectCard,
 }) => {
   const groupRef = useRef<THREE.Group>(null)
   const { gl, viewport } = useThree()
@@ -35,268 +30,195 @@ export const AchievementSphere: React.FC<AchievementSphereProps> = ({
   const isMobile = viewport.width < 5.8
   const isTablet = viewport.width >= 5.8 && viewport.width < 9.5
 
-  // 1. Sphere Radius
-  // Calibrated for portrait phone screenshot cards
-  const radius = useMemo(() => {
-    if (isMobile) return 3.75
-    if (isTablet) return 4.15
-    return 4.8
-  }, [isMobile, isTablet])
-
-  // 2. Card Dimensions: Portrait aspect ratio (1 : 1.4)
+  // 1. Proportional Card Dimensions
   const cardWidth = useMemo(() => {
-    if (isMobile) return Math.min(viewport.width * 0.42, 1.68)
-    if (isTablet) return 1.78
-    return 1.88
-  }, [isMobile, isTablet, viewport.width])
+    if (isMobile) return 1.15
+    if (isTablet) return 1.32
+    return 1.48
+  }, [isMobile, isTablet])
 
   const cardHeight = useMemo(() => cardWidth * 1.4, [cardWidth])
 
-  // 3. True 3D Sphere Geometry: 12 Real Student Feedback Images across 3 Latitude Tiers
-  // - Top Tier (+22° latitude): 4 cards (45°, 135°, 225°, 315°)
-  // - Middle Equator Tier (0° latitude): 4 cards (0°, 90°, 180°, 270°)
-  // - Bottom Tier (-22° latitude): 4 cards (45°, 135°, 225°, 315°)
-  const cardLayouts = useMemo<CardLayout[]>(() => {
-    const images = FEEDBACK_IMAGE_URLS
-    const layouts: CardLayout[] = []
+  const totalCards = FEEDBACK_IMAGE_URLS.length
 
-    const tiers = [
-      { phiDeg: 22, thetaOffsetDeg: 45, count: 4, startIndex: 0 },   // Top Ring
-      { phiDeg: 0, thetaOffsetDeg: 0, count: 4, startIndex: 4 },     // Middle Equator
-      { phiDeg: -22, thetaOffsetDeg: 45, count: 4, startIndex: 8 },  // Bottom Ring
-    ]
+  // Elliptical track parameters
+  const Rx = isMobile ? 2.3 : 3.85
+  const Rz = isMobile ? 1.35 : 2.0
+  const zOffset = isMobile ? -0.30 : -0.65
 
-    for (const tier of tiers) {
-      const phi = (tier.phiDeg * Math.PI) / 180
-      const cosPhi = Math.cos(phi)
-      const sinPhi = Math.sin(phi)
+  // 2. High-Precision Motion State (Ref-based, zero React re-render overhead!)
+  const motionRef = useRef<CarouselMotion>({ progress: 0, dragDistance: 0 })
+  const targetProgress = useRef(0)
+  const currentProgress = useRef(0)
+  const dragVelocity = useRef(0)
+  const isDragging = useRef(false)
+  const dragStartX = useRef(0)
+  const dragStartY = useRef(0)
+  const lastMoveX = useRef(0)
+  const recentMoves = useRef<{ x: number; t: number }[]>([])
+  const resumeAutoRotateAt = useRef(0)
+  const isAnyCardHovered = useRef(false)
+  const pointerPos = useRef({ x: 0, y: 0 })
 
-      for (let j = 0; j < tier.count; j++) {
-        const itemIdx = tier.startIndex + j
-        const imgUrl = images[itemIdx % images.length]
-
-        const thetaDeg = tier.thetaOffsetDeg + (j * 360) / tier.count
-        const theta = (thetaDeg * Math.PI) / 180
-
-        const x = radius * cosPhi * Math.sin(theta)
-        const y = radius * sinPhi
-        const z = radius * cosPhi * Math.cos(theta)
-
-        const norm = new THREE.Vector3(x, y, z).normalize()
-
-        layouts.push({
-          id: `feedback-card-${itemIdx}`,
-          imageUrl: imgUrl,
-          position: [x, y, z],
-          normal: [norm.x, norm.y, norm.z],
-          index: itemIdx,
-        })
+  // Expose step function to sphereImpulse for UI Prev / Next buttons
+  useEffect(() => {
+    if (sphereImpulse) {
+      sphereImpulse.current.step = (dir: 1 | -1) => {
+        targetProgress.current += dir * (1 / totalCards)
+        resumeAutoRotateAt.current = performance.now() + 2500
       }
     }
+  }, [sphereImpulse, totalCards])
 
-    return layouts
-  }, [radius])
-
-  // 4. Multi-Directional 360° Physics State
-  const isPointerDown = useRef(false)
-  const isDragging = useRef(false)
-  const pointerDownPos = useRef({ x: 0, y: 0 })
-  const lastPointer = useRef({ x: 0, y: 0 })
-  const currentRotationY = useRef(0)
-  const currentRotationX = useRef(0)
-  const targetRotationY = useRef(0)
-  const targetRotationX = useRef(0)
-  const velocityY = useRef(0)
-  const velocityX = useRef(0)
-
-  // 5. Seamless Pointer Event Listeners (Zero touch-freeze on tap)
+  // 3. Smooth Touch & Pointer Navigation
   useEffect(() => {
     const dom = gl.domElement
 
     const handlePointerDown = (e: PointerEvent) => {
-      if (!e.isPrimary) return
-      isPointerDown.current = true
-      isDragging.current = false
-      pointerDownPos.current = { x: e.clientX, y: e.clientY }
-      lastPointer.current = { x: e.clientX, y: e.clientY }
+      isDragging.current = true
+      dragStartX.current = e.clientX
+      dragStartY.current = e.clientY
+      lastMoveX.current = e.clientX
+      motionRef.current.dragDistance = 0
+      recentMoves.current = [{ x: e.clientX, t: performance.now() }]
+      dragVelocity.current = 0
+      try {
+        dom.setPointerCapture(e.pointerId)
+      } catch {
+        // pointer capture fallback
+      }
     }
 
     const handlePointerMove = (e: PointerEvent) => {
-      if (!isPointerDown.current || !e.isPrimary) return
+      const rect = dom.getBoundingClientRect()
+      const ndcX = ((e.clientX - rect.left) / rect.width) * 2 - 1
+      const ndcY = -(((e.clientY - rect.top) / rect.height) * 2 - 1)
+      pointerPos.current = { x: ndcX, y: ndcY }
 
-      const totalDist = Math.hypot(
-        e.clientX - pointerDownPos.current.x,
-        e.clientY - pointerDownPos.current.y
-      )
+      if (isDragging.current) {
+        const dx = e.clientX - lastMoveX.current
+        lastMoveX.current = e.clientX
 
-      // Only engage drag if moved beyond threshold (> 5px)
-      if (!isDragging.current) {
-        if (totalDist > 5) {
-          isDragging.current = true
-          // Seamlessly synchronize target rotation with current rotation (ZERO freeze or hitch!)
-          targetRotationY.current = currentRotationY.current
-          targetRotationX.current = currentRotationX.current
-          lastPointer.current = { x: e.clientX, y: e.clientY }
-          velocityY.current = 0
-          velocityX.current = 0
-          try {
-            dom.setPointerCapture(e.pointerId)
-          } catch {}
-        } else {
-          return
+        const dist = Math.hypot(e.clientX - dragStartX.current, e.clientY - dragStartY.current)
+        motionRef.current.dragDistance = dist
+
+        // Highly responsive direct finger tracking (calibrated 1:1 feel)
+        const deltaProgress = (dx / rect.width) * 0.85
+        targetProgress.current -= deltaProgress
+
+        const now = performance.now()
+        recentMoves.current.push({ x: e.clientX, t: now })
+        while (recentMoves.current.length > 1 && now - recentMoves.current[0].t > 120) {
+          recentMoves.current.shift()
         }
       }
-
-      const dx = e.clientX - lastPointer.current.x
-      const dy = e.clientY - lastPointer.current.y
-      lastPointer.current = { x: e.clientX, y: e.clientY }
-
-      // Direct 1:1 finger tracking sensitivity
-      const speedScale = isMobile ? 0.0055 : 0.004
-
-      // Horizontal 360° drag (spin left/right)
-      targetRotationY.current -= dx * speedScale
-      velocityY.current = -dx * 0.002
-
-      // Vertical 360° drag (tilt top/bottom)
-      // Clamped to ±1.42 rad (±81°) so bottom certificates rise fully to eye level
-      targetRotationX.current = THREE.MathUtils.clamp(
-        targetRotationX.current + dy * speedScale,
-        -1.42,
-        1.42
-      )
-      velocityX.current = dy * 0.002
     }
 
     const handlePointerUp = (e: PointerEvent) => {
-      if (!e.isPrimary) return
-      isPointerDown.current = false
-      isDragging.current = false
-      try {
-        dom.releasePointerCapture(e.pointerId)
-      } catch {}
-    }
-
-    const handleWheel = (e: WheelEvent) => {
-      velocityY.current += e.deltaY * 0.00015
+      if (isDragging.current) {
+        isDragging.current = false
+        try {
+          dom.releasePointerCapture(e.pointerId)
+        } catch {
+          // pointer release fallback
+        }
+        const rect = dom.getBoundingClientRect()
+        const now = performance.now()
+        const oldest = recentMoves.current[0]
+        if (oldest && now - oldest.t > 10) {
+          const dt = Math.max(16, now - oldest.t)
+          const dx = e.clientX - oldest.x
+          const pxPerMs = dx / dt
+          // Fluid swipe inertia flick with smooth momentum
+          const flickVelocity = -(pxPerMs * 16 / rect.width) * 1.35
+          dragVelocity.current = Math.max(-0.045, Math.min(0.045, flickVelocity))
+        }
+        // Pause auto-rotation for 2.8 seconds after user touch/swipe interaction
+        resumeAutoRotateAt.current = now + 2800
+      }
     }
 
     dom.addEventListener('pointerdown', handlePointerDown)
-    dom.addEventListener('pointermove', handlePointerMove)
-    dom.addEventListener('pointerup', handlePointerUp)
-    dom.addEventListener('pointercancel', handlePointerUp)
-    dom.addEventListener('wheel', handleWheel, { passive: true })
+    window.addEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointerup', handlePointerUp)
+    window.addEventListener('pointercancel', handlePointerUp)
 
     return () => {
       dom.removeEventListener('pointerdown', handlePointerDown)
-      dom.removeEventListener('pointermove', handlePointerMove)
-      dom.removeEventListener('pointerup', handlePointerUp)
-      dom.removeEventListener('pointercancel', handlePointerUp)
-      dom.removeEventListener('wheel', handleWheel)
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerup', handlePointerUp)
+      window.removeEventListener('pointercancel', handlePointerUp)
     }
-  }, [gl.domElement, isMobile])
+  }, [gl.domElement])
 
-  // 6. Rock-Solid 60 FPS Animation, D-Pad & Inertia Loop
-  useFrame((_, rawDelta) => {
+  // 4. Ultra-Smooth 60/120fps Frame Loop
+  useFrame((_, delta) => {
     const group = groupRef.current
     if (!group) return
 
-    const delta = Math.min(rawDelta, 0.05)
-    const factor = delta * 60
+    const now = performance.now()
 
-    // Process D-Pad Directional Controls (from 4 directional buttons)
-    if (sphereImpulse && sphereImpulse.current) {
-      const imp = sphereImpulse.current
-
-      if (imp.continuousDir === 'left') {
-        targetRotationY.current -= 0.028 * factor
-      } else if (imp.continuousDir === 'right') {
-        targetRotationY.current += 0.028 * factor
-      } else if (imp.continuousDir === 'up') {
-        targetRotationX.current = THREE.MathUtils.clamp(
-          targetRotationX.current + 0.022 * factor,
-          -1.42,
-          1.42
-        )
-      } else if (imp.continuousDir === 'down') {
-        targetRotationX.current = THREE.MathUtils.clamp(
-          targetRotationX.current - 0.022 * factor,
-          -1.42,
-          1.42
-        )
-      }
-
-      if (Math.abs(imp.vy) > 0.0001) {
-        velocityY.current += imp.vy
-        imp.vy = 0
-      }
-      if (Math.abs(imp.vx) > 0.0001) {
-        velocityX.current += imp.vx
-        imp.vx = 0
-      }
+    // Smooth aerodynamic inertia decay
+    if (!isDragging.current && Math.abs(dragVelocity.current) > 0.00004) {
+      targetProgress.current += dragVelocity.current
+      dragVelocity.current *= 0.94 // Silky momentum friction
     }
 
-    if (isDragging.current) {
-      // While actively dragging: immediate responsive 1:1 finger tracking
-      currentRotationY.current = THREE.MathUtils.lerp(
-        currentRotationY.current,
-        targetRotationY.current,
-        0.35
-      )
-      currentRotationX.current = THREE.MathUtils.lerp(
-        currentRotationX.current,
-        targetRotationX.current,
-        0.35
-      )
-    } else {
-      // While released or cruising: smooth inertia decay
-      velocityY.current *= 0.94
-      velocityX.current *= 0.94
-
-      // Continuous cruising horizontal rotation: Direct, consistent, zero hitch!
-      const effectiveAutoRotateSpeed = isAutoRotating ? autoRotateSpeed : 0
-      currentRotationY.current += (effectiveAutoRotateSpeed + velocityY.current) * factor
-      targetRotationY.current = currentRotationY.current
-
-      // Vertical tilt handling
-      currentRotationX.current = THREE.MathUtils.clamp(
-        currentRotationX.current + velocityX.current * factor,
-        -1.42,
-        1.42
-      )
-      targetRotationX.current = currentRotationX.current
-
-      // When vertical inertia decays, gently ease vertical tilt back to eye-level (0)
-      if (Math.abs(velocityX.current) < 0.0003 && !sphereImpulse?.current?.continuousDir) {
-        currentRotationX.current = THREE.MathUtils.lerp(
-          currentRotationX.current,
-          0,
-          0.02 * factor
-        )
-        targetRotationX.current = currentRotationX.current
-      }
+    // Directional control continuous hold (e.g. key hold or arrow touch)
+    if (sphereImpulse?.current?.continuousDir === 'left') {
+      targetProgress.current -= delta * 0.22
+    } else if (sphereImpulse?.current?.continuousDir === 'right') {
+      targetProgress.current += delta * 0.22
     }
 
-    // Apply rotation to 3D sphere group
-    group.rotation.y = currentRotationY.current
-    group.rotation.x = currentRotationX.current
+    // Auto-rotation when user is not interacting, not dragging, and not hovered
+    if (
+      isAutoRotating &&
+      !isDragging.current &&
+      !isAnyCardHovered.current &&
+      now > resumeAutoRotateAt.current
+    ) {
+      targetProgress.current += delta * autoRotateSpeed
+    }
+
+    // Responsiveness: high during drag for instant finger lock, smooth during gliding
+    const lerpFactor = isDragging.current ? 0.38 : 0.12
+    currentProgress.current = THREE.MathUtils.lerp(
+      currentProgress.current,
+      targetProgress.current,
+      lerpFactor
+    )
+
+    motionRef.current.progress = currentProgress.current
+
+    // Subtle cursor parallax on entire 3D stage
+    group.rotation.y = THREE.MathUtils.lerp(group.rotation.y, pointerPos.current.x * 0.06, 0.05)
+    group.rotation.x = THREE.MathUtils.lerp(group.rotation.x, -pointerPos.current.y * 0.04, 0.05)
   })
 
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
-      {/* 12 Real Student Feedback Cards Distributed in True 3D Spherical Space */}
-      {cardLayouts.map((layout) => (
+      {FEEDBACK_IMAGE_URLS.map((url, idx) => (
         <AchievementCard3D
-          key={layout.id}
-          imageUrl={layout.imageUrl}
-          position={layout.position}
-          normal={layout.normal}
-          index={layout.index}
-          sphereRadius={radius}
+          key={`proof-card-${idx}`}
+          imageUrl={url}
+          index={idx}
+          totalCards={totalCards}
           cardWidth={cardWidth}
           cardHeight={cardHeight}
+          Rx={Rx}
+          Rz={Rz}
+          zOffset={zOffset}
+          isMobile={isMobile}
+          motionRef={motionRef}
+          onSelect={onSelectCard}
+          onHoverChange={(hovered) => {
+            isAnyCardHovered.current = hovered
+          }}
         />
       ))}
     </group>
   )
 }
+
+

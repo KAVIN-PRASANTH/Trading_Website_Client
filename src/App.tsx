@@ -4,6 +4,8 @@ import { StudentFeedbackSection } from './components/feedback/StudentFeedbackSec
 import { StudentVideoSection } from './components/feedback/StudentVideoSection'
 import { ProgrammesSection } from './components/programmes/ProgrammesSection'
 import { SitePreloader } from './components/common/SitePreloader'
+import { FloatingContactOrbit } from './components/common/FloatingContactOrbit'
+import { NumberTicker } from './components/common/NumberTicker'
 
 /* ---------------------------------------- Icons ---------------------------------------- */
 const Arrow  = () => <svg viewBox="0 0 24 24" aria-hidden><path d="M5 12h13M13 6l6 6-6 6"/></svg>
@@ -87,10 +89,31 @@ const modules = [
   ['03', 'Execute with context', 'Turn a high-probability idea into a deliberate, risk-defined execution plan.'],
 ]
 
-const questions = [
-  ['Who is this mentorship for?',     'For committed traders who want a structured understanding of ICT and Smart Money Concepts—from beginners to traders ready to replace random entries with a process.'],
-  ['Will I receive trading signals?', 'No. Pravyn ICT is education-first: we teach the reasoning, execution framework and risk discipline required to make your own decisions.'],
-  ['How are sessions conducted?',     'Training is delivered through live, interactive sessions with real-market examples and mentor-led review. Enquire with us for the current batch schedule.'],
+const questions: [string, string][] = [
+  [
+    'Is Copy Trading Allowed During the Live Sessions?',
+    'We do not provide trade calls or signals, and we do not ask anyone to copy our trades. The live sessions are conducted purely for educational purposes, where you can observe how your mentor analyzes the market, applies the strategy, and manages trades in real-time.\n\nIf you happen to have the same market bias and trading idea, your trade may naturally be similar. However, the purpose of the live session is to learn the strategy and understand how it is applied in real market conditions—not to copy trades.'
+  ],
+  [
+    'How Many Days of Live Trading Sessions Are Conducted Each Week?',
+    'We aim to achieve 3 profitable trading days each week using our strategy. To give ourselves enough opportunities, the live sessions may run for a maximum of 4 days per week. We will put in our best effort to identify and execute high-quality trading opportunities based on our strategy.'
+  ],
+  [
+    'Are There Any Rules for the Live Trading Sessions?',
+    'Yes. We want our live sessions to be interactive and engaging, not just a one-way learning experience. Participants are encouraged to actively share and discuss their market analysis, ideas, and trade bias with the mentor.\n\nPlease avoid staying muted throughout the entire week without participating. Try your best to share your ideas, ask questions, and discuss your analysis with the mentor.\n\nThe goal is simple: We learn, discuss, and grow together as traders.'
+  ],
+  [
+    'How Long Will the Class Recordings Be Available?',
+    'The class recordings will be available for approximately 10–12 months. However, around 3 months of consistent learning and practice should be enough to gain a complete understanding of the trading model.\n\nFor security purposes, the recordings will have a personalized watermark with your name. Each video is intended for individual use, so the maximum view count should be 1. If the view count exceeds this, it may indicate that the recording has been shared with someone else.\n\nIn such cases, access to the recordings may be revoked.'
+  ],
+  [
+    'Can I Pass a Funded Account Challenge and Get Payouts Using the Slingshot Strategy?',
+    'Yes, it is possible to use the Slingshot Strategy for a funded account, but success requires consistency, discipline, and proper execution.\n\nAfter completing the classes, you will be expected to practice the model and submit the practical chart work requested by your mentor. Our live sessions and mentor support are designed to help you understand the strategy, improve your execution, and work toward your first funded-account payout.'
+  ],
+  [
+    'How Long Will It Take to Understand the Slingshot Strategy?',
+    'The Slingshot Strategy can be taught and understood in as little as 2 days. However, understanding the strategy is only the beginning. To become more consistent and confident in executing trades, we strongly recommend attending the live sessions with your mentor for at least 1 month.\n\nDuring this period, you’ll get practical exposure to the strategy in live market conditions, learn how to apply it correctly, and receive important mentor guidance and feedback to improve your execution.'
+  ]
 ]
 
 
@@ -100,21 +123,21 @@ const videos = [
     ytId: '1ro8otPMUlo',
     title: 'Backtesting vs Forward Testing – Which is Best?',
     tag: 'Strategy',
-    desc: 'Backtesting tells you how a strategy performed — forward testing tells you if it actually works. Learn how to use both the right way to build real confidence in your edge.',
+    desc: 'How to validate trading strategies with live market execution and build genuine confidence.',
   },
   {
     id: 'v2',
     ytId: 'Ka8SEdSN2Ww',
     title: 'Weekly Market Outlook – EURUSD, DXY & XAUUSD',
     tag: 'Market Outlook',
-    desc: 'A structured pre-week breakdown of EURUSD, DXY and Gold. Learn how to frame your bias before the week opens using institutional market structure and liquidity.',
+    desc: 'Institutional breakdown framing high-probability setups before the trading week opens.',
   },
   {
     id: 'v3',
     ytId: 'ON1dSoOflEo',
     title: 'What is SMT? – ICT Smart Money Divergence Explained',
     tag: 'ICT Concepts',
-    desc: 'SMT (Smart Money Technique) divergence is one of the most powerful confirmation tools in ICT. Understand what it is, how to spot it, and why it matters for your entries.',
+    desc: 'How to spot smart money divergence across correlated assets to confirm high-probability entries.',
   },
 ]
 
@@ -153,54 +176,23 @@ function getPhotoLabel(src: string, index: number): string {
 // Aligned with the announced cohort launch date: October 15, 2026 at 09:00 IST
 const BATCH_TARGET = new Date('2026-09-25T09:00:00+05:30')
 
-function useRapidCountdown(target: Date) {
-  const calc = () => {
-    const diff = target.getTime() - Date.now()
-    const isLive = diff <= 0
-    const clamped = Math.max(0, diff)
-    const days = Math.floor(clamped / 86400000)
-    const hours = Math.floor((clamped % 86400000) / 3600000)
-    const minutes = Math.floor((clamped % 3600000) / 60000)
-    const seconds = Math.floor((clamped % 60000) / 1000)
-    // 2-digit hundredths of a second (00-99) for precision chronograph display
-    const milliseconds = Math.floor((clamped % 1000) / 10)
-    return {
-      days,
-      hours,
-      minutes,
-      seconds,
-      milliseconds,
-      isLive,
-    }
+function calcCountdown(target: Date) {
+  const diff = target.getTime() - Date.now()
+  const isLive = diff <= 0
+  const clamped = Math.max(0, diff)
+  const days = Math.floor(clamped / 86400000)
+  const hours = Math.floor((clamped % 86400000) / 3600000)
+  const minutes = Math.floor((clamped % 3600000) / 60000)
+  const seconds = Math.floor((clamped % 60000) / 1000)
+  const milliseconds = Math.floor((clamped % 1000) / 10)
+  return {
+    days,
+    hours,
+    minutes,
+    seconds,
+    milliseconds,
+    isLive,
   }
-
-  const [t, setT] = useState(calc)
-
-  useEffect(() => {
-    let animId: number
-    let lastTick = 0
-    const tick = (now: number) => {
-      // Rapid ~45fps tick for ultra-fast, smooth millisecond numbers
-      if (now - lastTick >= 22) {
-        const next = calc()
-        setT(next)
-        lastTick = now
-        if (next.isLive) {
-          // Stop RAF loop when countdown reaches zero and batch is live
-          return
-        }
-      }
-      animId = requestAnimationFrame(tick)
-    }
-    if (!calc().isLive) {
-      animId = requestAnimationFrame(tick)
-    }
-    return () => {
-      if (animId) cancelAnimationFrame(animId)
-    }
-  }, [target])
-
-  return t
 }
 const pad = (n: number) => String(n).padStart(2, '0')
 
@@ -289,48 +281,82 @@ function computeCohortSeatStats(daysLeft: number, isLive: boolean): CohortSeatSt
 }
 
 interface HeroCountdownProps {
-  countdown: {
-    days: number
-    hours: number
-    minutes: number
-    seconds: number
-    milliseconds: number
-    isLive: boolean
-  }
+  target?: Date
+  onLiveChange?: (live: boolean) => void
 }
 
 const HeroCountdownModule = memo(function HeroCountdownModule({
-  countdown,
+  target = BATCH_TARGET,
+  onLiveChange,
 }: HeroCountdownProps) {
-  const [isFlipped, setIsFlipped] = useState(false)
+  const initial = useMemo(() => calcCountdown(target), [target])
+  const [isLive, setIsLive] = useState(initial.isLive)
+  const [stats, setStats] = useState(() => computeCohortSeatStats(initial.days, initial.isLive))
 
-  const stats = computeCohortSeatStats(countdown.days, countdown.isLive)
-  const isLive = stats.isLive
+  const daysRef = useRef<HTMLSpanElement>(null)
+  const hoursRef = useRef<HTMLSpanElement>(null)
+  const minsRef = useRef<HTMLSpanElement>(null)
+  const secsRef = useRef<HTMLSpanElement>(null)
+  const msRef = useRef<HTMLSpanElement>(null)
 
-  // Handle mobile card tap to toggle flip (disabled in live mode)
-  const handleCardClick = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement
-    if (target.closest('a') || target.closest('button')) return
-    if (!isLive) {
-      setIsFlipped((prev) => !prev)
+  useEffect(() => {
+    if (isLive) return
+
+    let animId: number
+    const tick = () => {
+      const cur = calcCountdown(target)
+      if (cur.isLive) {
+        setIsLive(true)
+        onLiveChange?.(true)
+        return
+      }
+
+      // Ultra-fluid direct DOM text updates with zero React VDOM overhead
+      const msStr = pad(cur.milliseconds)
+      if (msRef.current && msRef.current.textContent !== msStr) {
+        msRef.current.textContent = msStr
+      }
+
+      const secStr = pad(cur.seconds)
+      if (secsRef.current && secsRef.current.textContent !== secStr) {
+        secsRef.current.textContent = secStr
+      }
+
+      const minStr = pad(cur.minutes)
+      if (minsRef.current && minsRef.current.textContent !== minStr) {
+        minsRef.current.textContent = minStr
+      }
+
+      const hrStr = pad(cur.hours)
+      if (hoursRef.current && hoursRef.current.textContent !== hrStr) {
+        hoursRef.current.textContent = hrStr
+      }
+
+      const dayStr = pad(cur.days)
+      if (daysRef.current && daysRef.current.textContent !== dayStr) {
+        daysRef.current.textContent = dayStr
+        setStats(computeCohortSeatStats(cur.days, false))
+      }
+
+      animId = requestAnimationFrame(tick)
     }
-  }
+
+    animId = requestAnimationFrame(tick)
+    return () => {
+      if (animId) cancelAnimationFrame(animId)
+    }
+  }, [target, isLive, onLiveChange])
 
   return (
     <div
-      className={`hero-countdown-wrap reveal-el dl-2 ${isLive ? 'is-batch-live-wrap' : ''} ${isFlipped ? 'has-flipped' : ''}`}
-      onMouseLeave={() => {
-        // Reset manual flip on mouse leave so hover remains natural on desktop
-        setIsFlipped(false)
-      }}
+      className={`hero-countdown-wrap reveal-el dl-2 ${isLive ? 'is-batch-live-wrap' : ''}`}
     >
       <div className="hero-cd-glow" aria-hidden />
       <div className="hero-cd-ring ring-outer" aria-hidden />
       <div className="hero-cd-ring ring-inner" aria-hidden />
 
       <div
-        className={`hero-countdown-card ${isLive ? 'is-batch-live-card' : ''} ${isFlipped ? 'is-flipped' : ''}`}
-        onClick={handleCardClick}
+        className={`hero-countdown-card ${isLive ? 'is-batch-live-card' : ''}`}
       >
         {isLive ? (
           /* ---------------------------------------- LIVE BROADCAST SCREEN ---------------------------------------- */
@@ -384,219 +410,103 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
             </div>
           </div>
         ) : (
-          <>
-            {/* ---------------------------------------- FRONT FACE: CHRONOGRAPH ---------------------------------------- */}
-            <div className="hcd-face hcd-face-front">
-              {/* Terminal Header */}
-              <div className="hcd-header">
-                <div className="hcd-live-badge">
-                  <span className="hcd-pulse-dot" />
-                  <span>LIVE BATCH COHORT</span>
-                </div>
-                <div className="hcd-header-actions">
-                  <div className="hcd-status-tag">
-                    <span className="hcd-tag-dot" />
-                    <span>ADMISSIONS OPEN</span>
-                  </div>
-                  <button
-                    type="button"
-                    className="hcd-flip-trigger-btn"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setIsFlipped(true)
-                    }}
-                    title="Inspect seat matrix details"
-                    aria-label="Flip card to view seat details"
-                  >
-                    <span>Seat Matrix ↻</span>
-                  </button>
+          /* ---------------------------------------- FRONT FACE: CHRONOGRAPH ---------------------------------------- */
+          <div className="hcd-face hcd-face-front">
+            {/* Terminal Header */}
+            <div className="hcd-header">
+              <div className="hcd-live-badge">
+                <span className="hcd-pulse-dot" />
+                <span>LIVE BATCH COHORT</span>
+              </div>
+              <div className="hcd-header-actions">
+                <div className="hcd-status-tag">
+                  <span className="hcd-tag-dot" />
+                  <span>ADMISSIONS OPEN</span>
                 </div>
               </div>
+            </div>
 
-              {/* 5-Pillar Chronograph Display */}
-              <div className="hcd-chronograph">
-                {/* Days Pillar */}
-                {countdown.days > 0 && (
-                  <>
-                    <div className="hcd-chrono-unit">
-                      <div className="hcd-digit-box">
-                        <span className="hcd-val">{pad(countdown.days)}</span>
-                      </div>
-                      <span className="hcd-lbl">DAYS</span>
+            {/* 5-Pillar Chronograph Display */}
+            <div className="hcd-chronograph">
+              {/* Days Pillar */}
+              {initial.days > 0 && (
+                <>
+                  <div className="hcd-chrono-unit">
+                    <div className="hcd-digit-box">
+                      <span className="hcd-val" ref={daysRef}>{pad(initial.days)}</span>
                     </div>
-
-                    <div className="hcd-chrono-sep" aria-hidden="true">:</div>
-                  </>
-                )}
-
-                {/* Hours Pillar */}
-                <div className="hcd-chrono-unit">
-                  <div className="hcd-digit-box">
-                    <span className="hcd-val">{pad(countdown.hours)}</span>
+                    <span className="hcd-lbl">DAYS</span>
                   </div>
-                  <span className="hcd-lbl">HOURS</span>
+
+                  <div className="hcd-chrono-sep" aria-hidden="true">:</div>
+                </>
+              )}
+
+              {/* Hours Pillar */}
+              <div className="hcd-chrono-unit">
+                <div className="hcd-digit-box">
+                  <span className="hcd-val" ref={hoursRef}>{pad(initial.hours)}</span>
                 </div>
-
-                <div className="hcd-chrono-sep" aria-hidden="true">:</div>
-
-                {/* Minutes Pillar */}
-                <div className="hcd-chrono-unit">
-                  <div className="hcd-digit-box">
-                    <span className="hcd-val">{pad(countdown.minutes)}</span>
-                  </div>
-                  <span className="hcd-lbl">MIN</span>
-                </div>
-
-                <div className="hcd-chrono-sep" aria-hidden="true">:</div>
-
-                {/* Seconds Pillar */}
-                <div className="hcd-chrono-unit">
-                  <div className="hcd-digit-box">
-                    <span className="hcd-val">{pad(countdown.seconds)}</span>
-                  </div>
-                  <span className="hcd-lbl">SEC</span>
-                </div>
-
-                <div className="hcd-chrono-sep hcd-sep-ms" aria-hidden="true">.</div>
-
-                {/* Rapid Milliseconds Pillar */}
-                <div className="hcd-chrono-unit hcd-unit-ms">
-                  <div className="hcd-digit-box hcd-box-ms">
-                    <span className="hcd-val hcd-val-ms">{pad(countdown.milliseconds)}</span>
-                  </div>
-                  <div className="hcd-lbl-wrap">
-                    <span className="hcd-lbl hcd-lbl-ms">MS</span>
-                    <span className="hcd-ms-live-pulse" title="High-frequency live milliseconds" />
-                  </div>
-                </div>
+                <span className="hcd-lbl">HOURS</span>
               </div>
 
-              {/* Dynamic Urgency Meter Footer */}
-              <div className="hcd-footer">
-                <div className="hcd-urgency-strip">
-                  <div className="hcd-urgency-info">
-                    <div className="hcd-urgency-left">
-                      <span className="hcd-urgency-text">LIMITED MENTORSHIP SEATS</span>
-                      <span className="hcd-seat-badge-pill">
-                        {stats.availableSeats} of 20 LEFT
-                      </span>
-                    </div>
-                    <div className="hcd-urgency-right">
-                      <span className="hcd-urgency-val">{stats.percentFilled}% FILLED</span>
-                    </div>
-                  </div>
-                  <div className="hcd-urgency-meter">
-                    <div
-                      className="hcd-urgency-fill"
-                      style={{ width: `${Math.max(5, stats.percentFilled)}%` }}
-                    />
-                  </div>
-                  <div className="hcd-flip-hint-row">
-                    <span className="hcd-flip-hint-text">
-                      <span className="hcd-flip-icon">↺</span> Hover or click to inspect seat allocation matrix
+              <div className="hcd-chrono-sep" aria-hidden="true">:</div>
+
+              {/* Minutes Pillar */}
+              <div className="hcd-chrono-unit">
+                <div className="hcd-digit-box">
+                  <span className="hcd-val" ref={minsRef}>{pad(initial.minutes)}</span>
+                </div>
+                <span className="hcd-lbl">MIN</span>
+              </div>
+
+              <div className="hcd-chrono-sep" aria-hidden="true">:</div>
+
+              {/* Seconds Pillar */}
+              <div className="hcd-chrono-unit">
+                <div className="hcd-digit-box">
+                  <span className="hcd-val" ref={secsRef}>{pad(initial.seconds)}</span>
+                </div>
+                <span className="hcd-lbl">SEC</span>
+              </div>
+
+              <div className="hcd-chrono-sep hcd-sep-ms" aria-hidden="true">.</div>
+
+              {/* Rapid Milliseconds Pillar */}
+              <div className="hcd-chrono-unit hcd-unit-ms">
+                <div className="hcd-digit-box hcd-box-ms">
+                  <span className="hcd-val hcd-val-ms" ref={msRef}>{pad(initial.milliseconds)}</span>
+                </div>
+                <div className="hcd-lbl-wrap">
+                  <span className="hcd-lbl hcd-lbl-ms">MS</span>
+                  <span className="hcd-ms-live-pulse" title="High-frequency live milliseconds" />
+                </div>
+              </div>
+            </div>
+
+            {/* Dynamic Urgency Meter Footer */}
+            <div className="hcd-footer">
+              <div className="hcd-urgency-strip">
+                <div className="hcd-urgency-info">
+                  <div className="hcd-urgency-left">
+                    <span className="hcd-urgency-text">LIMITED MENTORSHIP SEATS</span>
+                    <span className="hcd-seat-badge-pill">
+                      {stats.availableSeats} of 20 LEFT
                     </span>
                   </div>
+                  <div className="hcd-urgency-right">
+                    <span className="hcd-urgency-val">{stats.percentFilled}% FILLED</span>
+                  </div>
+                </div>
+                <div className="hcd-urgency-meter">
+                  <div
+                    className="hcd-urgency-fill"
+                    style={{ width: `${Math.max(5, stats.percentFilled)}%` }}
+                  />
                 </div>
               </div>
             </div>
-
-            {/* ---------------------------------------- BACK FACE: SEAT ALLOCATION MATRIX ---------------------------------------- */}
-            <div className="hcd-face hcd-face-back">
-              <div className="hcd-back-header">
-                <div className="hcd-live-badge">
-                  <span className="hcd-pulse-dot" />
-                  <span>SEAT ALLOCATION MATRIX</span>
-                </div>
-                <div className="hcd-back-header-right">
-                  <span className="hcd-status-tag">20-SLOT CAP</span>
-                  <button
-                    type="button"
-                    className="hcd-back-flip-pill"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setIsFlipped(false)
-                    }}
-                    title="Flip back to timer"
-                  >
-                    <span>↻ Timer</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Top Metrics Row */}
-              <div className="hcd-back-metrics">
-                <div className="hcd-back-metric-main">
-                  <div className="hcd-back-num-wrap">
-                    <span className="hcd-back-big-num">{stats.availableSeats}</span>
-                    <span className="hcd-back-num-sub">/ 20</span>
-                  </div>
-                  <div className="hcd-back-metric-label">
-                    <strong>AVAILABLE SEATS</strong>
-                    <span>{stats.filledSeats} Reserved · {stats.percentFilled}% Capacity</span>
-                  </div>
-                </div>
-                <div className={`hcd-back-status-pill pill-${stats.urgencyLevel}`}>
-                  <span className="hcd-pill-dot" />
-                  <span>{stats.urgencyLabel}</span>
-                </div>
-              </div>
-
-              {/* 20-Seat Visual Grid */}
-              <div className="hcd-seat-grid-container">
-                <div className="hcd-seat-grid-header">
-                  <span>SEAT ALLOCATION INVENTORY</span>
-                  <span>CAP: 20 TRADERS</span>
-                </div>
-                <div className="hcd-seat-grid">
-                  {Array.from({ length: 20 }, (_, idx) => {
-                    const seatNum = idx + 1
-                    const isBooked = seatNum <= stats.filledSeats
-                    const isNext = seatNum === stats.filledSeats + 1 && !isBooked
-                    return (
-                      <div
-                        key={seatNum}
-                        className={`hcd-seat-pill ${isBooked ? 'is-booked' : isNext ? 'is-next' : 'is-open'}`}
-                        title={`Seat #${seatNum}: ${isBooked ? 'Reserved' : isNext ? 'Next Available' : 'Available'}`}
-                      >
-                        <span className="hcd-seat-num">{pad(seatNum)}</span>
-                        <span className="hcd-seat-status-dot" />
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Institutional Specs Strip */}
-              <div className="hcd-back-specs-grid">
-                <div className="hcd-spec-card">
-                  <span className="hcd-spec-k">CLASS START</span>
-                  <span className="hcd-spec-v">25 SEP 2026 · 10:00 AM</span>
-                </div>
-                <div className="hcd-spec-card">
-                  <span className="hcd-spec-k">FORMAT</span>
-                  <span className="hcd-spec-v">Offline · Classroom</span>
-                </div>
-                <div className="hcd-spec-card">
-                  <span className="hcd-spec-k">LOCATION</span>
-                  <span className="hcd-spec-v">Coimbatore Desk</span>
-                </div>
-              </div>
-
-              {/* Back Footer with Direct CTA */}
-              <div className="hcd-back-footer">
-                <div className="hcd-back-cta-row">
-                  <a
-                    href="#programmes"
-                    className="hcd-back-claim-btn"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <span>{stats.availableSeats > 0 ? `Reserve Seat #${Math.min(20, stats.filledSeats + 1)} Now` : 'Inquire for Waitlist'}</span>
-                    <span aria-hidden="true">→</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </>
+          </div>
         )}
       </div>
     </div>
@@ -614,6 +524,7 @@ const NAV_LINKS: NavItem[] = [
   { href: '#mentor',          label: 'Mentor' },
   { href: '#programmes',      label: 'Programmes' },
   { href: '#student-reviews', label: 'Student Reviews', hasDropdown: true },
+  { href: '#faq',             label: 'FAQ' },
   { href: '#contact',         label: 'Contact' },
 ]
 
@@ -688,7 +599,6 @@ function App() {
   const [contactData, setContactData] = useState<ContactFormState>(INITIAL_CONTACT_FORM)
   const [selectedTopic, setSelectedTopic] = useState<string>('Complete ICT Mastery')
   const [selectedExp, setSelectedExp] = useState<string>('Intermediate (6M - 2 Yrs)')
-  const [copiedEmail, setCopiedEmail] = useState<boolean>(false)
 
   const [contactErrors, setContactErrors] = useState<ContactErrors>({})
   const [contactTouched, setContactTouched] = useState<Record<keyof ContactFormState, boolean>>({
@@ -711,16 +621,6 @@ function App() {
       }
       return prev
     })
-  }
-
-  const handleCopyEmail = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText('pravyntraderweb@gmail.com').catch(() => {})
-    }
-    setCopiedEmail(true)
-    setTimeout(() => setCopiedEmail(false), 2400)
   }
 
   const handleEnroll = (programmeName: string) => {
@@ -749,13 +649,40 @@ function App() {
   const [menuOpen,      setMenuOpen]      = useState(false)
   const [scrolled,      setScrolled]      = useState(false)
   const [activeSection, setActiveSection] = useState('home')
-  const [activeQs,      setActiveQs]      = useState<number[]>([0])
+  const [activeQs,      setActiveQs]      = useState<number[]>([])
+  const [showAllFaqs,   setShowAllFaqs]   = useState(false)
   const [annDismissed,  setAnnDismissed]  = useState(false)
   const [reviewsDropdownOpen, setReviewsDropdownOpen] = useState(false)
 
+  const handleToggleFaqs = () => {
+    setShowAllFaqs(prev => {
+      const next = !prev
+      if (!next) {
+        const faqEl = document.getElementById('faq')
+        if (faqEl) {
+          const rect = faqEl.getBoundingClientRect()
+          if (rect.top < -80) {
+            faqEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+          }
+        }
+      }
+      return next
+    })
+  }
+
   /* ---------------------------------------- Live Batch Countdown & State ---------------------------------------- */
-  const countdown = useRapidCountdown(BATCH_TARGET)
-  const isBatchLive = countdown.isLive
+  const [isBatchLive, setIsBatchLive] = useState(() => Date.now() >= BATCH_TARGET.getTime())
+
+  useEffect(() => {
+    if (isBatchLive) return
+    const interval = setInterval(() => {
+      if (Date.now() >= BATCH_TARGET.getTime()) {
+        setIsBatchLive(true)
+        clearInterval(interval)
+      }
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [isBatchLive])
 
   /* ---------------------------------------- Surrounding Orbiting Images Mechanism ---------------------------------------- */
   // Preload all surrounding images in memory
@@ -798,6 +725,18 @@ function App() {
     })
   }, [])
 
+  /* ---------------------------------------- Global Button Liquid Drop Entry Position ---------------------------------------- */
+  useEffect(() => {
+    const handleBtnMouseEnter = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest('.button, .button-primary, .btn-enroll, #hero-cta, #cn-submit') as HTMLElement | null
+      if (!target) return
+      const rect = target.getBoundingClientRect()
+      const x = Math.max(16, Math.min(rect.width - 16, e.clientX - rect.left))
+      target.style.setProperty('--drop-x', `${x}px`)
+    }
+    document.addEventListener('mouseenter', handleBtnMouseEnter, true)
+    return () => document.removeEventListener('mouseenter', handleBtnMouseEnter, true)
+  }, [])
 
   /* ---------------------------------------- Header glass on scroll (state-guarded for zero re-render overhead) ---------------------------------------- */
   useEffect(() => {
@@ -1164,19 +1103,24 @@ function App() {
               <span className="badge-dot" />MENTORSHIP FOR SERIOUS TRADERS
             </div>
             <h1 className="reveal-el dl-1">
-              Trade with<br /><em className="h1-em">precision.</em><br />Not with luck.
+              Trade with <span className="h1-em">precision.</span>
+              <span className="h1-sub">Not with luck.</span>
             </h1>
             <p className="hero-sub reveal-el dl-2">
               A live, structured ICT mentorship for traders committed to understanding market structure, liquidity and disciplined execution.
             </p>
             <div className="hero-actions reveal-el dl-3">
-              <a className={`button button-primary glow-heavy ${isBatchLive ? 'is-waitlist-mode' : ''}`} href="#programmes" id="hero-cta">
-                {isBatchLive ? 'Join Next Batch Waitlist' : 'Reserve your seat'} <Arrow />
+              <a
+                className={`button button-primary glow-heavy ${isBatchLive ? 'is-waitlist-mode' : ''}`}
+                href="#programmes"
+                id="hero-cta"
+              >
+                <span className="btn-text">{isBatchLive ? 'Join Next Batch Waitlist' : 'Reserve your seat'}</span> <Arrow />
               </a>
             </div>
           </div>
 
-          <HeroCountdownModule countdown={countdown} />
+          <HeroCountdownModule target={BATCH_TARGET} onLiveChange={setIsBatchLive} />
         </div>
       </section>
 
@@ -1191,31 +1135,6 @@ function App() {
           ))}
         </div>
       </div>
-
-      {/* ---------------------------------------- METHOD ---------------------------------------- */}
-      <section className="method-section" id="method" data-section="method">
-        <div className="method-header reveal-el">
-          <p className="section-tag">01 / THE DIFFERENCE</p>
-          <h2>Trading is not a<br /><em>prediction game.</em></h2>
-        </div>
-        <div className="principles-grid">
-          {[
-            ['01','Structure before setups.','Know where price is in its larger narrative, then work down to the trade — never the reverse.'],
-            ['02','Process over impulse.','A repeatable framework gives you something more reliable than intuition or pattern-matching.'],
-            ['03','Risk before reward.','Protect capital first. Let high-quality decisions compound over time into an actual edge.'],
-          ].map(([num, heading, body]) => (
-            <article className="principle-card reveal-el" key={num}>
-              <div className="pc-num" aria-hidden>{num}</div>
-              <div className="pc-body">
-                <h3>{heading}</h3>
-                <p>{body}</p>
-              </div>
-              <div className="pc-corner tl" /><div className="pc-corner tr" />
-              <div className="pc-corner bl" /><div className="pc-corner br" />
-            </article>
-          ))}
-        </div>
-      </section>
 
       {/* ---------------------------------------- MENTOR ---------------------------------------- */}
       <section className="mentor-section" id="mentor" data-section="mentor">
@@ -1274,15 +1193,30 @@ function App() {
 
           {/* Stat strip */}
           <div className="mentor-stat-strip">
-            <div><strong>1000+</strong><span>Students</span></div>
-            <div><strong>4.9</strong><span>Rating</span></div>
-            <div><strong>3+</strong><span>Years</span></div>
+            <div>
+              <strong>
+                <NumberTicker value={1000} suffix="+" />
+              </strong>
+              <span className="mentor-stat-label">Students Trained</span>
+            </div>
+            <div>
+              <strong>
+                <NumberTicker value={4.9} decimalPlaces={1} />
+              </strong>
+              <span className="mentor-stat-label">Rating</span>
+            </div>
+            <div>
+              <strong>
+                <NumberTicker value={3} suffix="+" />
+              </strong>
+              <span className="mentor-stat-label">Years</span>
+            </div>
           </div>
         </div>
 
         <div className="mentor-content">
 
-          <p className="section-tag reveal-el">02 / YOUR MENTOR</p>
+          <p className="section-tag reveal-el">01 / YOUR MENTOR</p>
           <h2 className="reveal-el">Built for the trader<br />you intend <em>to become.</em></h2>
           <p className="reveal-el">Pravyn ICT is guided by an experienced practitioner focused on market structure, liquidity and institutional price action. Every session is grounded in real execution logic, clear frameworks and accountability—not predictions.</p>
           <blockquote className="reveal-el">"No signals. No jackpots. No false promises."</blockquote>
@@ -1294,38 +1228,6 @@ function App() {
 
       {/* ---------------------------------------- UNIFIED STUDENT REVIEWS & PROOF HUB ---------------------------------------- */}
       <div id="student-reviews" className="student-reviews-hub" data-section="student-reviews">
-        <div className="proof-hub-sticky-bar reveal-el">
-          <div className="proof-hub-bar-inner">
-            <div className="proof-hub-title-group">
-              <div className="proof-hub-badge">
-                <span className="phb-dot" />
-                <span>VERIFIED ALUMNI PROOF &amp; HONEST REVIEWS</span>
-              </div>
-              <span className="proof-hub-stats-badge">100% UNFILTERED STUDENT EVIDENCE</span>
-            </div>
-            <div className="proof-subcategories-pill-bar" role="navigation" aria-label="Student Review Subcategories">
-              <a href="#student-payout" className="proof-subcat-pill">
-                <span className="psc-icon">✦</span>
-                <span className="psc-num">01.</span>
-                <span>Payout Proofs</span>
-                <span className="psc-badge">3D Sphere</span>
-              </a>
-              <a href="#student-stories" className="proof-subcat-pill">
-                <span className="psc-icon">★</span>
-                <span className="psc-num">02.</span>
-                <span>Written Reviews</span>
-                <span className="psc-badge">3D Deck</span>
-              </a>
-              <a href="#student-videos" className="proof-subcat-pill">
-                <span className="psc-icon">▶</span>
-                <span className="psc-num">03.</span>
-                <span>Video Testimonials</span>
-                <span className="psc-badge">Watch Stories</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
         {/* Subcategory 1: Payout Proofs 3D Sphere */}
         <StudentPayoutSection />
 
@@ -1339,13 +1241,20 @@ function App() {
       {/* ---------------------------------------- YOUTUBE ---------------------------------------- */}
       <section className="videos-section" id="videos" data-section="videos">
         <div className="videos-header reveal-el">
-          <p className="section-tag">07 / FREE RESOURCES</p>
-          <h2>Watch before<br />you <em>commit.</em></h2>
-          <p>Our free content lets you experience the depth and quality of what we teach.</p>
+          <p className="section-tag">FREE RESOURCES</p>
+          <h2>Free Video <em>Lessons.</em></h2>
+          <p>Explore free market breakdowns, strategy sessions, and trading insights.</p>
         </div>
         <div className="video-grid">
           {videos.map(v => (
-            <div className="vid-card reveal-el" key={v.id}>
+            <a
+              className="vid-card reveal-el"
+              key={v.id}
+              href={`https://www.youtube.com/watch?v=${v.ytId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Watch: ${v.title}`}
+            >
               <div className="vid-thumb">
                 <img
                   className="vid-yt-thumb"
@@ -1355,15 +1264,6 @@ function App() {
                   loading="lazy"
                 />
                 <div className="vid-overlay" />
-                <a
-                  className="vid-play"
-                  href={`https://www.youtube.com/watch?v=${v.ytId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Watch: ${v.title}`}
-                >
-                  <Play />
-                </a>
                 <span className="vid-yt-badge">
                   <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
                   YouTube
@@ -1373,173 +1273,119 @@ function App() {
               <div className="vid-info">
                 <h3>{v.title}</h3>
                 <p>{v.desc}</p>
-                <div className="vid-foot">
-                  <span className="vid-yt-channel">Pravyn ICT</span>
-                  <a href={`https://www.youtube.com/watch?v=${v.ytId}`} target="_blank" rel="noopener noreferrer" className="vid-link">Watch on YouTube <Arrow /></a>
-                </div>
               </div>
-            </div>
+            </a>
           ))}
-        </div>
-        <div className="videos-yt-cta reveal-el">
-          <a
-            href="https://www.youtube.com/@pravynict"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="yt-subscribe-btn"
-            id="yt-btn"
-            aria-label="Subscribe to Pravyn ICT YouTube channel"
-          >
-            <span className="yt-btn-icon-pill" aria-hidden="true">
-              <svg viewBox="0 0 24 24" className="yt-play-triangle">
-                <path d="M9.5 7.5v9l7-4.5-7-4.5z" />
-              </svg>
-            </span>
-            <span className="yt-btn-text">Subscribe to channel</span>
-            <Arrow />
-          </a>
         </div>
       </section>
 
       {/* ---------------------------------------- FAQ ---------------------------------------- */}
       <section className="faq-section" id="faq" data-section="faq">
         <div className="faq-head reveal-el">
-          <p className="section-tag">09 / GOOD TO KNOW</p>
+          <p className="section-tag">FAQ</p>
           <h2>Common<br /><em>questions.</em></h2>
         </div>
         <div className="faq-list">
-          {questions.map(([q, a], i) => {
+          {/* Top 3 Persistent Questions */}
+          {questions.slice(0, 3).map(([q, a], i) => {
             const isActive = activeQs.includes(i)
             return (
-              <article className={`faq-item${isActive ? ' active' : ''} reveal-el`} key={i}>
-                <button onClick={() => setActiveQs(prev => prev.includes(i) ? prev.filter(x => x !== i) : [...prev, i])} id={`faq-${i}`} aria-expanded={isActive}>
+              <article className={`faq-item${isActive ? ' active' : ''}`} key={i}>
+                <button
+                  onClick={() => setActiveQs(prev => prev.includes(i) ? prev.filter(x => x !== i) : [...prev, i])}
+                  id={`faq-${i}`}
+                  aria-expanded={isActive}
+                >
                   <span className="faq-q-num">{String(i+1).padStart(2,'0')}</span>
                   <span className="faq-q-text">{q}</span>
-                  <span className="faq-toggle">{isActive ? '-' : '+'}</span>
+                  <span className="faq-toggle">{isActive ? '−' : '+'}</span>
                 </button>
-                <div className={`faq-answer${isActive ? ' open' : ''}`}><p>{a}</p></div>
+                <div className={`faq-answer${isActive ? ' open' : ''}`}>
+                  {a.split('\n\n').map((paragraph, pIdx) => (
+                    <p key={pIdx}>{paragraph}</p>
+                  ))}
+                </div>
               </article>
             )
           })}
+
+          {/* Smooth Collapsible Extra Questions */}
+          <div className={`faq-extra-accordion ${showAllFaqs ? 'is-open' : ''}`} aria-hidden={!showAllFaqs}>
+            <div className="faq-extra-inner">
+              {questions.slice(3).map(([q, a], sliceIdx) => {
+                const i = sliceIdx + 3
+                const isActive = activeQs.includes(i)
+                return (
+                  <article className={`faq-item${isActive ? ' active' : ''}`} key={i}>
+                    <button
+                      onClick={() => setActiveQs(prev => prev.includes(i) ? prev.filter(x => x !== i) : [...prev, i])}
+                      id={`faq-${i}`}
+                      aria-expanded={isActive}
+                    >
+                      <span className="faq-q-num">{String(i+1).padStart(2,'0')}</span>
+                      <span className="faq-q-text">{q}</span>
+                      <span className="faq-toggle">{isActive ? '−' : '+'}</span>
+                    </button>
+                    <div className={`faq-answer${isActive ? ' open' : ''}`}>
+                      {a.split('\n\n').map((paragraph, pIdx) => (
+                        <p key={pIdx}>{paragraph}</p>
+                      ))}
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          </div>
+
+          {questions.length > 3 && (
+            <div className="faq-view-more-wrap">
+              <button
+                type="button"
+                className={`faq-link-btn ${showAllFaqs ? 'is-expanded' : ''}`}
+                onClick={handleToggleFaqs}
+                aria-expanded={showAllFaqs}
+              >
+                <span className="faq-link-text">{showAllFaqs ? 'View less' : 'View more'}</span>
+                <span className="faq-link-icon" aria-hidden="true">{showAllFaqs ? '↑' : '↓'}</span>
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
       {/* ---------------------------------------- CONTACT ---------------------------------------- */}
       <section className="contact-section" id="contact" data-section="contact">
-        {/* Left Column: Direct Communication Channels */}
+        {/* Left Column: Heading & Concise Intro */}
         <div className="contact-desk-column reveal-el">
           <div className="contact-desk-intro">
             <p className="section-tag">10 / GET STARTED</p>
             <h2>Take the first<br /><em>intentional step.</em></h2>
             <p className="contact-desk-lead">
-              Have questions before joining? Reach out directly via WhatsApp for quick answers, or submit your profile below for batch admission review.
+              Submit your details below for batch admission review.
             </p>
-          </div>
-
-          {/* Crisp Simple Direct Contact Channels */}
-          <div className="contact-channels-list">
-            {/* WhatsApp Direct */}
-            <a
-              href="https://wa.me/918637478662?text=Hi%20Praveen,%20I'm%20interested%20in%20the%20Pravyn%20ICT%20Mentorship%20Batch"
-              target="_blank"
-              rel="noreferrer"
-              className="channel-card-crisp card-whatsapp"
-              aria-label="Direct WhatsApp Message to Praveen"
-            >
-              <div className="ccc-icon ccc-wa">
-                <WhatsAppIcon />
-              </div>
-              <div className="ccc-content">
-                <span className="ccc-tag">WhatsApp</span>
-                <strong className="ccc-val">+91 86374 78662</strong>
-              </div>
-              <span className="ccc-action">Chat on WhatsApp →</span>
-            </a>
-
-            {/* Mentor Inbox Email */}
-            <div className="channel-card-crisp card-email">
-              <div className="ccc-icon ccc-mail">
-                <MailIcon />
-              </div>
-              <div className="ccc-content">
-                <span className="ccc-tag">Email Desk</span>
-                <a href="mailto:pravyntraderweb@gmail.com" className="ccc-val email-link">
-                  pravyntraderweb@gmail.com
-                </a>
-              </div>
-              <div className="ccc-actions">
-                <button
-                  type="button"
-                  onClick={handleCopyEmail}
-                  className={`ccc-copy-btn ${copiedEmail ? 'copied' : ''}`}
-                  aria-label="Copy mentor email address"
-                  title="Copy email to clipboard"
-                >
-                  {copiedEmail ? '✓ Copied' : 'Copy'}
-                </button>
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* Right Column: Balanced Form Card OR Success Receipt */}
+        {/* Right Column: Balanced Form Card OR Success Confirmation */}
         {contactStatus === 'success' ? (
           <div className="contact-receipt-card reveal-el" role="status" aria-live="polite">
-            <div className="receipt-header">
-              <div className="receipt-badge-pill">
-                <span className="receipt-pulse-dot" />
-                <span>ADMISSION ENQUIRY DISPATCHED</span>
-              </div>
-              <span className="receipt-hash">#ICT-VERIFIED</span>
+            <div className="receipt-icon-core">
+              <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
             </div>
 
-            <div className="receipt-icon-wrap">
-              <div className="receipt-icon-ring" />
-              <div className="receipt-icon-core">
-                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 6L9 17l-5-5" />
-                </svg>
-              </div>
-            </div>
-
-            <h3>Enquiry Successfully Received</h3>
+            <h3>Message Sent Successfully</h3>
             <p className="receipt-lead">
               {contactStatusMsg || (
-                <>Your application was transmitted directly to <strong>pravyntraderweb@gmail.com</strong>. Mentor Praveen will review your background and reach out within 24 hours.</>
+                <>Thank you, <strong>{contactData.name}</strong>. Your message was received and Praveen will get back to you within 24 hours.</>
               )}
             </p>
 
-            {/* Receipt Summary Grid */}
-            <div className="receipt-table">
-              <div className="receipt-row">
-                <span className="r-label">Applicant</span>
-                <span className="r-val"><strong>{contactData.name}</strong></span>
-              </div>
-              <div className="receipt-row">
-                <span className="r-label">Email</span>
-                <span className="r-val">{contactData.email}</span>
-              </div>
-              {contactData.phone && (
-                <div className="receipt-row">
-                  <span className="r-label">Phone / WA</span>
-                  <span className="r-val">{contactData.phone}</span>
-                </div>
-              )}
-              <div className="receipt-row">
-                <span className="r-label">Selected Programme</span>
-                <span className="r-val highlight-topic">{selectedTopic}</span>
-              </div>
-              <div className="receipt-row receipt-dest-row">
-                <span className="r-label">Destination</span>
-                <span className="r-val r-dest-badge">pravyntraderweb@gmail.com</span>
-              </div>
-            </div>
-
-            {/* Fast-Track WhatsApp CTA */}
             <div className="receipt-fasttrack-card">
               <div className="rft-content">
-                <strong>Need an Instant Response?</strong>
-                <p>Skip the email queue. Ping Praveen directly on WhatsApp with your enquiry.</p>
+                <strong>Need a Faster Reply?</strong>
+                <p>Chat directly with Praveen on WhatsApp with your enquiry.</p>
               </div>
               <a
                 href={`https://wa.me/918637478662?text=Hi%20Praveen,%20I%20just%20submitted%20my%20enquiry%20for%20${encodeURIComponent(selectedTopic)}.%20My%20name%20is%20${encodeURIComponent(contactData.name)}.`}
@@ -1548,7 +1394,7 @@ function App() {
                 className="button button-primary rft-btn"
               >
                 <WhatsAppIcon />
-                <span>Open WhatsApp</span>
+                <span>Chat on WhatsApp</span>
                 <Arrow />
               </a>
             </div>
@@ -1567,12 +1413,8 @@ function App() {
             <div className="contact-card-head">
               <div className="cch-title-wrap">
                 <span className="cch-dot" />
-                <h3>Mentorship Application</h3>
+                <h3>Mentorship Enquiry</h3>
               </div>
-              <span className="cch-badge">
-                <ShieldIcon />
-                <span>256-Bit Encrypted</span>
-              </span>
             </div>
 
             <form onSubmit={handleContactSubmit} noValidate className="contact-actual-form">
@@ -1580,13 +1422,9 @@ function App() {
               <div className="contact-form-row">
                 <div className="terminal-input-wrap">
                   <label htmlFor="cn-name">
-                    <span>YOUR NAME</span>
-                    <span className="cn-req">*</span>
+                    <span>Your Name</span>
                   </label>
                   <div className="input-icon-shell">
-                    <span className="input-glyph" aria-hidden="true">
-                      <UserIcon />
-                    </span>
                     <input
                       type="text"
                       name="name"
@@ -1594,20 +1432,15 @@ function App() {
                       value={contactData.name}
                       onChange={handleContactChange}
                       onBlur={handleContactBlur}
-                      placeholder="Your full name"
+                      placeholder="e.g. Rahul Sharma"
                       autoComplete="name"
                       disabled={contactStatus === 'submitting'}
                       className={
                         contactTouched.name && contactErrors.name
                           ? 'is-invalid'
-                          : contactTouched.name && !contactErrors.name && contactData.name
-                          ? 'is-valid'
                           : ''
                       }
                     />
-                    {contactTouched.name && !contactErrors.name && contactData.name && (
-                      <span className="input-valid-check" aria-hidden="true">✓</span>
-                    )}
                   </div>
                   {contactTouched.name && contactErrors.name && (
                     <p className="field-error" role="alert">
@@ -1619,13 +1452,9 @@ function App() {
 
                 <div className="terminal-input-wrap">
                   <label htmlFor="cn-email">
-                    <span>EMAIL ADDRESS</span>
-                    <span className="cn-req">*</span>
+                    <span>Email Address</span>
                   </label>
                   <div className="input-icon-shell">
-                    <span className="input-glyph" aria-hidden="true">
-                      <MailIcon />
-                    </span>
                     <input
                       type="email"
                       name="email"
@@ -1639,14 +1468,9 @@ function App() {
                       className={
                         contactTouched.email && contactErrors.email
                           ? 'is-invalid'
-                          : contactTouched.email && !contactErrors.email && contactData.email
-                          ? 'is-valid'
                           : ''
                       }
                     />
-                    {contactTouched.email && !contactErrors.email && contactData.email && (
-                      <span className="input-valid-check" aria-hidden="true">✓</span>
-                    )}
                   </div>
                   {contactTouched.email && contactErrors.email && (
                     <p className="field-error" role="alert">
@@ -1661,13 +1485,9 @@ function App() {
               <div className="contact-form-row">
                 <div className="terminal-input-wrap">
                   <label htmlFor="cn-phone">
-                    <span>PHONE / WHATSAPP</span>
-                    <span className="cn-req">*</span>
+                    <span>Phone / WhatsApp</span>
                   </label>
                   <div className="input-icon-shell">
-                    <span className="input-glyph" aria-hidden="true">
-                      <PhoneIcon />
-                    </span>
                     <input
                       type="tel"
                       name="phone"
@@ -1682,14 +1502,9 @@ function App() {
                       className={
                         contactTouched.phone && contactErrors.phone
                           ? 'is-invalid'
-                          : contactTouched.phone && !contactErrors.phone && contactData.phone
-                          ? 'is-valid'
                           : ''
                       }
                     />
-                    {contactTouched.phone && !contactErrors.phone && contactData.phone && (
-                      <span className="input-valid-check" aria-hidden="true">✓</span>
-                    )}
                   </div>
                   {contactTouched.phone && contactErrors.phone && (
                     <p className="field-error" role="alert">
@@ -1701,13 +1516,9 @@ function App() {
 
                 <div className="terminal-input-wrap">
                   <label htmlFor="cn-topic">
-                    <span>INTERESTED PROGRAMME</span>
-                    <span className="cn-req">*</span>
+                    <span>Interested Programme</span>
                   </label>
                   <div className="input-icon-shell select-shell">
-                    <span className="input-glyph" aria-hidden="true">
-                      <ProgramIcon />
-                    </span>
                     <select
                       id="cn-topic"
                       name="topic"
@@ -1734,13 +1545,9 @@ function App() {
               {/* Message Field */}
               <div className="terminal-input-wrap">
                 <label htmlFor="cn-msg">
-                  <span>TRADING GOALS & MESSAGE</span>
-                  <span className="cn-req">*</span>
+                  <span>Your Message</span>
                 </label>
                 <div className="input-icon-shell textarea-shell">
-                  <span className="input-glyph textarea-glyph" aria-hidden="true">
-                    <MessageIcon />
-                  </span>
                   <textarea
                     name="message"
                     id="cn-msg"
@@ -1748,13 +1555,11 @@ function App() {
                     value={contactData.message}
                     onChange={handleContactChange}
                     onBlur={handleContactBlur}
-                    placeholder="Share your current market experience, traded assets, and learning goals…"
+                    placeholder="Tell us about your trading experience and goals…"
                     disabled={contactStatus === 'submitting'}
                     className={
                       contactTouched.message && contactErrors.message
                         ? 'is-invalid'
-                        : contactTouched.message && !contactErrors.message && contactData.message
-                        ? 'is-valid'
                         : ''
                     }
                   />
@@ -1794,9 +1599,9 @@ function App() {
                 </div>
               )}
 
-              {/* High-Conversion Submit Button */}
+              {/* Clean Submit Button - Redesigned compact & matching hero CTA */}
               <button
-                className="button button-primary glow-heavy terminal-submit-btn"
+                className="button button-primary terminal-submit-btn"
                 type="submit"
                 id="cn-submit"
                 disabled={contactStatus === 'submitting'}
@@ -1804,22 +1609,15 @@ function App() {
                 {contactStatus === 'submitting' ? (
                   <>
                     <span className="cn-spinner" aria-hidden />
-                    <span>Sending Enquiry...</span>
+                    <span className="btn-text">Submitting...</span>
                   </>
                 ) : (
                   <>
-                    <span>Submit Mentorship Enquiry</span>
+                    <span className="btn-text">Submit</span>
                     <Arrow />
                   </>
                 )}
               </button>
-
-              <div className="contact-form-footer">
-                <div className="cff-note">
-                  <span className="cff-dot" />
-                  <span>Applications are reviewed personally. You'll receive next steps within 24 hours.</span>
-                </div>
-              </div>
             </form>
           </div>
         )}
@@ -1842,6 +1640,9 @@ function App() {
       <div className="mobile-cta" aria-hidden="true">
         <a href="#programmes" className="button button-primary">Enroll in Programmes <Arrow /></a>
       </div>
+
+      {/* ---------------------------------------- PERSISTENT FLOATING CONTACT ORBIT ---------------------------------------- */}
+      <FloatingContactOrbit />
     </main>
   )
 }

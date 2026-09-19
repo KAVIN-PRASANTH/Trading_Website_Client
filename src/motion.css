@@ -33,12 +33,6 @@
     animation: beacon 2.8s infinite ease-in-out;
   }
 
-  /* ── Primary button breathe ────────────────────────────────── */
-  .hero-copy .button-primary {
-    box-shadow: 0 0 0 0 rgba(37,99,235,.4);
-    animation: btn-breathe 3.2s 1.5s infinite ease-in-out;
-  }
-
   /* ── Ticker fade mask ──────────────────────────────────────── */
   .ticker::before, .ticker::after {
     content: ''; position: absolute; top: 0; bottom: 0; width: 80px;
@@ -96,7 +90,6 @@
    KEYFRAMES
    ══════════════════════════════════════════════════════════════ */
 @keyframes header-arrive { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
-@keyframes btn-breathe   { 50% { box-shadow: 0 0 0 12px rgba(37,99,235,0), 0 0 35px rgba(37,99,235,.25); } }
 @keyframes beacon        { 50% { transform: scale(1.7); box-shadow: 0 0 0 18px rgba(6,182,212,0), 0 0 32px var(--cyan); } }
 @keyframes mentor-orbit  { to { transform: rotate(360deg); } }
 @keyframes grid-drift    { to { background-position: 36px 36px; } }
