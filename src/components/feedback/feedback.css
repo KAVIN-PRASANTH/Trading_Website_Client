@@ -111,6 +111,20 @@
   /* Smooth edge gradient fade for entering/exiting cards */
   mask-image: linear-gradient(to right, transparent 0%, #000 3.5%, #000 96.5%, transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 3.5%, #000 96.5%, transparent 100%);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.proof-marquee-viewport.is-dragging {
+  cursor: grabbing !important;
+}
+
+.proof-marquee-viewport.is-dragging * {
+  cursor: grabbing !important;
+  user-select: none !important;
+  pointer-events: none;
 }
 
 .proof-marquee-track {
@@ -121,6 +135,7 @@
   will-change: transform;
   user-select: none;
   -webkit-user-select: none;
+  touch-action: pan-y;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -131,11 +146,24 @@
   flex-shrink: 0;
   width: clamp(280px, 21vw, 330px);
   height: clamp(360px, 40vh, 410px);
-  cursor: pointer;
+  cursor: grab;
   outline: none;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
   transition:
     transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.proof-marquee-viewport.is-dragging .proof-marquee-card {
+  cursor: grabbing !important;
+  transition: none !important;
+}
+
+.proof-marquee-viewport.is-dragging .proof-marquee-card:hover {
+  transform: none !important;
 }
 
 .proof-card-inner {

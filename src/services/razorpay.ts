@@ -19,7 +19,7 @@ export const MENTORSHIP_PLANS: Record<string, MentorshipPlan> = {
     name: 'Personal Mentorship',
     mode: 'Online · Zoom',
     price: 24999,
-    description: '1-to-1 Personal Mentorship Program with unlimited live sessions',
+    description: '1-to-1 Personal Mentorship Program with dedicated live sessions',
     tag: 'ONLINE · ZOOM',
     colorVariant: 'blue',
   },

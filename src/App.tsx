@@ -532,23 +532,17 @@ const REVIEW_SUB_LINKS = [
   {
     href: '#student-payout',
     title: 'Payout Proofs',
-    badge: '3D Sphere',
     icon: '✦',
-    desc: '$1.4M+ verified student payouts & certs',
   },
   {
     href: '#student-stories',
     title: 'Written Feedback',
-    badge: '3D Deck',
     icon: '★',
-    desc: 'Real WhatsApp & Discord community reviews',
   },
   {
     href: '#student-videos',
     title: 'Video Testimonials',
-    badge: 'Watch',
     icon: '▶',
-    desc: 'Recorded video feedback from real students',
   },
 ]
 
@@ -1052,13 +1046,7 @@ function App() {
                         }}
                       >
                         <span className="ndi-icon" aria-hidden="true">{sub.icon}</span>
-                        <div className="ndi-content">
-                          <div className="ndi-row">
-                            <span className="ndi-title">{sub.title}</span>
-                            <span className="ndi-badge">{sub.badge}</span>
-                          </div>
-                          <span className="ndi-desc">{sub.desc}</span>
-                        </div>
+                        <span className="ndi-title">{sub.title}</span>
                       </a>
                     ))}
                   </div>

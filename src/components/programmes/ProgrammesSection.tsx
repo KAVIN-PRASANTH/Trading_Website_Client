@@ -282,7 +282,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
             <ul className="card-feature-checklist checklist-blue">
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
-                <span>Personal 1-on-1 Sessions (Unlimited Duration)</span>
+                <span>Personal 1-on-1 Sessions</span>
               </li>
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
@@ -337,7 +337,6 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
           <div className="card-border-beam beam-gold" aria-hidden="true" />
 
           <article className="prog-card-face card-theme-gold">
-            <div className="card-ambient-glow glow-gold" aria-hidden="true" />
             <span className="card-corner-bracket bracket-tl" aria-hidden="true" />
             <span className="card-corner-bracket bracket-tr" aria-hidden="true" />
             <span className="card-corner-bracket bracket-bl" aria-hidden="true" />
@@ -392,7 +391,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
               </li>
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
-                <span>Strictly Capped Cohort (20 Traders Max)</span>
+                <span>Live Classes + WhatsApp Group Access Guiding Daily Trade Plans</span>
               </li>
             </ul>
 
@@ -492,12 +491,6 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-blue">—</span>
                         <div className="doc-row-text">
-                          <strong>No Limitations for the Sessions:</strong> Continuous mentorship with zero session caps or expiration.
-                        </div>
-                      </div>
-                      <div className="doc-list-row">
-                        <span className="doc-bullet bullet-blue">—</span>
-                        <div className="doc-row-text">
                           <strong>From Basics to Everything:</strong> Complete foundational mechanics through to institutional market execution.
                         </div>
                       </div>
@@ -511,16 +504,62 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                       <h5 className="doc-sec-title">CURRICULUM</h5>
                     </div>
                     <div className="doc-columns-grid">
-                      <div className="doc-item">Basic Market Structure</div>
-                      <div className="doc-item">Liquidity</div>
-                      <div className="doc-item">Blocks & Gaps</div>
-                      <div className="doc-item">Timeframe Alignment</div>
-                      <div className="doc-item">SMT</div>
-                      <div className="doc-item highlight-blue">Entire ICT Topics Explained</div>
-                      <div className="doc-item highlight-blue">Our Own XAUUSD Concepts</div>
-                      <div className="doc-item">XAUUSD Characteristics</div>
-                      <div className="doc-item">Trading</div>
-                      <div className="doc-item">Nasdaq Model</div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Basics Of Forex Market</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Prop Firms & Their Rules</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Market Structure Understanding</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Orderblocks & Types</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Blocks & Gaps</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Liquidity & Its Illustrations</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Premium & Discount</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>SMT Divergence</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Timeframe Alignment & Analysis</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Sessions & Its Behaviour</span>
+                      </div>
+                      <div className="doc-item highlight-blue">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Entire ICT Topics Explained</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>XAUUSD Characteristics</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Risk Management & Psychology</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Character Understanding of Pairs</span>
+                      </div>
                     </div>
                   </div>
 
@@ -551,31 +590,6 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                         <span className="doc-bullet bullet-blue">—</span>
                         <div className="doc-row-text">Follow-up From Your Mentor</div>
                       </div>
-                    </div>
-                  </div>
-
-                  {/* OTHER TOPICS */}
-                  <div className="doc-section">
-                    <div className="doc-section-header">
-                      <span className="doc-sec-num">04</span>
-                      <h5 className="doc-sec-title">OTHER TOPICS</h5>
-                    </div>
-                    <div className="doc-columns-grid compact">
-                      <div className="doc-item">Basics Of Forex Market</div>
-                      <div className="doc-item">Prop Firms & Their Rules</div>
-                      <div className="doc-item">Price Action & Intro to ICT</div>
-                      <div className="doc-item">Market Structure Understanding</div>
-                      <div className="doc-item">Orderblocks & Types</div>
-                      <div className="doc-item">Liquidity & Its Illustrations</div>
-                      <div className="doc-item">Premium & Discount</div>
-                      <div className="doc-item">SMT Divergence</div>
-                      <div className="doc-item">Timeframe Analysis</div>
-                      <div className="doc-item">Sessions & Its Behaviour</div>
-                      <div className="doc-item full-row">
-                        Models For: EURUSD · NAS100 · XAUUSD · AUDUSD · USDJPY
-                      </div>
-                      <div className="doc-item">Risk Management & Psychology</div>
-                      <div className="doc-item">Character Understanding of Pairs</div>
                     </div>
                   </div>
                 </div>
@@ -613,12 +627,6 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                           <strong>Catering:</strong> Lunch Will Be Provided Daily
                         </div>
                       </div>
-                      <div className="doc-list-row">
-                        <span className="doc-bullet bullet-gold">—</span>
-                        <div className="doc-row-text">
-                          <strong>Capacity:</strong> 20 Slots Only (Strict Attendance Cap for Dedicated Mentorship)
-                        </div>
-                      </div>
                     </div>
                   </div>
 
@@ -643,28 +651,61 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                     </div>
                   </div>
 
-                  {/* OTHER TOPICS */}
+                  {/* CURRICULUM TOPICS */}
                   <div className="doc-section">
                     <div className="doc-section-header">
                       <span className="doc-sec-num num-gold">03</span>
-                      <h5 className="doc-sec-title">OTHER TOPICS</h5>
+                      <h5 className="doc-sec-title">CURRICULUM TOPICS</h5>
                     </div>
                     <div className="doc-columns-grid compact">
-                      <div className="doc-item">Basics Of Forex Market</div>
-                      <div className="doc-item">Prop Firms & Their Rules</div>
-                      <div className="doc-item">Price Action & Intro to ICT</div>
-                      <div className="doc-item">Market Structure Understanding</div>
-                      <div className="doc-item">Orderblocks & Types</div>
-                      <div className="doc-item">Liquidity & Its Illustrations</div>
-                      <div className="doc-item">Premium & Discount</div>
-                      <div className="doc-item">SMT Divergence</div>
-                      <div className="doc-item">Timeframe Analysis</div>
-                      <div className="doc-item">Sessions & Its Behaviour</div>
-                      <div className="doc-item full-row">
-                        Models For: EURUSD · NAS100 · XAUUSD · AUDUSD · USDJPY
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">✦</span>
+                        <span>Basics Of Forex Market</span>
                       </div>
-                      <div className="doc-item">Risk Management & Psychology</div>
-                      <div className="doc-item">Character Understanding of Pairs</div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">✦</span>
+                        <span>Prop Firms & Their Rules</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">✦</span>
+                        <span>Market Structure Understanding</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">✦</span>
+                        <span>Orderblocks & Types</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">✦</span>
+                        <span>Liquidity & Its Illustrations</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">✦</span>
+                        <span>Premium & Discount</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">✦</span>
+                        <span>SMT Divergence</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">✦</span>
+                        <span>Timeframe Analysis</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">✦</span>
+                        <span>Sessions & Its Behaviour</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">✦</span>
+                        <span>Risk Management & Psychology</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">✦</span>
+                        <span>Character Understanding of Pairs</span>
+                      </div>
+                      <div className="doc-item full-row highlight-gold">
+                        <span className="doc-topic-icon bullet-gold" aria-hidden="true">★</span>
+                        <span>Proprietary XAUUSD Model + Extra Asia Session Model for Nasdaq Taught</span>
+                      </div>
                     </div>
                   </div>
                 </div>
