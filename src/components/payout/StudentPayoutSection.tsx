@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { StudentPayoutScene } from './StudentPayoutScene'
 import { SphereImpulse } from './AchievementSphere'
 import { FEEDBACK_IMAGE_URLS } from './feedbackImages'
@@ -72,20 +73,30 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
     return () => mql.removeEventListener('change', listener)
   }, [])
 
-  // Lock body scroll and listen for Escape key when lightbox is open
+  // Lock body & html scroll and listen for Escape key when lightbox is open
   useEffect(() => {
+    if (!activeProofImg) return
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setActiveProofImg(null)
       }
     }
-    if (activeProofImg) {
-      window.addEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = 'hidden'
-    }
+    window.addEventListener('keydown', handleKeyDown)
+
+    const prevBodyOverflow = document.body.style.overflow
+    const prevHtmlOverflow = document.documentElement.style.overflow
+    const prevTouchAction = document.body.style.touchAction
+
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+    document.body.style.touchAction = 'none'
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = ''
+      document.body.style.overflow = prevBodyOverflow
+      document.documentElement.style.overflow = prevHtmlOverflow
+      document.body.style.touchAction = prevTouchAction
     }
   }, [activeProofImg])
 
@@ -206,11 +217,14 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
         </div>
       )}
 
-      {/* High-Resolution Screenshot Modal Lightbox */}
-      {activeProofImg && (
+      {/* High-Resolution Screenshot Modal Lightbox — Rendered via Portal directly into document.body */}
+      {activeProofImg && typeof document !== 'undefined' && createPortal(
         <div
           className="payout-lightbox-backdrop"
           onClick={() => setActiveProofImg(null)}
+          onTouchMove={(e) => {
+            if (e.target === e.currentTarget) e.preventDefault()
+          }}
           role="dialog"
           aria-modal="true"
           aria-label="Student Payout Certificate Proof"
@@ -232,7 +246,8 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
               <span>VERIFIED STUDENT PAYOUT CERTIFICATE & COMMUNITY EVIDENCE</span>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   )

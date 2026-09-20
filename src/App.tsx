@@ -1612,16 +1612,29 @@ function App() {
       </section>
 
       {/* ---------------------------------------- FOOTER ---------------------------------------- */}
-      <footer>
-        <a className="brand" href="#home" aria-label="Pravyn ICT — Trading Leaders Community">
-          <img src="/logo/logo.png" alt="Trading Leaders Community Logo" className="brand-logo" />
-          <div className="brand-text">
-            <span className="brand-name"><span>PRAVYN</span><em>ICT</em></span>
-            <span className="brand-sub">TRADING LEADERS COMMUNITY</span>
+      <footer className="site-footer">
+        <div className="footer-inner">
+          <div className="footer-top">
+            <a className="brand footer-brand" href="#home" aria-label="Pravyn ICT — Trading Leaders Community">
+              <img src="/logo/logo.png" alt="Trading Leaders Community Logo" className="brand-logo" />
+              <div className="brand-text">
+                <span className="brand-name"><span>PRAVYN</span><em>ICT</em></span>
+                <span className="brand-sub">TRADING LEADERS COMMUNITY</span>
+              </div>
+            </a>
           </div>
-        </a>
-        <nav>{NAV_LINKS.map(l => <a key={l.href} href={l.href}>{l.label}</a>)}</nav>
-        <p>© {new Date().getFullYear()} PRAVYN ICT · Trading Leaders Community. Educational content only.</p>
+          <nav className="footer-nav" aria-label="Footer Navigation">
+            {NAV_LINKS.map(l => (
+              <a key={l.href} href={l.href} className="footer-link">
+                <span className="footer-link-dot" aria-hidden="true" />
+                <span>{l.label}</span>
+              </a>
+            ))}
+          </nav>
+          <div className="footer-bottom">
+            <p className="footer-copy">© {new Date().getFullYear()} PRAVYN ICT · Trading Leaders Community. Educational content only.</p>
+          </div>
+        </div>
       </footer>
 
       {/* ---------------------------------------- MOBILE STICKY CTA ---------------------------------------- */}
