@@ -143,11 +143,11 @@ const videos = [
 
 
 /* ---------------------------------------- Dynamic Mentor Images Loop ---------------------------------------- */
-// Center portrait is fixed permanently as /MentorPic/IMG_6107.PNG (never changes)
-const MAIN_CENTER_IMAGE = '/MentorPic/IMG_6107.PNG'
+// Center portrait is fixed permanently as /mentor/IMG_6107.PNG (never changes)
+const MAIN_CENTER_IMAGE = '/mentor/IMG_6107.PNG'
 
-// Automatically discovers all image files inside public/MentorPic/ at build & dev time.
-const mentorPicGlob = import.meta.glob('/public/MentorPic/*.{png,PNG,jpg,JPG,jpeg,JPEG,webp,WEBP,avif,AVIF,svg,SVG}')
+// Automatically discovers all image files inside public/mentor/ at build & dev time.
+const mentorPicGlob = import.meta.glob('/public/mentor/*.{png,PNG,jpg,JPG,jpeg,JPEG,webp,WEBP,avif,AVIF,svg,SVG}')
 
 // Surrounding background images strictly excluding IMG_6107 so center is never repeated in the orbit
 const SURROUNDING_IMAGES: string[] = Object.keys(mentorPicGlob)

@@ -1,5 +1,5 @@
-// Dynamically discover all feedback screenshot images in public/feedback
-const feedbackGlob = import.meta.glob('/public/feedback/*.{jpeg,jpg,png,webp}', {
+// Dynamically discover all feedback screenshot images in public/payout_proofs
+const feedbackGlob = import.meta.glob('/public/payout_proofs/*.{jpeg,jpg,png,webp}', {
   eager: true,
   query: '?url',
   import: 'default',
@@ -12,18 +12,18 @@ const globUrls = (Object.values(feedbackGlob) as string[]).map((url) =>
 
 // Fallback list of known feedback images in case glob behaves differently in production vs dev
 const fallbackUrls = [
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.16.06 PM (1).jpeg'),
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.16.06 PM.jpeg'),
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.17.21 PM.jpeg'),
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.18.32 PM.jpeg'),
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.18.56 PM.jpeg'),
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.21.29 PM.jpeg'),
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.24.00 PM.jpeg'),
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.24.39 PM.jpeg'),
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.31.59 PM.jpeg'),
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.32.02 PM.jpeg'),
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.32.12 PM.jpeg'),
-  '/feedback/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.32.21 PM.jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.16.06 PM (1).jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.16.06 PM.jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.17.21 PM.jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.18.32 PM.jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.18.56 PM.jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.21.29 PM.jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.24.00 PM.jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.24.39 PM.jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.31.59 PM.jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.32.02 PM.jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.32.12 PM.jpeg'),
+  '/payout_proofs/' + encodeURIComponent('WhatsApp Image 2026-09-13 at 10.32.21 PM.jpeg'),
 ]
 
 export const FEEDBACK_IMAGE_URLS: string[] =
