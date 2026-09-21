@@ -29,7 +29,7 @@ const STUDENT_STORIES: StudentStory[] = [
     cohort: 'Chennai Batch Alumni',
     videoSrc: '/student_videos/keshav.mp4',
     poster: '/student_videos/thumb_keshav.jpg',
-    quote: 'Mastering liquidity draw and institutional price action frameworks.',
+    quote: 'Mastering liquidity draw and precision price action frameworks.',
   },
   {
     id: 'story-siva',
@@ -249,14 +249,6 @@ export const StudentVideoSection: React.FC = () => {
                 {/* Cinematic Dark Gradient Scrim */}
                 <div className="card-gradient-overlay" />
 
-                {/* Card Info: Student Name and Small Description ONLY */}
-                <div className="card-info-overlay">
-                  <h3 className="card-student-name">{story.name}</h3>
-                  {story.quote && (
-                    <p className="card-quote">"{story.quote}"</p>
-                  )}
-                </div>
-
                 {/* Collapsed State Play Cue (Subtle Icon, No Text) */}
                 <div className="card-collapsed-cue" aria-hidden="true">
                   <div className="collapsed-play-pill">
@@ -310,6 +302,10 @@ export const StudentVideoSection: React.FC = () => {
                 preload="metadata"
                 className="sv-fullscreen-video"
               />
+              <div className="sv-fullscreen-caption">
+                <h4 className="sv-caption-name">{activeVideo.name}</h4>
+                {activeVideo.quote && <p className="sv-caption-quote">"{activeVideo.quote}"</p>}
+              </div>
             </div>
           </div>,
           document.body

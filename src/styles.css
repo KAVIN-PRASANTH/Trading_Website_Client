@@ -279,7 +279,7 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
 }
 
 /* ══════════════════════════════════════════════════════════════
-   SITE PRELOADER — Institutional Brand Loading Experience
+   SITE PRELOADER — Premium Brand Loading Experience
    ══════════════════════════════════════════════════════════════ */
 .site-preloader {
   position: fixed;
@@ -1180,7 +1180,7 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
 .proof-sep { width: 1px; height: 30px; background: var(--border-2); }
 
 /* ══════════════════════════════════════════════════════════════
-   HERO COUNTDOWN MODULE — Precision Institutional Chronograph
+   HERO COUNTDOWN MODULE — Precision Chronograph
    ══════════════════════════════════════════════════════════════ */
 .hero-countdown-wrap {
   position: relative;
@@ -1303,7 +1303,7 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
-/* Header with Institutional Status */
+/* Header with Precision Status */
 .hcd-header {
   display: flex;
   align-items: center;
@@ -3460,7 +3460,7 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
 }
 
 /* ══════════════════════════════════════════════════════════════
-   CONTACT SECTION — Balanced Institutional Desk & Direct Enquiry Form
+   CONTACT SECTION — Balanced Professional Desk & Direct Enquiry Form
    ══════════════════════════════════════════════════════════════ */
 .contact-section {
   position: relative;

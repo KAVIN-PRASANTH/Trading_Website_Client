@@ -51,7 +51,7 @@ export const StudentFeedbackSection: React.FC = () => {
         </h2>
 
         <p className="proof-section-sub">
-          Genuine, unedited WhatsApp messages, discipline shifts, and verified milestones from our live institutional mentorship.
+          Genuine, unedited WhatsApp messages, discipline shifts, and verified milestones from our live professional mentorship.
         </p>
       </div>
 

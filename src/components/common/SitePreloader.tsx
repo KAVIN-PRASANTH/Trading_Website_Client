@@ -34,7 +34,7 @@ export const SitePreloader: React.FC = () => {
 
   const getStatusMessage = (p: number) => {
     if (p < 40) return 'INITIALIZING MARKET MATRIX...'
-    if (p < 80) return 'CONNECTING INSTITUTIONAL SUITE...'
+    if (p < 80) return 'INITIALIZING TRADING SUITE...'
     if (p < 100) return 'PREPARING TRADER TERMINAL...'
     return 'TERMINAL READY'
   }

@@ -16,7 +16,7 @@
   overflow: hidden;
 }
 
-/* Subtle Institutional Depth Grid */
+/* Subtle Precision Depth Grid */
 .student-videos-section::before {
   content: '';
   position: absolute;
@@ -348,6 +348,30 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.sv-fullscreen-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px 24px 24px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 60%, transparent 100%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.sv-caption-name {
+  margin: 0 0 4px;
+  font: 700 17px/1.2 var(--sans, sans-serif);
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.sv-caption-quote {
+  margin: 0;
+  font: 450 13.5px/1.4 var(--sans, sans-serif);
+  color: #cbd5e1;
 }
 
 .sv-fullscreen-close-btn {

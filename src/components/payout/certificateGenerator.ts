@@ -88,7 +88,7 @@ export function getOrCreateCertificateTexture(achievement: DemoAchievement): THR
   drawCorner(width - 28, height - 28, -1, -1)
   ctx.restore()
 
-  // 5. Header: Academy Logo / Monogram & Institution Branding
+  // 5. Header: Academy Logo / Monogram & Academy Branding
   ctx.save()
   // Monogram badge
   ctx.fillStyle = 'rgba(15, 23, 42, 0.85)'
@@ -104,7 +104,7 @@ export function getOrCreateCertificateTexture(achievement: DemoAchievement): THR
   ctx.textAlign = 'center'
   ctx.fillText('PI', 88, 90)
 
-  // Institution title
+  // Academy title
   ctx.textAlign = 'left'
   ctx.font = 'bold 15px "Inter", sans-serif'
   ctx.fillStyle = '#EFF6FF'
@@ -113,7 +113,7 @@ export function getOrCreateCertificateTexture(achievement: DemoAchievement): THR
 
   ctx.font = '10px "DM Mono", monospace'
   ctx.fillStyle = '#64748B'
-  ctx.fillText('INSTITUTIONAL EXECUTION & MENTORSHIP FRAMEWORK', 126, 96)
+  ctx.fillText('PRECISION EXECUTION & MENTORSHIP FRAMEWORK', 126, 96)
 
   // Right Header: Achievement Category Pill Badge
   ctx.font = 'bold 11px "DM Mono", monospace'

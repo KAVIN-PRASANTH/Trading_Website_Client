@@ -4,32 +4,41 @@
    -------------------------------------------------------------------------- */
 
 export interface MentorshipPlan {
-  id: 'online-mentorship' | 'offline-slingshot'
+  id: 'online-mastery' | 'online-mentorship' | 'offline-slingshot'
   name: string
   mode: string
-  price: number // in INR (e.g. 24999)
+  price: number // in INR (e.g. 9999)
   description: string
   tag: string
-  colorVariant: 'blue' | 'gold'
+  colorVariant: 'cyan' | 'blue' | 'gold'
 }
 
 export const MENTORSHIP_PLANS: Record<string, MentorshipPlan> = {
+  mastery: {
+    id: 'online-mastery',
+    name: 'ICT Mastery Mentorship',
+    mode: 'Online · Live Batch (Sep 29)',
+    price: 9999,
+    description: '11-Day Intensive Live Batch with Live Trading Sessions after classes',
+    tag: 'ONLINE · LIVE BATCH',
+    colorVariant: 'cyan',
+  },
   online: {
     id: 'online-mentorship',
     name: 'Personal Mentorship',
-    mode: 'Online · Zoom',
+    mode: 'Online · 1-on-1 Zoom',
     price: 24999,
     description: '1-to-1 Personal Mentorship Program with dedicated live sessions',
-    tag: 'ONLINE · ZOOM',
+    tag: 'ONLINE · 1-ON-1',
     colorVariant: 'blue',
   },
   offline: {
     id: 'offline-slingshot',
     name: 'Slingshot Model',
-    mode: 'Offline · Coimbatore',
+    mode: 'Offline · Chennai',
     price: 19999,
-    description: '8-Day Intensive Classroom Bootcamp on XAUUSD execution',
-    tag: 'OFFLINE · COIMBATORE',
+    description: 'Intensive Classroom Bootcamp on XAUUSD execution in Chennai',
+    tag: 'OFFLINE · CHENNAI',
     colorVariant: 'gold',
   },
 }

@@ -127,11 +127,6 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
         {/* Milestone Metrics Ribbon */}
         <div className="payout-stats-ribbon">
           <div className="payout-stat-item">
-            <strong>$1.4M+</strong>
-            <span>STUDENT MILESTONES</span>
-          </div>
-          <div className="payout-stat-sep" />
-          <div className="payout-stat-item">
             <strong>500+</strong>
             <span>FUNDED STUDENTS</span>
           </div>

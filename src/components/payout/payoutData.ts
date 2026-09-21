@@ -215,7 +215,7 @@ export const DEMO_ACHIEVEMENTS: DemoAchievement[] = [
     title: 'Funded Trader Milestone',
     payoutAmount: '$6,380.00',
     date: 'Demo Achievement',
-    evaluationModel: 'Full Institutional ICT Playbook',
+    evaluationModel: 'Full Systematic ICT Playbook',
     certificateNo: 'PICT-ACH-2026-012',
     disclaimer: 'DEMO ACHIEVEMENT · ILLUSTRATIVE EXAMPLE',
     accentColor: '#38BDF8', // Cyan

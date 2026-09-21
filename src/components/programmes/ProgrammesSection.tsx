@@ -13,7 +13,7 @@ import {
 interface SlideToEnrollProps {
   label: string
   successLabel?: string
-  colorVariant?: 'blue' | 'gold'
+  colorVariant?: 'blue' | 'gold' | 'cyan'
   disabled?: boolean
   disabledLabel?: string
   onSuccess: () => void
@@ -40,7 +40,7 @@ export function SlideToEnroll({
     setIsDragging(false)
     setIsCompleted(true)
     if (trackRef.current) {
-      const maxSlide = trackRef.current.offsetWidth - 50
+      const maxSlide = trackRef.current.offsetWidth - 38
       setSliderPos(maxSlide)
     }
     onSuccess()
@@ -59,7 +59,7 @@ export function SlideToEnroll({
 
   const handleMove = useCallback((clientX: number) => {
     if (!isDragging || isCompletedRef.current || disabled || !trackRef.current) return
-    const maxSlide = Math.max(0, trackRef.current.offsetWidth - 50)
+    const maxSlide = Math.max(0, trackRef.current.offsetWidth - 38)
     const newPos = Math.max(0, Math.min(clientX - startX.current, maxSlide))
     setSliderPos(newPos)
     if (newPos >= maxSlide * 0.75) {
@@ -71,7 +71,7 @@ export function SlideToEnroll({
     if (!isDragging || isCompletedRef.current || disabled) return
     setIsDragging(false)
     if (!trackRef.current) return
-    const maxSlide = Math.max(0, trackRef.current.offsetWidth - 50)
+    const maxSlide = Math.max(0, trackRef.current.offsetWidth - 38)
     if (sliderPos >= maxSlide * 0.6) {
       triggerComplete()
     } else {
@@ -110,7 +110,7 @@ export function SlideToEnroll({
       aria-disabled={disabled}
       aria-label={disabled ? disabledLabel : label}
     >
-      <div className="slide-progress" style={{ width: disabled ? 0 : `${sliderPos + 25}px` }} />
+      <div className="slide-progress" style={{ width: disabled ? 0 : `${sliderPos + 16}px` }} />
       <span className="slide-text">
         {disabled ? (
           <span className="slide-disabled-content">
@@ -161,8 +161,9 @@ interface ProgrammesSectionProps {
   onEnroll?: (programmeName: string) => void
 }
 
+
 export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
-  const [activeModal, setActiveModal] = useState<'online' | 'offline' | null>(null)
+  const [activeModal, setActiveModal] = useState<'mastery' | 'online' | 'offline' | null>(null)
   const [pendingPlan, setPendingPlan] = useState<MentorshipPlan | null>(null)
   const [successPayment, setSuccessPayment] = useState<{
     plan: MentorshipPlan
@@ -229,17 +230,17 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
       {/* ── Section Header ────────────────────────────────────────── */}
       <div className="prog-header reveal-el">
         <p className="section-tag">02 / PROGRAMMES</p>
-        <h2>Two ways to learn.</h2>
-        <p className="prog-header-sub">One way to trade with precision.</p>
+        <h2>Three pathways to mastery.</h2>
+        <p className="prog-header-sub">Live batch, offline intensive, or personal 1-on-1 — choose your edge.</p>
       </div>
 
-      {/* ── Compact Front Cards Grid ──────────────────────────────── */}
-      <div className="prog-cards-wrap">
+      {/* ── 3-Card Balanced Trio Grid (Personal Mentorship | Featured Live Batch | Slingshot Model) ── */}
+      <div className="prog-cards-grid">
 
         {/* ══════════════════════════════════════════════════════════════
-           CARD 01: PERSONAL MENTORSHIP — ONLINE ONLY (CYBER SAPPHIRE)
+           CARD 01: PERSONAL MENTORSHIP — PRIVATE 1-ON-1 (CYBER SAPPHIRE)
            ══════════════════════════════════════════════════════════════ */}
-        <div className="prog-card-container reveal-el">
+        <div className="prog-card-container prog-card-side reveal-el">
           <div className="card-border-beam beam-blue" aria-hidden="true" />
 
           <article className="prog-card-face card-theme-blue">
@@ -254,7 +255,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
             <div className="card-editorial-top">
               <div className="card-mode-badge mode-badge-blue">
                 <span className="mode-pulse dot-blue" />
-                <span>ONLINE · ZOOM</span>
+                <span>1-ON-1 · PRIVATE ZOOM</span>
               </div>
               <div className="card-index-num num-blue">01</div>
             </div>
@@ -265,24 +266,24 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                 PERSONAL MENTORSHIP
               </h3>
               <p className="card-editorial-quote">
-                1-to-1 mentorship built around your trading journey and execution.
+                1-to-1 mentorship built around your personal trading journey & execution.
               </p>
             </div>
 
             {/* Price Statement */}
             <div className="card-price-statement">
               <div className="price-num-row">
-                <span className="price-symbol">₹</span>
-                <span className="price-amount">24,999</span>
+                <span className="price-symbol symbol-blue">₹</span>
+                <span className="price-amount amount-blue">24,999</span>
               </div>
               <span className="price-cadence">One-time enrollment</span>
             </div>
 
-            {/* Clean Checkmark Feature List */}
+            {/* Clean Checkmark Feature List (4 Core Points) */}
             <ul className="card-feature-checklist checklist-blue">
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
-                <span>Personal 1-on-1 Sessions</span>
+                <span>Personal 1-on-1 Sessions with Mentor</span>
               </li>
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
@@ -290,15 +291,11 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
               </li>
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
-                <span>Complete Class Recordings Archive</span>
+                <span>Futures Market & Basics + Personal Model for Nasdaq</span>
               </li>
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
-                <span>Personalised Institutional Trading Model</span>
-              </li>
-              <li>
-                <span className="check-icon" aria-hidden="true">✓</span>
-                <span>Direct Mentor Accountability & Follow-up</span>
+                <span>Direct 1-on-1 Follow-up From Your Mentor</span>
               </li>
             </ul>
 
@@ -329,11 +326,107 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
           </article>
         </div>
 
+        {/* ══════════════════════════════════════════════════════════════
+           CARD 02: FEATURED LIVE BATCH — ICT MASTERY MENTORSHIP (ACTIVE)
+           ══════════════════════════════════════════════════════════════ */}
+        <div className="prog-card-container prog-card-featured reveal-el">
+          <div className="live-card-backdrop-aura" aria-hidden="true" />
+          <div className="card-border-beam beam-cyan" aria-hidden="true" />
+
+          <article className="prog-card-face card-theme-cyan">
+            <div className="card-live-sweep" aria-hidden="true" />
+            <div className="card-ambient-glow glow-cyan" aria-hidden="true" />
+            <span className="card-corner-bracket bracket-tl" aria-hidden="true" />
+            <span className="card-corner-bracket bracket-tr" aria-hidden="true" />
+            <span className="card-corner-bracket bracket-bl" aria-hidden="true" />
+            <span className="card-corner-bracket bracket-br" aria-hidden="true" />
+            <div className="card-subtle-mesh" aria-hidden="true" />
+
+            {/* Top Bar: Eyebrow Tag & Compact Horizontal Live Status Pill + Index 02 */}
+            <div className="card-editorial-top">
+              <div className="card-mode-badge mode-badge-cyan">
+                <span className="mode-pulse dot-cyan" />
+                <span>ONLINE · LIVE BATCH</span>
+              </div>
+              <div className="card-top-right-group">
+                <div className="card-status-pill status-pill-live" aria-label="Batch is live now">
+                  <span className="status-live-dot" aria-hidden="true" />
+                  <span>LIVE NOW</span>
+                </div>
+                <div className="card-index-num num-cyan">02</div>
+              </div>
+            </div>
+
+            {/* Title & Philosophy Quote */}
+            <div className="card-hero-block">
+              <h3 className="card-editorial-title title-cyan">
+                ICT MASTERY MENTORSHIP
+              </h3>
+              <p className="card-editorial-quote">
+                Live interactive cohort with mentor-guided live trading sessions.
+              </p>
+            </div>
+
+            {/* Price Statement */}
+            <div className="card-price-statement">
+              <div className="price-num-row">
+                <span className="price-symbol symbol-cyan">₹</span>
+                <span className="price-amount amount-cyan">9,999</span>
+              </div>
+              <span className="price-cadence">Sept 29 Batch · 11 Days</span>
+            </div>
+
+            {/* Clean Checkmark Feature List (4 Core Points) */}
+            <ul className="card-feature-checklist checklist-cyan">
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>Starts Sept 29 · 11 Days (7 PM – 9 PM)</span>
+              </li>
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>Language: தமிழ் (Tamil) · Interactive</span>
+              </li>
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>Live Trading Sessions with Mentor After Classes</span>
+              </li>
+              <li>
+                <span className="check-icon" aria-hidden="true">✓</span>
+                <span>14 Core Topics: Forex, FVG, OB, SMT & Mindset</span>
+              </li>
+            </ul>
+
+            {/* Secondary Action: View Full Details ↗ */}
+            <button
+              type="button"
+              className="card-details-trigger trigger-cyan"
+              onClick={() => setActiveModal('mastery')}
+              aria-label="View full curriculum details for ICT Mastery Mentorship"
+            >
+              <span>VIEW FULL DETAILS</span>
+              <span className="arrow-sym">↗</span>
+            </button>
+
+            <div className="card-divider-hairline" />
+
+            {/* CoinDCX Slide-To-Enroll Slider */}
+            <div className="card-slider-wrap">
+              <SlideToEnroll
+                label="Slide to Enroll"
+                disabled={isBatchLive}
+                disabledLabel="Enrollment Closed · Cohort is Live"
+                successLabel="Redirecting to Razorpay..."
+                colorVariant="cyan"
+                onSuccess={() => handleEnrollClick(MENTORSHIP_PLANS.mastery)}
+              />
+            </div>
+          </article>
+        </div>
 
         {/* ══════════════════════════════════════════════════════════════
-           CARD 02: SLINGSHOT MODEL — OFFLINE ONLY (IMPERIAL GOLD)
+           CARD 03: SLINGSHOT MODEL — OFFLINE CHENNAI (IMPERIAL GOLD)
            ══════════════════════════════════════════════════════════════ */}
-        <div className="prog-card-container reveal-el">
+        <div className="prog-card-container prog-card-side reveal-el">
           <div className="card-border-beam beam-gold" aria-hidden="true" />
 
           <article className="prog-card-face card-theme-gold">
@@ -343,13 +436,13 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
             <span className="card-corner-bracket bracket-br" aria-hidden="true" />
             <div className="card-subtle-mesh" aria-hidden="true" />
 
-            {/* Top Bar: Mode Tag & Index 02 */}
+            {/* Top Bar: Mode Tag & Index 03 */}
             <div className="card-editorial-top">
               <div className="card-mode-badge mode-badge-gold">
                 <span className="mode-pulse dot-gold" />
-                <span>OFFLINE · COIMBATORE</span>
+                <span>UPCOMING · OFFLINE CHENNAI</span>
               </div>
-              <div className="card-index-num num-gold">02</div>
+              <div className="card-index-num num-gold">03</div>
             </div>
 
             {/* Title & Philosophy Quote */}
@@ -358,7 +451,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                 SLINGSHOT MODEL
               </h3>
               <p className="card-editorial-quote">
-                Master our institutional XAUUSD execution model.
+                Master our proprietary XAUUSD execution model in Chennai.
               </p>
             </div>
 
@@ -368,10 +461,10 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                 <span className="price-symbol symbol-gold">₹</span>
                 <span className="price-amount amount-gold">19,999</span>
               </div>
-              <span className="price-cadence">One-time enrollment</span>
+              <span className="price-cadence">December Batch (Dates Soon)</span>
             </div>
 
-            {/* Clean Checkmark Feature List */}
+            {/* Clean Checkmark Feature List (4 Core Points) */}
             <ul className="card-feature-checklist checklist-gold">
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
@@ -383,15 +476,11 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
               </li>
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
-                <span>In-Person Classroom Cohort in Coimbatore</span>
+                <span>In-Person Classroom Cohort in Chennai</span>
               </li>
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
-                <span>Course Materials, Daily Hospitality & Lunch</span>
-              </li>
-              <li>
-                <span className="check-icon" aria-hidden="true">✓</span>
-                <span>Live Classes + WhatsApp Group Access Guiding Daily Trade Plans</span>
+                <span>WhatsApp Group + Lifetime Access & Live Sessions</span>
               </li>
             </ul>
 
@@ -434,10 +523,22 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
           onClick={() => setActiveModal(null)}
           role="dialog"
           aria-modal="true"
-          aria-label={activeModal === 'online' ? 'Personal Mentorship Curriculum Brochure' : 'Slingshot Model Bootcamp Brochure'}
+          aria-label={
+            activeModal === 'mastery'
+              ? 'ICT Mastery Mentorship Curriculum Brochure'
+              : activeModal === 'online'
+              ? 'Personal Mentorship Curriculum Brochure'
+              : 'Slingshot Model Bootcamp Brochure'
+          }
         >
           <div
-            className={`prog-modal-dialog ${activeModal === 'online' ? 'modal-theme-blue' : 'modal-theme-gold'}`}
+            className={`prog-modal-dialog ${
+              activeModal === 'mastery'
+                ? 'modal-theme-cyan'
+                : activeModal === 'online'
+                ? 'modal-theme-blue'
+                : 'modal-theme-gold'
+            }`}
             onClick={e => e.stopPropagation()}
           >
             {/* Modal Corner Accents */}
@@ -449,20 +550,56 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
             {/* Modal Header Bar — 100% Unobstructed Above All Navbars */}
             <div className="prog-modal-header">
               <div className="modal-header-info">
-                <span className={`card-mode-badge ${activeModal === 'online' ? 'mode-badge-blue' : 'mode-badge-gold'}`}>
-                  <span className={`mode-pulse ${activeModal === 'online' ? 'dot-blue' : 'dot-gold'}`} />
-                  <span>{activeModal === 'online' ? 'ONLINE · ZOOM' : 'OFFLINE · COIMBATORE'}</span>
+                <span
+                  className={`card-mode-badge ${
+                    activeModal === 'mastery'
+                      ? 'mode-badge-cyan'
+                      : activeModal === 'online'
+                      ? 'mode-badge-blue'
+                      : 'mode-badge-gold'
+                  }`}
+                >
+                  <span
+                    className={`mode-pulse ${
+                      activeModal === 'mastery'
+                        ? 'dot-cyan'
+                        : activeModal === 'online'
+                        ? 'dot-blue'
+                        : 'dot-gold'
+                    }`}
+                  />
+                  <span>
+                    {activeModal === 'mastery'
+                      ? 'ONLINE · LIVE BATCH (SEP 29)'
+                      : activeModal === 'online'
+                      ? 'ONLINE · 1-ON-1 ZOOM'
+                      : 'OFFLINE · CHENNAI'}
+                  </span>
                 </span>
                 <h3 className="modal-title">
-                  {activeModal === 'online' ? 'PERSONAL MENTORSHIP' : 'SLINGSHOT MODEL'}
+                  {activeModal === 'mastery'
+                    ? 'ICT MASTERY MENTORSHIP'
+                    : activeModal === 'online'
+                    ? 'PERSONAL MENTORSHIP'
+                    : 'SLINGSHOT MODEL'}
                 </h3>
                 <span className="modal-price">
-                  {activeModal === 'online' ? '₹24,999/- · One-Time Investment' : '₹19,999/- · One-Time Fee'}
+                  {activeModal === 'mastery'
+                    ? '₹9,999/- · Starts September 29th'
+                    : activeModal === 'online'
+                    ? '₹24,999/- · One-Time Investment'
+                    : '₹19,999/- · December Intensive'}
                 </span>
               </div>
               <button
                 type="button"
-                className={`modal-close-btn ${activeModal === 'online' ? 'close-btn-blue' : 'close-btn-gold'}`}
+                className={`modal-close-btn ${
+                  activeModal === 'mastery'
+                    ? 'close-btn-cyan'
+                    : activeModal === 'online'
+                    ? 'close-btn-blue'
+                    : 'close-btn-gold'
+                }`}
                 onClick={() => setActiveModal(null)}
                 aria-label="Close brochure"
               >
@@ -472,7 +609,150 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
 
             {/* Modal Body: Scannable Curriculum Document */}
             <div className="prog-modal-scroll">
-              {activeModal === 'online' ? (
+              {activeModal === 'mastery' ? (
+                /* ── ICT MASTERY MENTORSHIP CURRICULUM ─────────── */
+                <div className="modal-content-sections">
+                  {/* BATCH INFORMATION */}
+                  <div className="doc-section">
+                    <div className="doc-section-header">
+                      <span className="doc-sec-num num-cyan">01</span>
+                      <h5 className="doc-sec-title">BATCH INFORMATION & SCHEDULE</h5>
+                    </div>
+                    <div className="doc-editorial-list">
+                      <div className="doc-list-row">
+                        <span className="doc-bullet bullet-cyan">—</span>
+                        <div className="doc-row-text">
+                          <strong>Batch Start:</strong> Classes Start From September 29th
+                        </div>
+                      </div>
+                      <div className="doc-list-row">
+                        <span className="doc-bullet bullet-cyan">—</span>
+                        <div className="doc-row-text">
+                          <strong>Duration:</strong> 11 Days Comprehensive Intensive
+                        </div>
+                      </div>
+                      <div className="doc-list-row">
+                        <span className="doc-bullet bullet-cyan">—</span>
+                        <div className="doc-row-text">
+                          <strong>Timings:</strong> 7:00 PM to 9:00 PM Daily Live Sessions
+                        </div>
+                      </div>
+                      <div className="doc-list-row">
+                        <span className="doc-bullet bullet-cyan">—</span>
+                        <div className="doc-row-text">
+                          <strong>Language:</strong> தமிழ் (Tamil) with crystal-clear terminology
+                        </div>
+                      </div>
+                      <div className="doc-list-row">
+                        <span className="doc-bullet bullet-cyan">—</span>
+                        <div className="doc-row-text">
+                          <strong>Recordings:</strong> Full Session Recordings will be provided for revision
+                        </div>
+                      </div>
+                      <div className="doc-list-row">
+                        <span className="doc-bullet bullet-cyan">—</span>
+                        <div className="doc-row-text">
+                          <strong>Live Trading Sessions:</strong> Mentorship with Live Trading Sessions with Mentor After the Classes 📈🔥
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 14 TOPICS CURRICULUM */}
+                  <div className="doc-section">
+                    <div className="doc-section-header">
+                      <span className="doc-sec-num num-cyan">02</span>
+                      <h5 className="doc-sec-title">CURRICULUM TOPICS (14 CORE MODULES)</h5>
+                    </div>
+                    <div className="doc-columns-grid">
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>Basics Of Forex Market</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>ICT Concept Intro</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>Basic Market Structure</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>OB & Types (Orderblocks)</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>FVG & Types (Fair Value Gaps)</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>Liquidity & Its Illustrations</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>Premium & Discount Zones</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>SMT Divergence</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>Timeframe Alignment & Analysis</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>Sessions & Pair Behaviour</span>
+                      </div>
+                      <div className="doc-item highlight-cyan">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>High-Probability Trading Models</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>Risk Management & Drawdown Rules</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>Trader Psychology & Mindset</span>
+                      </div>
+                      <div className="doc-item highlight-cyan">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>Live Trade Context & Execution</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* POST-CLASS LIVE SESSIONS */}
+                  <div className="doc-section">
+                    <div className="doc-section-header">
+                      <span className="doc-sec-num num-cyan">03</span>
+                      <h5 className="doc-sec-title">AFTER THE CLASSES — LIVE SESSIONS</h5>
+                    </div>
+                    <div className="doc-editorial-list">
+                      <div className="doc-list-row">
+                        <span className="doc-bullet bullet-cyan">—</span>
+                        <div className="doc-row-text">
+                          <strong>Mentorship with Live Trading:</strong> Direct live chart execution sessions with Praveen after 11-day class completion.
+                        </div>
+                      </div>
+                      <div className="doc-list-row">
+                        <span className="doc-bullet bullet-cyan">—</span>
+                        <div className="doc-row-text">
+                          <strong>Revision Archive:</strong> Re-watch all 11-day classroom lectures anytime with permanent access.
+                        </div>
+                      </div>
+                      <div className="doc-list-row">
+                        <span className="doc-bullet bullet-cyan">—</span>
+                        <div className="doc-row-text">
+                          <strong>Doubt Clearing & Guidance:</strong> Ongoing trade reviews and community discussion.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : activeModal === 'online' ? (
                 /* ── PERSONAL MENTORSHIP FULL CURRICULUM ─────────── */
                 <div className="modal-content-sections">
                   {/* WHAT YOU GET */}
@@ -491,7 +771,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-blue">—</span>
                         <div className="doc-row-text">
-                          <strong>From Basics to Everything:</strong> Complete foundational mechanics through to institutional market execution.
+                          <strong>From Basics to Everything:</strong> Complete foundational mechanics through to professional market execution.
                         </div>
                       </div>
                     </div>
@@ -507,6 +787,14 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                       <div className="doc-item">
                         <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
                         <span>Basics Of Forex Market</span>
+                      </div>
+                      <div className="doc-item highlight-blue">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Futures Market & Basics</span>
+                      </div>
+                      <div className="doc-item highlight-blue">
+                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span>Personal Model for Nasdaq</span>
                       </div>
                       <div className="doc-item">
                         <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
@@ -580,15 +868,15 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                       </div>
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-blue">—</span>
-                        <div className="doc-row-text">Class Recordings Also Given</div>
+                        <div className="doc-row-text">Complete Class Recordings Access Provided</div>
                       </div>
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-blue">—</span>
-                        <div className="doc-row-text">Get Your Personalised Model</div>
+                        <div className="doc-row-text">Get Your Personalised Trading Model</div>
                       </div>
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-blue">—</span>
-                        <div className="doc-row-text">Follow-up From Your Mentor</div>
+                        <div className="doc-row-text">Direct 1-on-1 Follow-up From Your Mentor</div>
                       </div>
                     </div>
                   </div>
@@ -606,25 +894,25 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-gold">—</span>
                         <div className="doc-row-text">
-                          <strong>Dates:</strong> August 07 — August 14 (8 Days In-Person Intensive)
+                          <strong>Dates:</strong> December 2026 Batch (Dates Announced Soon)
                         </div>
                       </div>
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-gold">—</span>
                         <div className="doc-row-text">
-                          <strong>Timings:</strong> 10 AM — 6 PM Daily Live Classroom
+                          <strong>Timings:</strong> 10 AM — 6 PM Daily In-Person Classroom
                         </div>
                       </div>
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-gold">—</span>
                         <div className="doc-row-text">
-                          <strong>Location:</strong> Singanallur, Coimbatore
+                          <strong>Location:</strong> Chennai (Venue Disclosed to Enrolled Traders)
                         </div>
                       </div>
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-gold">—</span>
                         <div className="doc-row-text">
-                          <strong>Catering:</strong> Lunch Will Be Provided Daily
+                          <strong>Hospitality:</strong> Lunch & Snacks Provided Daily
                         </div>
                       </div>
                     </div>
@@ -645,7 +933,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                         <div className="ds-spec-item">✦ Proper 2 to 3R Trades</div>
                         <div className="ds-spec-item">✦ Weekly 5 to 7 Entries</div>
                         <div className="ds-spec-item full-width">
-                          ✦ Slingshot Model Plan Sharing WhatsApp Group Access Will Be Given
+                          ✦ Slingshot Model Plan Sharing WhatsApp Group Access + Lifetime Access & Live Sessions
                         </div>
                       </div>
                     </div>
@@ -715,13 +1003,24 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
             {/* Modal Bottom Conversion Bar with Slider */}
             <div className="prog-modal-footer">
               <SlideToEnroll
-                label={activeModal === 'online' ? 'Slide to Enroll' : 'Slide to Reserve Seat'}
+                label={activeModal === 'offline' ? 'Slide to Reserve Seat' : 'Slide to Enroll'}
                 disabled={isBatchLive}
                 disabledLabel="Enrollment Closed · Cohort is Live"
                 successLabel="Redirecting to Razorpay..."
-                colorVariant={activeModal === 'online' ? 'blue' : 'gold'}
+                colorVariant={
+                  activeModal === 'mastery'
+                    ? 'cyan'
+                    : activeModal === 'online'
+                    ? 'blue'
+                    : 'gold'
+                }
                 onSuccess={() => {
-                  const plan = activeModal === 'online' ? MENTORSHIP_PLANS.online : MENTORSHIP_PLANS.offline
+                  const plan =
+                    activeModal === 'mastery'
+                      ? MENTORSHIP_PLANS.mastery
+                      : activeModal === 'online'
+                      ? MENTORSHIP_PLANS.online
+                      : MENTORSHIP_PLANS.offline
                   setActiveModal(null)
                   handleEnrollClick(plan)
                 }}

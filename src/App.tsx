@@ -6,6 +6,7 @@ import { ProgrammesSection } from './components/programmes/ProgrammesSection'
 import { SitePreloader } from './components/common/SitePreloader'
 import { FloatingContactOrbit } from './components/common/FloatingContactOrbit'
 import { NumberTicker } from './components/common/NumberTicker'
+import { InstagramShowcaseSection } from './components/social/InstagramShowcaseSection'
 
 /* ---------------------------------------- Icons ---------------------------------------- */
 const Arrow  = () => <svg viewBox="0 0 24 24" aria-hidden><path d="M5 12h13M13 6l6 6-6 6"/></svg>
@@ -130,7 +131,7 @@ const videos = [
     ytId: 'Ka8SEdSN2Ww',
     title: 'Weekly Market Outlook – EURUSD, DXY & XAUUSD',
     tag: 'Market Outlook',
-    desc: 'Institutional breakdown framing high-probability setups before the trading week opens.',
+    desc: 'Comprehensive market breakdown framing high-probability setups before the trading week opens.',
   },
   {
     id: 'v3',
@@ -164,7 +165,7 @@ function getPhotoLabel(src: string, index: number): string {
   if (name.includes('1860')) return 'Trader Mindset'
   if (name.includes('7278')) return 'Market Mastery'
   if (name.includes('5645')) return 'Chart Breakdown'
-  if (name.includes('5651')) return 'Institutional Flow'
+  if (name.includes('5651')) return 'Market Liquidity Flow'
   if (name.includes('6056')) return 'Risk Protocol'
   if (name.includes('6057')) return 'Session Analysis'
   if (name.includes('6095')) return 'Precision Entries'
@@ -173,8 +174,8 @@ function getPhotoLabel(src: string, index: number): string {
 }
 
 /* ---------------------------------------- High-Precision Rapid Countdown ---------------------------------------- */
-// Aligned with the announced cohort launch date: October 15, 2026 at 09:00 IST
-const BATCH_TARGET = new Date('2026-09-25T09:00:00+05:30')
+// Aligned with the announced cohort launch date: September 29, 2026 at 19:00 IST
+const BATCH_TARGET = new Date('2026-09-29T19:00:00+05:30')
 
 function calcCountdown(target: Date) {
   const diff = target.getTime() - Date.now()
@@ -198,11 +199,11 @@ const pad = (n: number) => String(n).padStart(2, '0')
 
 /* ══════════════════════════════════════════════════════════════
    COHORT INVENTORY & ADMISSIONS SEAT CALCULATION
-   20 Days rolling admission window · 20 seats capacity
+   25 Days rolling admission window · 25 seats capacity
    Decreases by 1 seat per day leading up to class start date
    ══════════════════════════════════════════════════════════════ */
-const TOTAL_COHORT_SEATS = 20
-const ADMISSION_WINDOW_DAYS = 20
+const TOTAL_COHORT_SEATS = 25
+const ADMISSION_WINDOW_DAYS = 25
 
 interface CohortSeatStats {
   totalSeats: number
@@ -238,11 +239,11 @@ function computeCohortSeatStats(daysLeft: number, isLive: boolean): CohortSeatSt
   let urgencyLevel: 'critical' | 'high' | 'normal' | 'early'
 
   if (daysLeft >= ADMISSION_WINDOW_DAYS) {
-    // 20+ days before class start: all 20 seats available (Early Admissions Open)
+    // 25+ days before class start: all 25 seats available (Early Admissions Open)
     availableSeats = totalSeats
     filledSeats = 0
     percentFilled = 0
-    urgencyLabel = '20 SEATS AVAILABLE · ADMISSIONS OPEN'
+    urgencyLabel = `${totalSeats} SEATS AVAILABLE · ADMISSIONS OPEN`
     urgencyLevel = 'early'
   } else {
     // Within 20-day window: 1 seat decreases per day
@@ -416,7 +417,7 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
             <div className="hcd-header">
               <div className="hcd-live-badge">
                 <span className="hcd-pulse-dot" />
-                <span>LIVE BATCH COHORT</span>
+                <span>LIVE BATCH</span>
               </div>
               <div className="hcd-header-actions">
                 <div className="hcd-status-tag">
@@ -491,7 +492,7 @@ const HeroCountdownModule = memo(function HeroCountdownModule({
                   <div className="hcd-urgency-left">
                     <span className="hcd-urgency-text">LIMITED MENTORSHIP SEATS</span>
                     <span className="hcd-seat-badge-pill">
-                      {stats.availableSeats} of 20 LEFT
+                      {stats.availableSeats} of 25 SLOTS LEFT
                     </span>
                   </div>
                   <div className="hcd-urgency-right">
@@ -524,6 +525,7 @@ const NAV_LINKS: NavItem[] = [
   { href: '#mentor',          label: 'Mentor' },
   { href: '#programmes',      label: 'Programmes' },
   { href: '#student-reviews', label: 'Student Reviews', hasDropdown: true },
+  { href: '#instagram',       label: 'Community' },
   { href: '#faq',             label: 'FAQ' },
   { href: '#contact',         label: 'Contact' },
 ]
@@ -552,11 +554,9 @@ const REVIEW_SUB_LINKS = [
    CONTACT FORM TYPES & CONSTANTS
    ---------------------------------------- */
 const TOPIC_OPTIONS = [
-  'Complete ICT Mastery',
-  '1-on-1 Mentorship',
-  'Structure & Liquidity',
-  'Next Batch Schedule',
-  'Trading Assessment',
+  'Online Batch - ICT Mastery (Sep 29)',
+  'Personal Mentorship (1-on-1)',
+  'Offline Bootcamp - Chennai',
 ] as const
 
 const EXPERIENCE_OPTIONS = [
@@ -591,7 +591,7 @@ const INITIAL_CONTACT_FORM: ContactFormState = {
    ---------------------------------------- */
 function App() {
   const [contactData, setContactData] = useState<ContactFormState>(INITIAL_CONTACT_FORM)
-  const [selectedTopic, setSelectedTopic] = useState<string>('Complete ICT Mastery')
+  const [selectedTopic, setSelectedTopic] = useState<string>('Online Batch - ICT Mastery (Sep 29)')
   const [selectedExp, setSelectedExp] = useState<string>('Intermediate (6M - 2 Yrs)')
 
   const [contactErrors, setContactErrors] = useState<ContactErrors>({})
@@ -848,7 +848,7 @@ function App() {
     setContactData(INITIAL_CONTACT_FORM)
     setContactErrors({})
     setContactTouched({ name: false, email: false, phone: false, message: false })
-    setSelectedTopic('Complete ICT Mastery')
+    setSelectedTopic('Online Batch - ICT Mastery (Sep 29)')
     setSelectedExp('Intermediate (6M - 2 Yrs)')
     setContactStatus('idle')
     setContactStatusMsg('')
@@ -977,7 +977,7 @@ function App() {
                     <span className="live-dot" />LIVE
                   </span>
                   <span className="ann-text">
-                    Next Batch Starts <strong>September 25, 2026</strong>
+                    Next Batch Starts <strong>September 29, 2026</strong>
                   </span>
                   <span className="ann-divider">✦</span>
                 </div>
@@ -1091,11 +1091,11 @@ function App() {
               <span className="badge-dot" />MENTORSHIP FOR SERIOUS TRADERS
             </div>
             <h1 className="reveal-el dl-1">
-              Trade with <span className="h1-em">precision.</span>
-              <span className="h1-sub">Not with luck.</span>
+              Your Live Trading <span className="h1-em">Experience</span>
+              <span className="h1-sub">Starts Here.</span>
             </h1>
             <p className="hero-sub reveal-el dl-2">
-              A live, structured ICT mentorship for traders committed to understanding market structure, liquidity and disciplined execution.
+              Master advanced market structure, live liquidity delivery, and disciplined execution with real-time mentorship designed for serious traders.
             </p>
             <div className="hero-actions reveal-el dl-3">
               <a
@@ -1183,7 +1183,7 @@ function App() {
           <div className="mentor-stat-strip">
             <div>
               <strong>
-                <NumberTicker value={1000} suffix="+" />
+                <NumberTicker value={2000} suffix="+" />
               </strong>
               <span className="mentor-stat-label">Students Trained</span>
             </div>
@@ -1195,9 +1195,9 @@ function App() {
             </div>
             <div>
               <strong>
-                <NumberTicker value={3} suffix="+" />
+                <NumberTicker value={6} suffix="+" />
               </strong>
-              <span className="mentor-stat-label">Years</span>
+              <span className="mentor-stat-label">Years Experience</span>
             </div>
           </div>
         </div>
@@ -1206,7 +1206,7 @@ function App() {
 
           <p className="section-tag reveal-el">01 / YOUR MENTOR</p>
           <h2 className="reveal-el">Built for the trader<br />you intend <em>to become.</em></h2>
-          <p className="reveal-el">Pravyn ICT is guided by an experienced practitioner focused on market structure, liquidity and institutional price action. Every session is grounded in real execution logic, clear frameworks and accountability—not predictions.</p>
+          <p className="reveal-el">Pravyn ICT is guided by an experienced practitioner focused on market structure, liquidity and precision price action. Every session is grounded in real execution logic, clear frameworks and accountability—not predictions.</p>
           <blockquote className="reveal-el">"No signals. No jackpots. No false promises."</blockquote>
           <a className="text-link reveal-el" href="#programmes">Start your journey <Arrow /></a>
         </div>
@@ -1266,6 +1266,9 @@ function App() {
           ))}
         </div>
       </section>
+
+      {/* ---------------------------------------- INSTAGRAM COMMUNITY SHOWCASE ---------------------------------------- */}
+      <InstagramShowcaseSection />
 
       {/* ---------------------------------------- FAQ ---------------------------------------- */}
       <section className="faq-section" id="faq" data-section="faq">
