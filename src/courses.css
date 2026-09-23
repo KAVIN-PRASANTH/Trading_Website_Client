@@ -88,11 +88,20 @@
 
 @media (max-width: 1040px) {
   .prog-cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-    gap: 18px;
-    max-width: 920px;
+    grid-template-columns: repeat(2, 1fr);
+    --prog-gap: 20px;
+    gap: var(--prog-gap);
+    max-width: 880px;
     align-items: stretch;
     padding: 10px 0;
+  }
+
+  /* Center 3rd card on tablet (2-column layout) while maintaining identical card width */
+  .prog-cards-grid > .prog-card-container:nth-child(3) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 100%;
+    max-width: calc((100% - var(--prog-gap)) / 2);
   }
 }
 
@@ -101,6 +110,12 @@
     grid-template-columns: 1fr;
     max-width: 440px;
     gap: 18px;
+  }
+
+  .prog-cards-grid > .prog-card-container:nth-child(3) {
+    grid-column: auto;
+    max-width: 100%;
+    justify-self: stretch;
   }
 }
 
@@ -153,10 +168,10 @@
     transform: translateY(-2px);
   }
   .prog-card-container.prog-card-featured {
-    transform: scale(1.02);
+    transform: none;
   }
   .prog-card-container.prog-card-featured:hover {
-    transform: scale(1.03);
+    transform: translateY(-2px);
   }
 }
 
@@ -301,6 +316,18 @@
   );
 }
 
+.beam-violet {
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    transparent 65%,
+    rgba(168, 85, 247, 0.08) 80%,
+    rgba(192, 132, 252, 0.6) 92%,
+    #ffffff 96%,
+    rgba(139, 92, 246, 0.6) 98%,
+    transparent 100%
+  );
+}
+
 .beam-gold {
   background: conic-gradient(
     from var(--border-angle, 0deg),
@@ -319,6 +346,9 @@
 }
 .prog-card-side:hover .beam-blue {
   filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.25));
+}
+.prog-card-side:hover .beam-violet {
+  filter: drop-shadow(0 0 5px rgba(192, 132, 252, 0.35));
 }
 .prog-card-side:hover .beam-gold {
   filter: drop-shadow(0 0 4px rgba(250, 204, 21, 0.25));
@@ -378,6 +408,23 @@
     0 22px 48px -10px rgba(0, 0, 0, 0.95),
     0 0 18px rgba(59, 130, 246, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Card 01: Royal Amethyst / Deep Violet (Personal Mentorship - Exclusive 1-on-1) */
+.card-theme-violet {
+  background: linear-gradient(180deg, #0e0a1a 0%, #06040d 100%);
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  box-shadow: 
+    0 16px 36px -10px rgba(0, 0, 0, 0.9),
+    0 0 16px rgba(139, 92, 246, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.card-theme-violet:hover {
+  border-color: rgba(192, 132, 252, 0.48);
+  box-shadow: 
+    0 22px 48px -10px rgba(0, 0, 0, 0.95),
+    0 0 22px rgba(168, 85, 247, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Card 03: Imperial Gold (Slingshot Model - Restrained Dark) */
@@ -468,8 +515,11 @@
 .glow-blue {
   background: radial-gradient(ellipse 70% 45% at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
 }
+.glow-violet {
+  background: radial-gradient(ellipse 70% 45% at 50% 0%, rgba(168, 85, 247, 0.14) 0%, transparent 70%);
+}
 .glow-gold {
-  background: radial-gradient(ellipse 70% 45% at 50% 0%, rgba(234, 179, 8, 0.08) 0%, transparent 70%);
+  background: radial-gradient(ellipse 70% 45% at 50% 0%, rgba(234, 179, 8, 0.12) 0%, transparent 70%);
 }
 
 /* Restrained Optical Corner Brackets */
@@ -487,6 +537,7 @@
 }
 .card-theme-cyan .card-corner-bracket { border-color: #22d3ee; }
 .card-theme-blue .card-corner-bracket { border-color: #60a5fa; }
+.card-theme-violet .card-corner-bracket { border-color: #c084fc; }
 .card-theme-gold .card-corner-bracket { border-color: #facc15; }
 
 .bracket-tl { top: 9px; left: 9px; border-top: 1.5px solid; border-left: 1.5px solid; }
@@ -543,6 +594,7 @@
 }
 .mode-badge-cyan { color: #22d3ee; }
 .mode-badge-blue { color: #60a5fa; }
+.mode-badge-violet { color: #c084fc; }
 .mode-badge-gold { color: #facc15; }
 
 .mode-pulse {
@@ -553,6 +605,7 @@
 }
 .dot-cyan { background: #22d3ee; box-shadow: 0 0 5px rgba(34, 211, 238, 0.6); }
 .dot-blue { background: #60a5fa; box-shadow: 0 0 5px rgba(96, 165, 250, 0.6); }
+.dot-violet { background: #c084fc; box-shadow: 0 0 6px rgba(192, 132, 252, 0.7); }
 .dot-gold { background: #facc15; box-shadow: 0 0 5px rgba(250, 204, 21, 0.6); }
 
 @keyframes dot-pulse {
@@ -572,6 +625,7 @@
 }
 .num-cyan { color: #22d3ee; }
 .num-blue { color: #60a5fa; }
+.num-violet { color: #c084fc; text-shadow: 0 0 8px rgba(192, 132, 252, 0.35); }
 .num-gold { color: #facc15; }
 
 /* Programme Title & Philosophy Quote (Crisp White + Clean Gray) */
@@ -712,12 +766,19 @@
   color: #22d3ee;
 }
 
-/* Personal Mentorship checkmark: Electric Blue */
+/* Personal Mentorship checkmark: Electric Blue & Violet */
 .card-theme-blue .check-icon,
 .checklist-blue .check-icon {
   background: rgba(59, 130, 246, 0.12);
   border: 1px solid rgba(96, 165, 250, 0.3);
   color: #60a5fa;
+}
+
+.card-theme-violet .check-icon,
+.checklist-violet .check-icon {
+  background: rgba(139, 92, 246, 0.14);
+  border: 1px solid rgba(192, 132, 252, 0.35);
+  color: #c084fc;
 }
 
 /* Slingshot Model checkmark: Gold */
@@ -767,6 +828,15 @@
   border-bottom-color: #60a5fa;
 }
 
+.trigger-violet {
+  color: #c084fc;
+  border-bottom-color: rgba(192, 132, 252, 0.25);
+}
+.trigger-violet:hover {
+  color: #ffffff;
+  border-bottom-color: #c084fc;
+}
+
 .trigger-gold {
   color: #facc15;
   border-bottom-color: rgba(250, 204, 21, 0.22);
@@ -795,6 +865,9 @@
 }
 .card-theme-blue .card-divider-hairline {
   background: linear-gradient(90deg, rgba(96, 165, 250, 0.22), rgba(255, 255, 255, 0.03));
+}
+.card-theme-violet .card-divider-hairline {
+  background: linear-gradient(90deg, rgba(192, 132, 252, 0.25), rgba(255, 255, 255, 0.03));
 }
 .card-theme-gold .card-divider-hairline {
   background: linear-gradient(90deg, rgba(250, 204, 21, 0.22), rgba(255, 255, 255, 0.03));
@@ -846,6 +919,14 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
+.slide-violet {
+  border-color: rgba(168, 85, 247, 0.35);
+}
+.slide-violet:hover {
+  border-color: rgba(192, 132, 252, 0.6);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
 .slide-gold {
   border-color: rgba(234, 179, 8, 0.35);
 }
@@ -866,6 +947,9 @@
 }
 .slide-cyan .slide-progress {
   background: linear-gradient(90deg, rgba(6, 182, 212, 0.2), rgba(34, 211, 238, 0.45));
+}
+.slide-violet .slide-progress {
+  background: linear-gradient(90deg, rgba(147, 51, 234, 0.2), rgba(168, 85, 247, 0.45));
 }
 .slide-gold .slide-progress {
   background: linear-gradient(90deg, rgba(202, 138, 4, 0.18), rgba(234, 179, 8, 0.4));
@@ -901,6 +985,7 @@
   animation: chevron-pulse 1.4s infinite ease-in-out;
 }
 .slide-cyan .slide-chevrons { color: #22d3ee; }
+.slide-violet .slide-chevrons { color: #c084fc; }
 .slide-gold .slide-chevrons { color: #facc15; }
 
 @keyframes slide-shimmer {
@@ -942,6 +1027,14 @@
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 .slide-cyan .slide-knob.is-dragging {
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.slide-violet .slide-knob {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.slide-violet .slide-knob.is-dragging {
   box-shadow: 0 5px 14px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
@@ -1103,6 +1196,14 @@
     0 0 50px rgba(37, 99, 235, 0.18),
     inset 0 1px 0 rgba(147, 197, 253, 0.35);
 }
+.modal-theme-violet {
+  background: linear-gradient(180deg, #100824 0%, #05030e 100%);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 
+    0 35px 90px -15px rgba(0, 0, 0, 0.98),
+    0 0 50px rgba(139, 92, 246, 0.22),
+    inset 0 1px 0 rgba(216, 180, 254, 0.35);
+}
 .modal-theme-gold {
   background: linear-gradient(180deg, #070e1c 0%, #030710 100%);
   border: 1px solid rgba(234, 179, 8, 0.35);
@@ -1181,6 +1282,18 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
+.close-btn-violet {
+  background: rgba(26, 12, 44, 0.85);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #d8b4fe;
+}
+.close-btn-violet:hover {
+  background: rgba(88, 28, 135, 0.6);
+  border-color: rgba(192, 132, 252, 0.75);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
 .close-btn-gold {
   background: rgba(24, 18, 8, 0.85);
   border: 1px solid rgba(234, 179, 8, 0.35);
@@ -1219,6 +1332,10 @@
 }
 .modal-theme-blue .prog-modal-scroll::-webkit-scrollbar-thumb {
   background: rgba(56, 189, 248, 0.35);
+  border-radius: 4px;
+}
+.modal-theme-violet .prog-modal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.4);
   border-radius: 4px;
 }
 .modal-theme-gold .prog-modal-scroll::-webkit-scrollbar-thumb {
@@ -1261,6 +1378,12 @@
   border: 1px solid rgba(34, 211, 238, 0.3);
   color: #67e8f9;
 }
+.modal-theme-violet .doc-sec-num,
+.doc-sec-num.num-violet {
+  background: rgba(168, 85, 247, 0.18);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  color: #d8b4fe;
+}
 .doc-sec-num.num-gold {
   background: rgba(234, 179, 8, 0.18);
   border: 1px solid rgba(234, 179, 8, 0.3);
@@ -1295,6 +1418,7 @@
 }
 .bullet-cyan { color: #22d3ee; }
 .bullet-blue { color: #38bdf8; }
+.bullet-violet { color: #c084fc; }
 .bullet-gold { color: #facc15; }
 
 .doc-row-text strong {
@@ -1352,6 +1476,12 @@
   font-weight: 600;
   background: rgba(56, 189, 248, 0.06);
   border-color: rgba(56, 189, 248, 0.22);
+}
+.doc-item.highlight-violet {
+  color: #e9d5ff;
+  font-weight: 600;
+  background: rgba(168, 85, 247, 0.08);
+  border-color: rgba(168, 85, 247, 0.28);
 }
 .doc-item.highlight-gold {
   color: #fef08a;

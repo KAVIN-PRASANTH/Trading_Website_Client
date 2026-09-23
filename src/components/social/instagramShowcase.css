@@ -14,18 +14,18 @@
   scroll-margin-top: 85px;
 }
 
-/* Subtle atmospheric depth background matching web theme */
+/* Atmospheric warm sunset depth background matching Student Stories theme */
 .ig-ambient-depth {
   position: absolute;
   top: 15%;
   left: 50%;
   transform: translateX(-50%);
   width: min(92vw, 1150px);
-  height: 500px;
+  height: 520px;
   background: radial-gradient(
-    ellipse 65% 50% at 65% 45%,
-    rgba(56, 189, 248, 0.045) 0%,
-    rgba(37, 99, 235, 0.02) 45%,
+    ellipse 65% 50% at 50% 45%,
+    rgba(244, 63, 94, 0.09) 0%,
+    rgba(249, 115, 22, 0.05) 45%,
     transparent 75%
   );
   pointer-events: none;
@@ -62,23 +62,24 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 5px 12px;
+  padding: 5px 14px;
   border-radius: 999px;
-  background: rgba(6, 182, 212, 0.08);
-  border: 1px solid rgba(56, 189, 248, 0.28);
+  background: rgba(244, 63, 94, 0.08);
+  border: 1px solid rgba(251, 113, 133, 0.35);
   font: 700 10px/1 var(--mono, monospace);
   letter-spacing: 0.12em;
-  color: #38bdf8;
+  color: #fb7185;
   text-transform: uppercase;
   margin-bottom: 16px;
+  box-shadow: 0 0 14px rgba(244, 63, 94, 0.12);
 }
 
 .ig-live-pulse-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #38bdf8;
-  box-shadow: 0 0 8px #38bdf8;
+  background: #f43f5e;
+  box-shadow: 0 0 8px #f43f5e;
   animation: igDotPulse 2s infinite ease-in-out;
 }
 
@@ -100,10 +101,11 @@
   font-style: normal;
   font-family: inherit;
   font-weight: inherit;
-  background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 50%, #2dd4bf 100%);
+  background: linear-gradient(135deg, #fb7185 0%, #f43f5e 35%, #fb923c 70%, #facc15 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  display: inline-block;
 }
 
 .ig-hero-desc {
@@ -114,7 +116,7 @@
 }
 
 .ig-author-highlight {
-  color: #ffffff;
+  color: #fbbf24;
   font-weight: 700;
 }
 
@@ -141,12 +143,12 @@
 
 .ig-stat-lbl {
   font-size: 11.5px;
-  color: #64748b;
+  color: #94a3b8;
   font-weight: 500;
 }
 
 .ig-stat-dot {
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.25);
   font-size: 18px;
   line-height: 1;
   user-select: none;
@@ -163,27 +165,74 @@
 .ig-btn-follow {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 11px 24px;
+  gap: 10px;
+  padding: 12px 24px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 45%, #0284C7 100%);
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.24) 0%, rgba(29, 78, 216, 0.38) 100%), rgba(8, 16, 36, 0.85);
   color: #ffffff;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.015em;
   text-decoration: none;
-  border: 1px solid rgba(147, 197, 253, 0.38);
-  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(147, 197, 253, 0.32);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.42),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.35),
+    0 8px 22px -6px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.28s ease, 
+              background 0.28s ease, 
+              box-shadow 0.28s ease;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+}
+
+/* Smooth glass shine light beam */
+.ig-btn-follow::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -70%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 20%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0.05) 80%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  animation: igGlassSheen 4.2s ease-in-out infinite;
+}
+
+@keyframes igGlassSheen {
+  0% {
+    left: -70%;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  32%, 100% {
+    left: 140%;
+    opacity: 0;
+  }
 }
 
 .ig-btn-follow:hover {
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #06B6D4 100%);
-  border-color: rgba(191, 219, 254, 0.75);
-  box-shadow: 0 8px 25px rgba(6, 182, 212, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.34) 0%, rgba(29, 78, 216, 0.48) 100%), rgba(10, 20, 45, 0.9);
+  border-color: rgba(191, 219, 254, 0.65);
+  box-shadow: 
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.58),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.35),
+    0 12px 28px -6px rgba(0, 0, 0, 0.75);
   color: #ffffff;
 }
 
@@ -242,6 +291,8 @@
 
 .supp-left-bridge:hover {
   transform: rotate(-1deg) translateY(10px) scale(1.06);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.9);
   animation-play-state: paused;
   z-index: 8;
 }
@@ -281,7 +332,7 @@
 
 .ig-phone-bezel:hover {
   transform: translateY(-4px) scale(1.045);
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.28);
   box-shadow: 
     0 32px 70px -10px rgba(0, 0, 0, 0.98),
     inset 0 0 0 1px rgba(255, 255, 255, 0.18);
@@ -578,7 +629,7 @@
 
 .wave-bar {
   width: 1.5px;
-  background: #38bdf8;
+  background: linear-gradient(to top, #fb7185, #fbbf24);
   border-radius: 1px;
 }
 
@@ -619,8 +670,8 @@
 }
 
 .ig-stepper-btn:hover {
-  background: rgba(6, 182, 212, 0.85);
-  border-color: #38bdf8;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.35);
   transform: scale(1.15);
 }
 
@@ -671,6 +722,8 @@
 
 .supp-top-chart:hover {
   transform: rotate(1deg) translateY(-26px) scale(1.06);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.9);
   animation-play-state: paused;
   z-index: 8;
 }
@@ -692,6 +745,8 @@
 
 .supp-bottom-payout:hover {
   transform: rotate(0deg) translateY(18px) scale(1.06);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.9);
   animation-play-state: paused;
   z-index: 8;
 }
@@ -749,13 +804,9 @@
 
 .ig-supp-tag {
   font: 700 7.5px/1 var(--mono, monospace);
-  color: #38bdf8;
-  letter-spacing: 0.06em;
+  color: #fb7185;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-.tag-payout {
-  color: #34d399;
 }
 
 .ig-supp-title {
@@ -772,7 +823,7 @@
 
 .ig-supp-likes {
   font: 600 8.5px/1 var(--mono, monospace);
-  color: #38bdf8;
+  color: #cbd5e1;
   margin-top: 1px;
 }
 

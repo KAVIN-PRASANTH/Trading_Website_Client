@@ -113,7 +113,7 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
 
       {/* Section Header */}
       <div className="payout-header">
-        <span className="section-tag center">
+        <span className="section-tag section-tag-emerald center">
           <span className="payout-live-pulse" />
           STUDENT PAYOUT
         </span>

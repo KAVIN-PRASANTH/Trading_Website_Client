@@ -535,16 +535,19 @@ const REVIEW_SUB_LINKS = [
     href: '#student-payout',
     title: 'Payout Proofs',
     icon: '✦',
+    colorClass: 'icon-emerald',
   },
   {
     href: '#student-stories',
     title: 'Written Feedback',
     icon: '★',
+    colorClass: 'icon-gold',
   },
   {
     href: '#student-videos',
     title: 'Video Testimonials',
     icon: '▶',
+    colorClass: 'icon-ruby',
   },
 ]
 
@@ -1045,7 +1048,7 @@ function App() {
                           setMenuOpen(false)
                         }}
                       >
-                        <span className="ndi-icon" aria-hidden="true">{sub.icon}</span>
+                        <span className={`ndi-icon ${sub.colorClass || ''}`} aria-hidden="true">{sub.icon}</span>
                         <span className="ndi-title">{sub.title}</span>
                       </a>
                     ))}
@@ -1115,11 +1118,29 @@ function App() {
       {/* ---------------------------------------- TICKER RIBBON ---------------------------------------- */}
       <div className="ticker" aria-label="Course topics">
         <div className="ticker-track">
-          {['MARKET STRUCTURE','LIQUIDITY CONCEPTS','ICT METHODOLOGY','SMART MONEY','RISK DISCIPLINE','ORDER BLOCKS','REAL MARKET CONTEXT','FVG & IMBALANCE'].map((t,i) => (
-            <span key={i}><b>◆</b>{t}</span>
+          {[
+            { text: 'MARKET STRUCTURE', color: 'dia-gold' },
+            { text: 'LIQUIDITY CONCEPTS', color: 'dia-emerald' },
+            { text: 'ICT METHODOLOGY', color: 'dia-cyan' },
+            { text: 'SMART MONEY', color: 'dia-violet' },
+            { text: 'RISK DISCIPLINE', color: 'dia-coral' },
+            { text: 'ORDER BLOCKS', color: 'dia-gold' },
+            { text: 'REAL MARKET CONTEXT', color: 'dia-emerald' },
+            { text: 'FVG & IMBALANCE', color: 'dia-cyan' },
+          ].map((t, i) => (
+            <span key={i}><b className={t.color}>◆</b>{t.text}</span>
           ))}
-          {['MARKET STRUCTURE','LIQUIDITY CONCEPTS','ICT METHODOLOGY','SMART MONEY','RISK DISCIPLINE','ORDER BLOCKS','REAL MARKET CONTEXT','FVG & IMBALANCE'].map((t,i) => (
-            <span key={`d${i}`} aria-hidden><b>◆</b>{t}</span>
+          {[
+            { text: 'MARKET STRUCTURE', color: 'dia-gold' },
+            { text: 'LIQUIDITY CONCEPTS', color: 'dia-emerald' },
+            { text: 'ICT METHODOLOGY', color: 'dia-cyan' },
+            { text: 'SMART MONEY', color: 'dia-violet' },
+            { text: 'RISK DISCIPLINE', color: 'dia-coral' },
+            { text: 'ORDER BLOCKS', color: 'dia-gold' },
+            { text: 'REAL MARKET CONTEXT', color: 'dia-emerald' },
+            { text: 'FVG & IMBALANCE', color: 'dia-cyan' },
+          ].map((t, i) => (
+            <span key={`d${i}`} aria-hidden><b className={t.color}>◆</b>{t.text}</span>
           ))}
         </div>
       </div>
@@ -1181,19 +1202,19 @@ function App() {
 
           {/* Stat strip */}
           <div className="mentor-stat-strip">
-            <div>
+            <div className="mentor-stat-item-students">
               <strong>
                 <NumberTicker value={2000} suffix="+" />
               </strong>
               <span className="mentor-stat-label">Students Trained</span>
             </div>
-            <div>
+            <div className="mentor-stat-item-rating">
               <strong>
-                <NumberTicker value={4.9} decimalPlaces={1} />
+                <NumberTicker value={4.9} decimalPlaces={1} />★
               </strong>
               <span className="mentor-stat-label">Rating</span>
             </div>
-            <div>
+            <div className="mentor-stat-item-exp">
               <strong>
                 <NumberTicker value={6} suffix="+" />
               </strong>
@@ -1204,7 +1225,7 @@ function App() {
 
         <div className="mentor-content">
 
-          <p className="section-tag reveal-el">01 / YOUR MENTOR</p>
+          <p className="section-tag section-tag-violet reveal-el"><span className="tag-dot" />01 / YOUR MENTOR</p>
           <h2 className="reveal-el">Built for the trader<br />you intend <em>to become.</em></h2>
           <p className="reveal-el">Pravyn ICT is guided by an experienced practitioner focused on market structure, liquidity and precision price action. Every session is grounded in real execution logic, clear frameworks and accountability—not predictions.</p>
           <blockquote className="reveal-el">"No signals. No jackpots. No false promises."</blockquote>
@@ -1229,41 +1250,42 @@ function App() {
       {/* ---------------------------------------- YOUTUBE ---------------------------------------- */}
       <section className="videos-section" id="videos" data-section="videos">
         <div className="videos-header reveal-el">
-          <p className="section-tag">FREE RESOURCES</p>
+          <p className="section-tag section-tag-ruby"><span className="tag-dot" />FREE RESOURCES</p>
           <h2>Free Video <em>Lessons.</em></h2>
           <p>Explore free market breakdowns, strategy sessions, and trading insights.</p>
         </div>
         <div className="video-grid">
-          {videos.map(v => (
-            <a
-              className="vid-card reveal-el"
-              key={v.id}
-              href={`https://www.youtube.com/watch?v=${v.ytId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Watch: ${v.title}`}
-            >
-              <div className="vid-thumb">
-                <img
-                  className="vid-yt-thumb"
-                  src={`https://img.youtube.com/vi/${v.ytId}/maxresdefault.jpg`}
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg` }}
-                  alt={v.title}
-                  loading="lazy"
-                />
-                <div className="vid-overlay" />
-                <span className="vid-yt-badge">
-                  <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
-                  YouTube
-                </span>
-                <span className="vid-tag">{v.tag}</span>
-              </div>
-              <div className="vid-info">
-                <h3>{v.title}</h3>
-                <p>{v.desc}</p>
-              </div>
-            </a>
-          ))}
+          {videos.map((v) => {
+            return (
+              <a
+                className="vid-card reveal-el"
+                key={v.id}
+                href={`https://www.youtube.com/watch?v=${v.ytId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Watch: ${v.title}`}
+              >
+                <div className="vid-thumb">
+                  <img
+                    className="vid-yt-thumb"
+                    src={`https://img.youtube.com/vi/${v.ytId}/maxresdefault.jpg`}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg` }}
+                    alt={v.title}
+                    loading="lazy"
+                  />
+                  <div className="vid-overlay" />
+                  <span className="vid-yt-badge">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+                    YouTube
+                  </span>
+                </div>
+                <div className="vid-info">
+                  <h3>{v.title}</h3>
+                  <p>{v.desc}</p>
+                </div>
+              </a>
+            )
+          })}
         </div>
       </section>
 
@@ -1273,7 +1295,7 @@ function App() {
       {/* ---------------------------------------- FAQ ---------------------------------------- */}
       <section className="faq-section" id="faq" data-section="faq">
         <div className="faq-head reveal-el">
-          <p className="section-tag">FAQ</p>
+          <p className="section-tag section-tag-blue"><span className="tag-dot" />09 / FAQ</p>
           <h2>Common<br /><em>questions.</em></h2>
         </div>
         <div className="faq-list">
@@ -1349,7 +1371,7 @@ function App() {
         {/* Left Column: Heading & Concise Intro */}
         <div className="contact-desk-column reveal-el">
           <div className="contact-desk-intro">
-            <p className="section-tag">10 / GET STARTED</p>
+            <p className="section-tag section-tag-emerald"><span className="tag-dot" />10 / GET STARTED</p>
             <h2>Take the first<br /><em>intentional step.</em></h2>
             <p className="contact-desk-lead">
               Submit your details below for batch admission review.
@@ -1423,7 +1445,7 @@ function App() {
                       value={contactData.name}
                       onChange={handleContactChange}
                       onBlur={handleContactBlur}
-                      placeholder="e.g. Rahul Sharma"
+                      placeholder="e.g. Praveen"
                       autoComplete="name"
                       disabled={contactStatus === 'submitting'}
                       className={

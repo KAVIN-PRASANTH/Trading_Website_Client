@@ -15,7 +15,7 @@ import {
 interface SlideToEnrollProps {
   label: string
   successLabel?: string
-  colorVariant?: 'blue' | 'gold' | 'cyan'
+  colorVariant?: 'blue' | 'gold' | 'cyan' | 'violet'
   disabled?: boolean
   disabledLabel?: string
   onSuccess: () => void
@@ -257,13 +257,13 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
       <div className="prog-cards-grid">
 
         {/* ══════════════════════════════════════════════════════════════
-           CARD 01: PERSONAL MENTORSHIP — PRIVATE 1-ON-1 (CYBER SAPPHIRE)
+           CARD 01: PERSONAL MENTORSHIP — PRIVATE 1-ON-1 (ROYAL AMETHYST)
            ══════════════════════════════════════════════════════════════ */}
         <div className="prog-card-container prog-card-side reveal-el">
-          <div className="card-border-beam beam-blue" aria-hidden="true" />
+          <div className="card-border-beam beam-violet" aria-hidden="true" />
 
-          <article className="prog-card-face card-theme-blue">
-            <div className="card-ambient-glow glow-blue" aria-hidden="true" />
+          <article className="prog-card-face card-theme-violet">
+            <div className="card-ambient-glow glow-violet" aria-hidden="true" />
             <span className="card-corner-bracket bracket-tl" aria-hidden="true" />
             <span className="card-corner-bracket bracket-tr" aria-hidden="true" />
             <span className="card-corner-bracket bracket-bl" aria-hidden="true" />
@@ -272,16 +272,16 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
 
             {/* Top Bar: Mode Tag & Index 01 */}
             <div className="card-editorial-top">
-              <div className="card-mode-badge mode-badge-blue">
-                <span className="mode-pulse dot-blue" />
+              <div className="card-mode-badge mode-badge-violet">
+                <span className="mode-pulse dot-violet" />
                 <span>1-ON-1 · PRIVATE ZOOM</span>
               </div>
-              <div className="card-index-num num-blue">01</div>
+              <div className="card-index-num num-violet">01</div>
             </div>
 
             {/* Title & Philosophy Quote */}
             <div className="card-hero-block">
-              <h3 className="card-editorial-title title-blue">
+              <h3 className="card-editorial-title title-violet">
                 PERSONAL MENTORSHIP
               </h3>
               <p className="card-editorial-quote">
@@ -292,14 +292,14 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
             {/* Price Statement */}
             <div className="card-price-statement">
               <div className="price-num-row">
-                <span className="price-symbol symbol-blue">₹</span>
-                <span className="price-amount amount-blue">24,999</span>
+                <span className="price-symbol symbol-violet">₹</span>
+                <span className="price-amount amount-violet">24,999</span>
               </div>
               <span className="price-cadence">One-time enrollment</span>
             </div>
 
             {/* Clean Checkmark Feature List (4 Core Points) */}
-            <ul className="card-feature-checklist checklist-blue">
+            <ul className="card-feature-checklist checklist-violet">
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
                 <span>Personal 1-on-1 Sessions with Mentor</span>
@@ -321,7 +321,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
             {/* Secondary Action: View Full Details ↗ */}
             <button
               type="button"
-              className="card-details-trigger trigger-blue"
+              className="card-details-trigger trigger-violet"
               onClick={() => setActiveModal('online')}
               aria-label="View full curriculum details for Personal Mentorship"
             >
@@ -338,7 +338,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                 disabled={isBatchLive}
                 disabledLabel="Enrollment Closed · Cohort is Live"
                 successLabel="Redirecting to Razorpay..."
-                colorVariant="blue"
+                colorVariant="violet"
                 onSuccess={() => handleEnrollClick(MENTORSHIP_PLANS.online)}
               />
             </div>
@@ -556,7 +556,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
               activeModal === 'mastery'
                 ? 'modal-theme-cyan'
                 : activeModal === 'online'
-                ? 'modal-theme-blue'
+                ? 'modal-theme-violet'
                 : 'modal-theme-gold'
             }`}
             onClick={e => e.stopPropagation()}
@@ -575,7 +575,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                     activeModal === 'mastery'
                       ? 'mode-badge-cyan'
                       : activeModal === 'online'
-                      ? 'mode-badge-blue'
+                      ? 'mode-badge-violet'
                       : 'mode-badge-gold'
                   }`}
                 >
@@ -584,7 +584,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                       activeModal === 'mastery'
                         ? 'dot-cyan'
                         : activeModal === 'online'
-                        ? 'dot-blue'
+                        ? 'dot-violet'
                         : 'dot-gold'
                     }`}
                   />
@@ -617,7 +617,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                   activeModal === 'mastery'
                     ? 'close-btn-cyan'
                     : activeModal === 'online'
-                    ? 'close-btn-blue'
+                    ? 'close-btn-violet'
                     : 'close-btn-gold'
                 }`}
                 onClick={() => setActiveModal(null)}
@@ -787,13 +787,13 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                     </div>
                     <div className="doc-editorial-list">
                       <div className="doc-list-row">
-                        <span className="doc-bullet bullet-blue">—</span>
+                        <span className="doc-bullet bullet-violet">—</span>
                         <div className="doc-row-text">
                           <strong>1-1 Sessions:</strong> Dedicated private training built around your personal schedule and trading psychology.
                         </div>
                       </div>
                       <div className="doc-list-row">
-                        <span className="doc-bullet bullet-blue">—</span>
+                        <span className="doc-bullet bullet-violet">—</span>
                         <div className="doc-row-text">
                           <strong>From Basics to Everything:</strong> Complete foundational mechanics through to professional market execution.
                         </div>
@@ -809,67 +809,67 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                     </div>
                     <div className="doc-columns-grid">
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Basics Of Forex Market</span>
                       </div>
-                      <div className="doc-item highlight-blue">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                      <div className="doc-item highlight-violet">
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Futures Market & Basics</span>
                       </div>
-                      <div className="doc-item highlight-blue">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                      <div className="doc-item highlight-violet">
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Personal Model for Nasdaq</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Prop Firms & Their Rules</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Market Structure Understanding</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Orderblocks & Types</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Blocks & Gaps</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Liquidity & Its Illustrations</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Premium & Discount</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>SMT Divergence</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Timeframe Alignment & Analysis</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Sessions & Its Behaviour</span>
                       </div>
-                      <div className="doc-item highlight-blue">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                      <div className="doc-item highlight-violet">
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Entire ICT Topics Explained</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>XAUUSD Characteristics</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Risk Management & Psychology</span>
                       </div>
                       <div className="doc-item">
-                        <span className="doc-topic-icon bullet-blue" aria-hidden="true">✦</span>
+                        <span className="doc-topic-icon bullet-violet" aria-hidden="true">✦</span>
                         <span>Character Understanding of Pairs</span>
                       </div>
                     </div>
@@ -883,23 +883,23 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                     </div>
                     <div className="doc-editorial-list">
                       <div className="doc-list-row">
-                        <span className="doc-bullet bullet-blue">—</span>
+                        <span className="doc-bullet bullet-violet">—</span>
                         <div className="doc-row-text">Live Trading Session Access Will Be Given</div>
                       </div>
                       <div className="doc-list-row">
-                        <span className="doc-bullet bullet-blue">—</span>
+                        <span className="doc-bullet bullet-violet">—</span>
                         <div className="doc-row-text">Plan Trade With Your Mentor</div>
                       </div>
                       <div className="doc-list-row">
-                        <span className="doc-bullet bullet-blue">—</span>
+                        <span className="doc-bullet bullet-violet">—</span>
                         <div className="doc-row-text">Complete Class Recordings Access Provided</div>
                       </div>
                       <div className="doc-list-row">
-                        <span className="doc-bullet bullet-blue">—</span>
+                        <span className="doc-bullet bullet-violet">—</span>
                         <div className="doc-row-text">Get Your Personalised Trading Model</div>
                       </div>
                       <div className="doc-list-row">
-                        <span className="doc-bullet bullet-blue">—</span>
+                        <span className="doc-bullet bullet-violet">—</span>
                         <div className="doc-row-text">Direct 1-on-1 Follow-up From Your Mentor</div>
                       </div>
                     </div>
@@ -1035,7 +1035,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                   activeModal === 'mastery'
                     ? 'cyan'
                     : activeModal === 'online'
-                    ? 'blue'
+                    ? 'violet'
                     : 'gold'
                 }
                 onSuccess={() => {

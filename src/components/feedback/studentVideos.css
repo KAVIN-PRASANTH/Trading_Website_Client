@@ -7,8 +7,8 @@
   position: relative;
   background-color: var(--bg-1, #030816);
   background-image:
-    radial-gradient(ellipse 65% 45% at 50% 15%, rgba(14, 165, 233, 0.07) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 50% at 85% 85%, rgba(37, 99, 235, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 65% 45% at 50% 15%, rgba(56, 189, 248, 0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 50% at 85% 85%, rgba(37, 99, 235, 0.05) 0%, transparent 60%),
     linear-gradient(to bottom, rgba(4, 9, 24, 0.98) 0%, rgba(2, 6, 18, 0.99) 100%);
   padding: clamp(36px, 4.5vh, 52px) var(--px, 20px);
   border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -47,10 +47,10 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font: 600 11px/1 var(--sans, sans-serif);
+  font: 700 11px/1 var(--sans, sans-serif);
   letter-spacing: 0.08em;
   color: #38bdf8;
-  background: rgba(56, 189, 248, 0.12);
+  background: rgba(56, 189, 248, 0.08);
   border: 1px solid rgba(56, 189, 248, 0.28);
   padding: 5px 12px;
   border-radius: 999px;
@@ -63,7 +63,7 @@
   height: 5px;
   border-radius: 50%;
   background: #38bdf8;
-  box-shadow: 0 0 6px #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.8);
   animation: sv-pulse 2s infinite ease-in-out;
 }
 
@@ -86,9 +86,10 @@
   font-style: normal;
   font-family: inherit;
   font-weight: inherit;
-  background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 50%, #2dd4bf 100%);
+  background: linear-gradient(135deg, #bae6fd 0%, #38bdf8 45%, #2563eb 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .sv-lead {
