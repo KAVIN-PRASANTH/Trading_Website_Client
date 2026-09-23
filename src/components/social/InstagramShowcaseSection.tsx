@@ -138,7 +138,7 @@ export function InstagramShowcaseSection() {
           </h2>
 
           <p className="ig-hero-desc">
-            Follow <strong className="ig-author-highlight">@pravyn_ict</strong> for real-time London &amp; New York session breakdowns, live trade execution context, and verified community milestones.
+            Follow <strong className="ig-author-highlight">@pravyn_ict</strong> for real-time market structure breakdowns, live killzone context, and daily community trade proofs.
           </p>
 
           {/* Clean Inline Stats (No boxed container) */}

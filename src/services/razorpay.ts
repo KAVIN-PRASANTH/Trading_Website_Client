@@ -11,6 +11,39 @@ export interface MentorshipPlan {
   description: string
   tag: string
   colorVariant: 'cyan' | 'blue' | 'gold'
+  batchMonth?: string
+  batchStartDate?: string | null
+}
+
+export const PRAVYN_WHATSAPP_PHONE = '918637478662'
+
+export function getSlingshotReservationMessage(plan: MentorshipPlan = MENTORSHIP_PLANS.offline): string {
+  const isDateConfirmed = Boolean(plan.batchStartDate && plan.batchStartDate.trim() !== '')
+  if (isDateConfirmed) {
+    const month = plan.batchMonth || 'December'
+    return `Hi PRAVYN ICT, I went through the Slingshot Model details. I’d like to know more about the ${month} batch starting on ${plan.batchStartDate}. Please share the next steps for reserving a seat.`
+  }
+  return 'Hi PRAVYN ICT, I went through the Slingshot Model details. Could you please let me know the expected start date of the upcoming batch?'
+}
+
+export function isMobileDevice(): boolean {
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') return false
+  const ua = navigator.userAgent
+  const isTouchMac = /Macintosh/i.test(ua) && Boolean(navigator.maxTouchPoints && navigator.maxTouchPoints > 1)
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) || isTouchMac
+}
+
+export function getSlingshotWhatsAppUrl(plan: MentorshipPlan = MENTORSHIP_PLANS.offline): string {
+  const message = getSlingshotReservationMessage(plan)
+  const encoded = encodeURIComponent(message)
+
+  if (isMobileDevice()) {
+    // Mobile: wa.me opens native WhatsApp application directly
+    return `https://wa.me/${PRAVYN_WHATSAPP_PHONE}?text=${encoded}`
+  }
+
+  // Desktop: web.whatsapp.com directly opens WhatsApp Web, bypassing the intermediate api.whatsapp.com landing page
+  return `https://web.whatsapp.com/send?phone=${PRAVYN_WHATSAPP_PHONE}&text=${encoded}`
 }
 
 export const MENTORSHIP_PLANS: Record<string, MentorshipPlan> = {
@@ -40,6 +73,8 @@ export const MENTORSHIP_PLANS: Record<string, MentorshipPlan> = {
     description: 'Intensive Classroom Bootcamp on XAUUSD execution in Chennai',
     tag: 'OFFLINE · CHENNAI',
     colorVariant: 'gold',
+    batchMonth: 'December',
+    batchStartDate: undefined, // Dates Soon (unconfirmed)
   },
 }
 

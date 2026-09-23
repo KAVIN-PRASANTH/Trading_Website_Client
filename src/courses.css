@@ -96,10 +96,17 @@
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 768px) {
   .prog-cards-grid {
     grid-template-columns: 1fr;
-    max-width: 420px;
+    max-width: 440px;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .prog-cards-grid {
+    max-width: 100%;
     gap: 16px;
   }
 }
@@ -153,12 +160,20 @@
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 768px) {
+  /* Mobile: Center card (Live Batch) is displayed as the first card */
   .prog-card-container.prog-card-featured {
+    order: 1;
     transform: none;
   }
   .prog-card-container.prog-card-featured:hover {
     transform: translateY(-2px);
+  }
+  .prog-card-container:first-child {
+    order: 2;
+  }
+  .prog-card-container:last-child {
+    order: 3;
   }
 }
 
@@ -549,6 +564,11 @@
   font: 700 11.5px/1 var(--mono);
   letter-spacing: 0.05em;
   opacity: 0.85;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 .num-cyan { color: #22d3ee; }
 .num-blue { color: #60a5fa; }
@@ -1236,7 +1256,12 @@
   border: 1px solid rgba(59, 130, 246, 0.3);
   color: #93c5fd;
 }
-.num-gold {
+.doc-sec-num.num-cyan {
+  background: rgba(6, 182, 212, 0.18);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: #67e8f9;
+}
+.doc-sec-num.num-gold {
   background: rgba(234, 179, 8, 0.18);
   border: 1px solid rgba(234, 179, 8, 0.3);
   color: #fde047;

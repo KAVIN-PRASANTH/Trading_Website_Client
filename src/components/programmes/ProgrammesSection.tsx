@@ -3,6 +3,8 @@ import { createPortal } from 'react-dom'
 import {
   MENTORSHIP_PLANS,
   MentorshipPlan,
+  PRAVYN_WHATSAPP_PHONE,
+  getSlingshotWhatsAppUrl,
   initiateRazorpayCheckout,
   getRazorpayKey,
 } from '../../services/razorpay'
@@ -193,6 +195,23 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
     })
   }
 
+  const reserveActionLockRef = useRef(false)
+
+  const handleSlingshotReserve = useCallback(() => {
+    if (reserveActionLockRef.current) return
+    reserveActionLockRef.current = true
+
+    const url = getSlingshotWhatsAppUrl(MENTORSHIP_PLANS.offline)
+    const win = window.open(url, '_blank', 'noopener,noreferrer')
+    if (!win) {
+      window.location.href = url
+    }
+
+    setTimeout(() => {
+      reserveActionLockRef.current = false
+    }, 2800)
+  }, [])
+
   const handleEnrollClick = (plan: MentorshipPlan) => {
     const currentKey = getRazorpayKey()
     if (currentKey === 'rzp_test_placeholder_key') {
@@ -363,7 +382,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                 ICT MASTERY MENTORSHIP
               </h3>
               <p className="card-editorial-quote">
-                Live interactive cohort with mentor-guided live trading sessions.
+                Mentorship with live trading sessions with mentor after the classes.
               </p>
             </div>
 
@@ -373,7 +392,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                 <span className="price-symbol symbol-cyan">₹</span>
                 <span className="price-amount amount-cyan">9,999</span>
               </div>
-              <span className="price-cadence">Sept 29 Batch · 11 Days</span>
+              <span className="price-cadence">Sept 29 Batch · 11 Days (7 PM – 9 PM)</span>
             </div>
 
             {/* Clean Checkmark Feature List (4 Core Points) */}
@@ -384,7 +403,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
               </li>
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
-                <span>Language: தமிழ் (Tamil) · Interactive</span>
+                <span>Language: தமிழ் · Session Recordings Provided</span>
               </li>
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
@@ -392,7 +411,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
               </li>
               <li>
                 <span className="check-icon" aria-hidden="true">✓</span>
-                <span>14 Core Topics: Forex, FVG, OB, SMT & Mindset</span>
+                <span>15 Topics: Slingshot & Nasdaq Models, Forex & Futures</span>
               </li>
             </ul>
 
@@ -430,6 +449,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
           <div className="card-border-beam beam-gold" aria-hidden="true" />
 
           <article className="prog-card-face card-theme-gold">
+            <div className="card-ambient-glow glow-gold" aria-hidden="true" />
             <span className="card-corner-bracket bracket-tl" aria-hidden="true" />
             <span className="card-corner-bracket bracket-tr" aria-hidden="true" />
             <span className="card-corner-bracket bracket-bl" aria-hidden="true" />
@@ -503,9 +523,9 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                 label="Slide to Reserve Seat"
                 disabled={isBatchLive}
                 disabledLabel="Enrollment Closed · Cohort is Live"
-                successLabel="Redirecting to Razorpay..."
+                successLabel="Opening WhatsApp..."
                 colorVariant="gold"
-                onSuccess={() => handleEnrollClick(MENTORSHIP_PLANS.offline)}
+                onSuccess={handleSlingshotReserve}
               />
             </div>
           </article>
@@ -622,7 +642,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-cyan">—</span>
                         <div className="doc-row-text">
-                          <strong>Batch Start:</strong> Classes Start From September 29th
+                          <strong>Classes Start:</strong> September 29th
                         </div>
                       </div>
                       <div className="doc-list-row">
@@ -634,35 +654,35 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-cyan">—</span>
                         <div className="doc-row-text">
-                          <strong>Timings:</strong> 7:00 PM to 9:00 PM Daily Live Sessions
+                          <strong>Class Timings:</strong> 7:00 PM to 9:00 PM Daily Live Sessions
                         </div>
                       </div>
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-cyan">—</span>
                         <div className="doc-row-text">
-                          <strong>Language:</strong> தமிழ் (Tamil) with crystal-clear terminology
+                          <strong>Language:</strong> தமிழ் (Tamil)
                         </div>
                       </div>
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-cyan">—</span>
                         <div className="doc-row-text">
-                          <strong>Recordings:</strong> Full Session Recordings will be provided for revision
+                          <strong>Session Recordings:</strong> Full session recordings will be provided
                         </div>
                       </div>
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-cyan">—</span>
                         <div className="doc-row-text">
-                          <strong>Live Trading Sessions:</strong> Mentorship with Live Trading Sessions with Mentor After the Classes 📈🔥
+                          <strong>Live Trading Sessions:</strong> Mentorship with Live Trading Sessions with Mentor after the classes 📈🔥
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* 14 TOPICS CURRICULUM */}
+                  {/* 15 TOPICS CURRICULUM */}
                   <div className="doc-section">
                     <div className="doc-section-header">
                       <span className="doc-sec-num num-cyan">02</span>
-                      <h5 className="doc-sec-title">CURRICULUM TOPICS (14 CORE MODULES)</h5>
+                      <h5 className="doc-sec-title">CURRICULUM TOPICS (15 CORE MODULES)</h5>
                     </div>
                     <div className="doc-columns-grid">
                       <div className="doc-item">
@@ -679,47 +699,51 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                       </div>
                       <div className="doc-item">
                         <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
-                        <span>OB & Types (Orderblocks)</span>
+                        <span>OB & PD arrays</span>
                       </div>
                       <div className="doc-item">
                         <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
-                        <span>FVG & Types (Fair Value Gaps)</span>
+                        <span>Liquidity & QML</span>
                       </div>
                       <div className="doc-item">
                         <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
-                        <span>Liquidity & Its Illustrations</span>
+                        <span>SMT Divergence & Displacement</span>
                       </div>
                       <div className="doc-item">
                         <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
-                        <span>Premium & Discount Zones</span>
+                        <span>Timeframe Alignment</span>
                       </div>
                       <div className="doc-item">
                         <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
-                        <span>SMT Divergence</span>
+                        <span>Sessions & Killzones</span>
                       </div>
                       <div className="doc-item">
                         <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
-                        <span>Timeframe Alignment & Analysis</span>
-                      </div>
-                      <div className="doc-item">
-                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
-                        <span>Sessions & Pair Behaviour</span>
+                        <span>XAUUSD Characteristics</span>
                       </div>
                       <div className="doc-item highlight-cyan">
                         <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
-                        <span>High-Probability Trading Models</span>
+                        <span>My Own Slingshot Model</span>
                       </div>
                       <div className="doc-item">
                         <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
-                        <span>Risk Management & Drawdown Rules</span>
+                        <span>ICT Silver Bullet</span>
                       </div>
                       <div className="doc-item">
                         <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
-                        <span>Trader Psychology & Mindset</span>
+                        <span>Futures Trading Basics</span>
+                      </div>
+                      <div className="doc-item">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>Futures Market Propfirms</span>
                       </div>
                       <div className="doc-item highlight-cyan">
                         <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
-                        <span>Live Trade Context & Execution</span>
+                        <span>Our Own Nasdaq Model for Futures Market</span>
+                      </div>
+                      <div className="doc-item full-row highlight-cyan">
+                        <span className="doc-topic-icon bullet-cyan" aria-hidden="true">✦</span>
+                        <span>Risk Management & Psychology</span>
                       </div>
                     </div>
                   </div>
@@ -728,25 +752,25 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                   <div className="doc-section">
                     <div className="doc-section-header">
                       <span className="doc-sec-num num-cyan">03</span>
-                      <h5 className="doc-sec-title">AFTER THE CLASSES — LIVE SESSIONS</h5>
+                      <h5 className="doc-sec-title">LIVE MARKET SESSIONS & INCLUSIONS</h5>
                     </div>
                     <div className="doc-editorial-list">
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-cyan">—</span>
                         <div className="doc-row-text">
-                          <strong>Mentorship with Live Trading:</strong> Direct live chart execution sessions with Praveen after 11-day class completion.
+                          <strong>Live Market Session:</strong> This mentorship includes LIVE MARKET SESSION With Mentor 👨🏻💻🙌🔥
                         </div>
                       </div>
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-cyan">—</span>
                         <div className="doc-row-text">
-                          <strong>Revision Archive:</strong> Re-watch all 11-day classroom lectures anytime with permanent access.
+                          <strong>Execution Mentorship:</strong> Live chart execution sessions with mentor directly after the classes.
                         </div>
                       </div>
                       <div className="doc-list-row">
                         <span className="doc-bullet bullet-cyan">—</span>
                         <div className="doc-row-text">
-                          <strong>Doubt Clearing & Guidance:</strong> Ongoing trade reviews and community discussion.
+                          <strong>Recordings Provided:</strong> Full session recordings provided for life-long revision & mastery.
                         </div>
                       </div>
                     </div>
@@ -1006,7 +1030,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                 label={activeModal === 'offline' ? 'Slide to Reserve Seat' : 'Slide to Enroll'}
                 disabled={isBatchLive}
                 disabledLabel="Enrollment Closed · Cohort is Live"
-                successLabel="Redirecting to Razorpay..."
+                successLabel={activeModal === 'offline' ? 'Opening WhatsApp...' : 'Redirecting to Razorpay...'}
                 colorVariant={
                   activeModal === 'mastery'
                     ? 'cyan'
@@ -1015,14 +1039,17 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                     : 'gold'
                 }
                 onSuccess={() => {
-                  const plan =
-                    activeModal === 'mastery'
-                      ? MENTORSHIP_PLANS.mastery
-                      : activeModal === 'online'
-                      ? MENTORSHIP_PLANS.online
-                      : MENTORSHIP_PLANS.offline
-                  setActiveModal(null)
-                  handleEnrollClick(plan)
+                  if (activeModal === 'offline') {
+                    setActiveModal(null)
+                    handleSlingshotReserve()
+                  } else {
+                    const plan =
+                      activeModal === 'mastery'
+                        ? MENTORSHIP_PLANS.mastery
+                        : MENTORSHIP_PLANS.online
+                    setActiveModal(null)
+                    handleEnrollClick(plan)
+                  }
                 }}
               />
             </div>
@@ -1145,7 +1172,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
 
             <div className="rzp-actions">
               <a
-                href={`https://wa.me/918637478662?text=Hi%20Praveen,%20I%20have%20completed%20my%20enrollment%20for%20${encodeURIComponent(successPayment.plan.name)}.%20Payment%20ID:%20${encodeURIComponent(successPayment.paymentId)}`}
+                href={`https://wa.me/${PRAVYN_WHATSAPP_PHONE}?text=Hi%20Praveen,%20I%20have%20completed%20my%20enrollment%20for%20${encodeURIComponent(successPayment.plan.name)}.%20Payment%20ID:%20${encodeURIComponent(successPayment.paymentId)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rzp-whatsapp-btn"

@@ -97,10 +97,10 @@
 }
 
 .ig-hero-headline em {
-  font-style: italic;
-  font-family: var(--serif, serif);
-  font-weight: 400;
-  background: linear-gradient(135deg, #f58529 0%, #dd2a7b 50%, #8134af 100%);
+  font-style: normal;
+  font-family: inherit;
+  font-weight: inherit;
+  background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 50%, #2dd4bf 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -163,22 +163,27 @@
 .ig-btn-follow {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 11px 22px;
+  gap: 9px;
+  padding: 11px 24px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #f58529 0%, #dd2a7b 50%, #8134af 100%);
+  background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 45%, #0284C7 100%);
   color: #ffffff;
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
+  letter-spacing: 0.01em;
   text-decoration: none;
-  box-shadow: 0 4px 18px rgba(221, 42, 123, 0.35);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
-  border: none;
+  border: 1px solid rgba(147, 197, 253, 0.38);
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .ig-btn-follow:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(221, 42, 123, 0.5);
+  background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #06B6D4 100%);
+  border-color: rgba(191, 219, 254, 0.75);
+  box-shadow: 0 8px 25px rgba(6, 182, 212, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   color: #ffffff;
 }
 
