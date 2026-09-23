@@ -30,8 +30,3 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-# Heavy video media files (use Google Drive / CDN instead of git)
-*.MOV
-*.mov
-*.mp4
-!public/feedback_vedios/*.mp4

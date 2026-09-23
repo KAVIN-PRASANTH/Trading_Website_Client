@@ -250,7 +250,6 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
       <div className="prog-header reveal-el">
         <p className="section-tag">02 / PROGRAMMES</p>
         <h2>Three pathways to mastery.</h2>
-        <p className="prog-header-sub">Live batch, offline intensive, or personal 1-on-1 — choose your edge.</p>
       </div>
 
       {/* ── 3-Card Balanced Trio Grid (Personal Mentorship | Featured Live Batch | Slingshot Model) ── */}

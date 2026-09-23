@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { StudentPayoutScene } from './StudentPayoutScene'
 import { SphereImpulse } from './AchievementSphere'
 import { FEEDBACK_IMAGE_URLS } from './feedbackImages'
+import { NumberTicker } from '../common/NumberTicker'
 
 interface ErrorBoundaryProps {
   fallback: React.ReactNode
@@ -124,21 +125,53 @@ export const StudentPayoutSection: React.FC = React.memo(() => {
           Real payouts, live trading feedback, and consistency milestones from Pravyn ICT students.
         </p>
 
-        {/* Milestone Metrics Ribbon */}
+        {/* Milestone Metrics Ribbon — Luxury Institutional Telemetry */}
         <div className="payout-stats-ribbon">
           <div className="payout-stat-item">
-            <strong>500+</strong>
-            <span>FUNDED STUDENTS</span>
+            <div className="stat-value-display">
+              <span className="stat-number-text">
+                <NumberTicker value={500} />
+              </span>
+              <span className="stat-suffix stat-suffix-emerald">+</span>
+            </div>
+            <span className="payout-stat-label">
+              <span className="stat-pip stat-pip-emerald" aria-hidden="true" />
+              Funded Students
+            </span>
           </div>
+
           <div className="payout-stat-sep" />
+
           <div className="payout-stat-item">
-            <strong>94.2%</strong>
-            <span>DISCIPLINE SCORE</span>
+            <div className="stat-value-display">
+              <span className="stat-number-text">
+                <NumberTicker value={94.2} decimalPlaces={1} />
+              </span>
+              <span className="stat-suffix stat-suffix-cyan">%</span>
+            </div>
+            <span className="payout-stat-label">
+              <span className="stat-pip stat-pip-cyan" aria-hidden="true" />
+              Discipline Score
+            </span>
           </div>
+
           <div className="payout-stat-sep" />
+
           <div className="payout-stat-item">
-            <strong>4.9★</strong>
-            <span>COMMUNITY RATING</span>
+            <div className="stat-value-display">
+              <span className="stat-number-text">
+                <NumberTicker value={4.9} decimalPlaces={1} />
+              </span>
+              <span className="stat-star-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </span>
+            </div>
+            <span className="payout-stat-label">
+              <span className="stat-pip stat-pip-gold" aria-hidden="true" />
+              Community Rating
+            </span>
           </div>
         </div>
       </div>

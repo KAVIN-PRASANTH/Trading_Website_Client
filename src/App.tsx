@@ -1200,25 +1200,49 @@ function App() {
             </div>
           </div>
 
-          {/* Stat strip */}
+          {/* Stat strip — Luxury Institutional Telemetry */}
           <div className="mentor-stat-strip">
-            <div className="mentor-stat-item-students">
-              <strong>
-                <NumberTicker value={2000} suffix="+" />
-              </strong>
-              <span className="mentor-stat-label">Students Trained</span>
+            <div className="mentor-stat-item mentor-stat-item-students">
+              <div className="stat-value-display">
+                <span className="stat-number-text">
+                  <NumberTicker value={2000} />
+                </span>
+                <span className="stat-suffix stat-suffix-cyan">+</span>
+              </div>
+              <span className="mentor-stat-label">
+                <span className="stat-pip stat-pip-cyan" aria-hidden="true" />
+                Students Trained
+              </span>
             </div>
-            <div className="mentor-stat-item-rating">
-              <strong>
-                <NumberTicker value={4.9} decimalPlaces={1} />★
-              </strong>
-              <span className="mentor-stat-label">Rating</span>
+
+            <div className="mentor-stat-item mentor-stat-item-rating">
+              <div className="stat-value-display">
+                <span className="stat-number-text">
+                  <NumberTicker value={4.9} decimalPlaces={1} />
+                </span>
+                <span className="stat-star-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                </span>
+              </div>
+              <span className="mentor-stat-label">
+                <span className="stat-pip stat-pip-gold" aria-hidden="true" />
+                Rating
+              </span>
             </div>
-            <div className="mentor-stat-item-exp">
-              <strong>
-                <NumberTicker value={6} suffix="+" />
-              </strong>
-              <span className="mentor-stat-label">Years Experience</span>
+
+            <div className="mentor-stat-item mentor-stat-item-exp">
+              <div className="stat-value-display">
+                <span className="stat-number-text">
+                  <NumberTicker value={6} />
+                </span>
+                <span className="stat-suffix stat-suffix-emerald">+</span>
+              </div>
+              <span className="mentor-stat-label">
+                <span className="stat-pip stat-pip-emerald" aria-hidden="true" />
+                Years Experience
+              </span>
             </div>
           </div>
         </div>

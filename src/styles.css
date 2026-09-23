@@ -3,7 +3,7 @@
    Midnight Precision Theme — Unique per-section design
    ══════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 /* ── Tokens ─────────────────────────────────────────────────── */
 :root {
@@ -2559,72 +2559,168 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
 }
 
 /* ── Stat strip ── */
-.mentor-stat-strip {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  display: flex; border-top: 1px solid var(--border);
-  background: rgba(4, 12, 27, 0.97);
-  z-index: 12;
-}
-.mentor-stat-strip > div {
-  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-  padding: 13px 8px; border-right: 1px solid var(--border);
-}
-.mentor-stat-strip > div:last-child { border: 0; }
-.mentor-stat-strip strong {
-  font-size: clamp(20px, 2.1vw, 23px);
-  font-weight: 750;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: #fff;
-  background: none;
-  -webkit-text-fill-color: #fff;
+/* ══════════════════════════════════════════════════════════════
+   HIGH-END PRECISION STAT METRICS SYSTEM (SLENDER LUXURY AESTHETIC)
+   ══════════════════════════════════════════════════════════════ */
+
+/* Shared Value Display & Typographic Polish — Slender, Not Bold */
+.stat-value-display {
   display: inline-flex;
   align-items: baseline;
   justify-content: center;
+  position: relative;
+  line-height: 1;
 }
-.mentor-stat-strip strong span,
-.mentor-stat-strip strong .number-ticker-root,
-.mentor-stat-strip strong .number-ticker-value,
-.mentor-stat-strip strong .number-ticker-suffix {
+
+.stat-number-text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(19px, 1.85vw, 22.5px);
+  font-weight: 400; /* Clean, slender, un-bold luxury presence */
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: #F8FAFC;
+  background: linear-gradient(180deg, #FFFFFF 30%, rgba(241, 245, 249, 0.84) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "cv02" 1, "zero" 1;
+  display: inline-flex;
+  align-items: baseline;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.stat-number-text .number-ticker-root,
+.stat-number-text .number-ticker-value {
   font-size: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
   line-height: inherit;
-  color: #fff;
-  text-transform: none;
-  margin: 0;
+  color: inherit;
+  background: inherit;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.mentor-stat-item-students strong,
-.mentor-stat-item-students strong span,
-.mentor-stat-item-students strong .number-ticker-value {
-  color: #38bdf8 !important;
-  -webkit-text-fill-color: #38bdf8 !important;
-  text-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+/* Polished Suffix Badges (+, %) — Delicate & Subtle */
+.stat-suffix {
+  font-size: 0.62em;
+  font-weight: 300;
+  letter-spacing: 0;
+  margin-left: 2.5px;
+  vertical-align: super;
+  line-height: 1;
+  display: inline-block;
+  transform: translateY(-3px);
+  opacity: 0.85;
 }
 
-.mentor-stat-item-rating strong,
-.mentor-stat-item-rating strong span,
-.mentor-stat-item-rating strong .number-ticker-value {
-  color: #f59e0b !important;
-  -webkit-text-fill-color: #f59e0b !important;
-  text-shadow: 0 0 14px rgba(245, 158, 11, 0.45);
+.stat-suffix-cyan {
+  color: #7dd3fc;
 }
 
-.mentor-stat-item-exp strong,
-.mentor-stat-item-exp strong span,
-.mentor-stat-item-exp strong .number-ticker-value {
-  color: #34d399 !important;
-  -webkit-text-fill-color: #34d399 !important;
-  text-shadow: 0 0 10px rgba(52, 211, 153, 0.35);
+.stat-suffix-emerald {
+  color: #6ee7b7;
+}
+
+.stat-suffix-gold {
+  color: #fde68a;
+}
+
+/* Polished Star Icon — Subtle Champagne Gold */
+.stat-star-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4.5px;
+  color: #fbbf24;
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+.stat-star-icon svg {
+  width: 11px;
+  height: 11px;
+  display: block;
+}
+
+/* Micro-Pip Status Indicators — Refined 3.5px Dots */
+.stat-pip {
+  display: inline-block;
+  width: 3.5px;
+  height: 3.5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+.stat-pip-cyan {
+  background: #38bdf8;
+  box-shadow: 0 0 5px rgba(56, 189, 248, 0.6);
+}
+
+.stat-pip-gold {
+  background: #fbbf24;
+  box-shadow: 0 0 5px rgba(251, 191, 36, 0.6);
+}
+
+.stat-pip-emerald {
+  background: #34d399;
+  box-shadow: 0 0 5px rgba(52, 211, 153, 0.6);
+}
+
+/* ── Mentor Stat Strip Refinement ── */
+.mentor-stat-strip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: rgba(3, 8, 20, 0.78);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 -8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 12;
+}
+
+.mentor-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 10px 8px 11px;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.mentor-stat-item:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mentor-stat-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 22%;
+  height: 56%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.07), transparent);
 }
 
 .mentor-stat-strip .mentor-stat-label {
-  font: 600 10.5px var(--sans);
-  letter-spacing: 0.06em;
-  color: var(--text-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font: 450 8.5px var(--mono);
+  letter-spacing: 0.15em;
+  color: rgba(203, 213, 225, 0.7);
   text-transform: uppercase;
-  margin-top: 2px;
+  margin-top: 3px;
+  white-space: nowrap;
 }
 
 /* ── Content column ── */
@@ -5272,63 +5368,62 @@ footer,
 }
 
 /* Metrics Ribbon */
+/* ── Payout Stats Ribbon Refinement — Slender Luxury Capsule ── */
 .payout-stats-ribbon {
   display: inline-flex;
   align-items: center;
-  gap: clamp(14px, 3vw, 36px);
-  margin-top: 24px;
-  padding: 12px 28px;
-  background: rgba(9, 18, 38, 0.78);
-  border: 1px solid rgba(16, 185, 129, 0.28);
+  gap: clamp(14px, 3vw, 34px);
+  margin-top: 22px;
+  padding: 11px clamp(18px, 3.5vw, 32px);
+  background: rgba(4, 10, 24, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.payout-stats-ribbon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 25%;
+  right: 25%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  pointer-events: none;
 }
 
 .payout-stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 2px;
+  position: relative;
 }
 
-.payout-stat-item:nth-child(1) strong {
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #34d399 !important;
-  line-height: 1.2;
-  text-shadow: 0 0 12px rgba(16, 185, 129, 0.45);
-}
-
-.payout-stat-item:nth-child(3) strong {
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #38bdf8 !important;
-  line-height: 1.2;
-}
-
-.payout-stat-item:nth-child(5) strong {
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #f59e0b !important;
-  line-height: 1.2;
-  text-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
-}
-
-.payout-stat-item span {
-  font: 9px var(--mono);
-  letter-spacing: 0.12em;
-  color: var(--text-3);
+.payout-stat-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font: 450 8.5px var(--mono);
+  letter-spacing: 0.15em;
+  color: rgba(203, 213, 225, 0.7);
+  text-transform: uppercase;
+  margin-top: 3px;
+  white-space: nowrap;
 }
 
 .payout-stat-sep {
   width: 1px;
-  height: 26px;
-  background: var(--border-2);
+  height: 24px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.09) 20%, rgba(255, 255, 255, 0.09) 80%, transparent);
+  flex-shrink: 0;
 }
 
 /* Controls Bar */
@@ -5627,12 +5722,19 @@ footer,
   }
 
   .payout-stats-ribbon {
-    border-radius: var(--r-sm);
-    padding: 12px 16px;
+    border-radius: 20px;
+    padding: 14px 18px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 12px;
     width: 100%;
+    max-width: 380px;
+    margin: 20px auto 0;
+  }
+
+  .payout-stats-ribbon .payout-stat-item:nth-child(5) {
+    grid-column: 1 / -1;
+    justify-self: center;
   }
 
   .payout-stat-sep {
