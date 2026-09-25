@@ -562,12 +562,6 @@ const TOPIC_OPTIONS = [
   'Offline Bootcamp - Chennai',
 ] as const
 
-const EXPERIENCE_OPTIONS = [
-  'Beginner (< 6 Mos)',
-  'Intermediate (6M - 2 Yrs)',
-  'Advanced / Prop Trader',
-] as const
-
 interface ContactFormState {
   name: string
   email: string
@@ -595,7 +589,6 @@ const INITIAL_CONTACT_FORM: ContactFormState = {
 function App() {
   const [contactData, setContactData] = useState<ContactFormState>(INITIAL_CONTACT_FORM)
   const [selectedTopic, setSelectedTopic] = useState<string>('Online Batch - ICT Mastery (Sep 29)')
-  const [selectedExp, setSelectedExp] = useState<string>('Intermediate (6M - 2 Yrs)')
 
   const [contactErrors, setContactErrors] = useState<ContactErrors>({})
   const [contactTouched, setContactTouched] = useState<Record<keyof ContactFormState, boolean>>({
@@ -852,7 +845,6 @@ function App() {
     setContactErrors({})
     setContactTouched({ name: false, email: false, phone: false, message: false })
     setSelectedTopic('Online Batch - ICT Mastery (Sep 29)')
-    setSelectedExp('Intermediate (6M - 2 Yrs)')
     setContactStatus('idle')
     setContactStatusMsg('')
   }
@@ -860,17 +852,17 @@ function App() {
   const mailtoHref = useMemo(() => {
     const subject = encodeURIComponent(`Mentorship Enquiry: ${contactData.name || 'Trader'} [${selectedTopic}]`)
     const body = encodeURIComponent(
-      `Name: ${contactData.name || ''}\nEmail: ${contactData.email || ''}\nPhone: ${contactData.phone || 'N/A'}\nTopic: ${selectedTopic}\nExperience: ${selectedExp}\n\nTrading Goals / Message:\n${contactData.message || ''}\n\n---\nSent via Pravyn ICT Mentorship Portal`
+      `Name: ${contactData.name || ''}\nEmail: ${contactData.email || ''}\nPhone: ${contactData.phone || 'N/A'}\nTopic: ${selectedTopic}\n\nTrading Goals / Message:\n${contactData.message || ''}\n\n---\nSent via Pravyn ICT Mentorship Portal`
     )
     return `mailto:pravyntraderweb@gmail.com?subject=${subject}&body=${body}`
-  }, [contactData, selectedTopic, selectedExp])
+  }, [contactData, selectedTopic])
 
   const whatsappHref = useMemo(() => {
     const text = encodeURIComponent(
-      `Hi Mentor Praveen, I would like to enquire about mentorship.\n\nName: ${contactData.name || 'Trader'}\nEmail: ${contactData.email || 'N/A'}\nPhone: ${contactData.phone || 'N/A'}\nInterested Programme: ${selectedTopic}\nExperience: ${selectedExp}\n\nMy Message / Goals:\n${contactData.message || ''}\n\n---\nSent via Pravyn ICT Portal`
+      `Hi Mentor Praveen, I would like to enquire about mentorship.\n\nName: ${contactData.name || 'Trader'}\nEmail: ${contactData.email || 'N/A'}\nPhone: ${contactData.phone || 'N/A'}\nInterested Programme: ${selectedTopic}\n\nMy Message / Goals:\n${contactData.message || ''}\n\n---\nSent via Pravyn ICT Portal`
     )
     return `https://wa.me/918637478662?text=${text}`
-  }, [contactData, selectedTopic, selectedExp])
+  }, [contactData, selectedTopic])
 
   const handleContactSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -902,7 +894,6 @@ function App() {
       email: contactData.email.trim(),
       phone: contactData.phone.trim() || 'Not provided',
       topic: selectedTopic,
-      experience: selectedExp,
       message: contactData.message.trim(),
       _subject: `New Mentorship Enquiry from ${contactData.name.trim()} [${selectedTopic}]`,
       _replyto: contactData.email.trim(),
