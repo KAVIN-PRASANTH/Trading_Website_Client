@@ -3755,6 +3755,29 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
   margin: 0;
 }
 
+.contact-desk-wa-wrap {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.contact-desk-wa-note {
+  font: 500 12.5px/1.4 var(--sans);
+  color: #94a3b8;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 900px) {
+  .contact-desk-wa-wrap {
+    align-items: center;
+    margin-top: 18px;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+}
+
 /* 3 Balanced Channel Cards */
 .contact-channels-list {
   display: flex;
@@ -4139,7 +4162,7 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
 }
 
 .cn-mailto-fallback-btn {
-  padding: 6px 12px;
+  padding: 8px 14px;
   font: 600 11px var(--mono);
   background: rgba(244, 63, 94, 0.22);
   border: 1px solid rgba(244, 63, 94, 0.45);
@@ -4149,6 +4172,8 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
   transition: background 0.2s, border-color 0.2s;
   display: inline-flex;
   align-items: center;
+  gap: 6px;
+  cursor: pointer;
 }
 
 .cn-mailto-fallback-btn:hover {
@@ -4156,8 +4181,36 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
   border-color: rgba(244, 63, 94, 0.7);
 }
 
+.cn-whatsapp-fallback-btn {
+  padding: 8px 14px;
+  font: 600 11px var(--mono);
+  background: rgba(37, 211, 102, 0.2);
+  border: 1px solid rgba(37, 211, 102, 0.5);
+  border-radius: 4px;
+  color: #a7f3d0;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.cn-whatsapp-fallback-btn:hover {
+  background: rgba(37, 211, 102, 0.35);
+  border-color: rgba(37, 211, 102, 0.85);
+  color: #ffffff;
+}
+
+.cn-whatsapp-fallback-btn svg,
+.cn-mailto-fallback-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
 .cn-retry-btn {
-  padding: 6px 12px;
+  padding: 8px 14px;
   font: 600 11px var(--mono);
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--border-2);
@@ -4170,6 +4223,50 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
 .cn-retry-btn:hover {
   background: rgba(255, 255, 255, 0.15);
   color: #fff;
+}
+
+.cn-submit-actions-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 12px auto 0;
+  width: 100%;
+}
+
+.cn-whatsapp-direct-btn {
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 20px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font: 600 13px/1 var(--sans) !important;
+  border-radius: var(--r-sm) !important;
+  background: rgba(37, 211, 102, 0.12) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(52, 211, 153, 0.35) !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.25s ease !important;
+  cursor: pointer !important;
+}
+
+.cn-whatsapp-direct-btn:hover {
+  background: rgba(37, 211, 102, 0.22) !important;
+  border-color: rgba(52, 211, 153, 0.7) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.25) !important;
+}
+
+.cn-whatsapp-direct-btn svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  fill: currentColor;
 }
 
 /* Submit Action Button - Redesigned compact, centered, matching hero CTA */
@@ -4485,25 +4582,47 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
 }
 
 .rft-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 9px 16px;
-  font: 700 11.5px var(--mono);
-  letter-spacing: 0.06em;
-  background: #10b981;
-  color: #fff;
-  border-radius: var(--r-sm);
-  text-decoration: none;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.38);
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 20px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font: 600 13px/1 var(--sans) !important;
+  border-radius: var(--r-sm) !important;
+  background: rgba(37, 211, 102, 0.12) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(52, 211, 153, 0.35) !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.25s ease !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
 }
 
 .rft-btn:hover {
-  background: #059669;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.48);
+  background: rgba(37, 211, 102, 0.22) !important;
+  border-color: rgba(52, 211, 153, 0.7) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.25) !important;
+}
+
+.rft-btn svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.rft-btn svg:first-child {
+  fill: currentColor;
+}
+
+.rft-btn svg:last-child {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
 }
 
 .receipt-reset-btn {

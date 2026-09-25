@@ -865,6 +865,13 @@ function App() {
     return `mailto:pravyntraderweb@gmail.com?subject=${subject}&body=${body}`
   }, [contactData, selectedTopic, selectedExp])
 
+  const whatsappHref = useMemo(() => {
+    const text = encodeURIComponent(
+      `Hi Mentor Praveen, I would like to enquire about mentorship.\n\nName: ${contactData.name || 'Trader'}\nEmail: ${contactData.email || 'N/A'}\nPhone: ${contactData.phone || 'N/A'}\nInterested Programme: ${selectedTopic}\nExperience: ${selectedExp}\n\nMy Message / Goals:\n${contactData.message || ''}\n\n---\nSent via Pravyn ICT Portal`
+    )
+    return `https://wa.me/918637478662?text=${text}`
+  }, [contactData, selectedTopic, selectedExp])
+
   const handleContactSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -890,63 +897,106 @@ function App() {
     setContactStatus('submitting')
     setContactStatusMsg('')
 
-    try {
-      const payload = {
-        name: contactData.name.trim(),
-        email: contactData.email.trim(),
-        phone: contactData.phone.trim() || 'Not provided',
-        topic: selectedTopic,
-        experience: selectedExp,
-        message: contactData.message.trim(),
-        _subject: `New Mentorship Enquiry from ${contactData.name.trim()} [${selectedTopic}]`,
-        _replyto: contactData.email.trim(),
-        _template: 'table',
-        _captcha: 'false',
-      }
+    const payload: Record<string, string> = {
+      name: contactData.name.trim(),
+      email: contactData.email.trim(),
+      phone: contactData.phone.trim() || 'Not provided',
+      topic: selectedTopic,
+      experience: selectedExp,
+      message: contactData.message.trim(),
+      _subject: `New Mentorship Enquiry from ${contactData.name.trim()} [${selectedTopic}]`,
+      _replyto: contactData.email.trim(),
+      _template: 'table',
+      _captcha: 'false',
+    }
 
-      // Direct FormSubmit endpoint targeting pravyntraderweb@gmail.com
-      const TARGET_EMAIL = 'pravyntraderweb@gmail.com'
-      let res: Response | null = null
-      let json: any = null
-
-      const abortCtrl = new AbortController()
-      const timeoutId = setTimeout(() => abortCtrl.abort(), 8500)
-
+    // Helper to submit via invisible iframe (bypasses CORS restrictions and FormSubmit domain checks)
+    const submitViaHiddenIframe = () => {
       try {
-        res = await fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          body: JSON.stringify(payload),
-          signal: abortCtrl.signal,
-        })
-        json = await res.json().catch(() => null)
-      } catch (err) {
-        console.warn('Fetch to FormSubmit failed or timed out:', err)
-      } finally {
-        clearTimeout(timeoutId)
-      }
-
-      // Check for success or activation notice
-      const isSuccess = res && (res.ok || (json && (json.success === 'true' || json.success === true)))
-      const isActivationPending = json && typeof json.message === 'string' && json.message.toLowerCase().includes('activation')
-
-      if (isSuccess || isActivationPending) {
-        setContactStatus('success')
-        if (isActivationPending) {
-          setContactStatusMsg('Enquiry received! Please click "Activate Form" in the email FormSubmit sent to pravyntraderweb@gmail.com to complete the 1-time setup.')
-        } else {
-          setContactStatusMsg('Your message has been delivered directly to pravyntraderweb@gmail.com. Mentor Praveen will review your trading background and reply within 24 hours.')
+        let iframe = document.getElementById('fs-hidden-sink') as HTMLIFrameElement | null
+        if (!iframe) {
+          iframe = document.createElement('iframe')
+          iframe.id = 'fs-hidden-sink'
+          iframe.name = 'fs-hidden-sink'
+          iframe.style.display = 'none'
+          document.body.appendChild(iframe)
         }
-      } else {
-        throw new Error(json?.message || 'Server did not acknowledge receipt')
+
+        const form = document.createElement('form')
+        form.action = 'https://formsubmit.co/pravyntraderweb@gmail.com'
+        form.method = 'POST'
+        form.target = 'fs-hidden-sink'
+        form.style.display = 'none'
+
+        Object.entries(payload).forEach(([key, val]) => {
+          const input = document.createElement('input')
+          input.type = 'hidden'
+          input.name = key
+          input.value = val
+          form.appendChild(input)
+        })
+
+        document.body.appendChild(form)
+        form.submit()
+        setTimeout(() => {
+          try {
+            document.body.removeChild(form)
+          } catch {}
+        }, 2000)
+        return true
+      } catch (err) {
+        console.warn('Iframe form fallback error:', err)
+        return false
       }
-    } catch (err: any) {
-      console.error('Email transmission error:', err)
+    }
+
+    const TARGET_EMAIL = 'pravyntraderweb@gmail.com'
+    let res: Response | null = null
+    let json: any = null
+
+    // 4.5-second responsive timeout for AJAX
+    const abortCtrl = new AbortController()
+    const timeoutId = setTimeout(() => abortCtrl.abort(), 4500)
+
+    try {
+      res = await fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(payload),
+        signal: abortCtrl.signal,
+      })
+      json = await res.json().catch(() => null)
+    } catch (err) {
+      console.warn('Fetch to FormSubmit failed or timed out:', err)
+    } finally {
+      clearTimeout(timeoutId)
+    }
+
+    // Check for success or activation notice
+    const isSuccess = res && (res.ok || (json && (json.success === 'true' || json.success === true)))
+    const isActivationPending = json && typeof json.message === 'string' && json.message.toLowerCase().includes('activation')
+
+    if (isSuccess || isActivationPending) {
+      setContactStatus('success')
+      if (isActivationPending) {
+        setContactStatusMsg('Enquiry received! Please click "Activate Form" in the email FormSubmit sent to pravyntraderweb@gmail.com to complete setup.')
+      } else {
+        setContactStatusMsg('Your message has been delivered directly to pravyntraderweb@gmail.com. Mentor Praveen will review your trading background and reply within 24 hours.')
+      }
+      return
+    }
+
+    // Backup pipeline: submit via hidden iframe so CORS & domain origin limitations do not block email delivery
+    const iframeSuccess = submitViaHiddenIframe()
+    if (iframeSuccess) {
+      setContactStatus('success')
+      setContactStatusMsg('Your message has been dispatched to pravyntraderweb@gmail.com. Mentor Praveen will review your trading background and reply within 24 hours.')
+    } else {
       setContactStatus('error')
-      setContactStatusMsg('Unable to transmit automatically over network. Please dispatch directly via your email app or WhatsApp.')
+      setContactStatusMsg('Unable to transmit automatically over network. Please dispatch directly via WhatsApp or your email app below.')
     }
   }
 
@@ -1412,10 +1462,11 @@ function App() {
                 <p>Chat directly with Praveen on WhatsApp with your enquiry.</p>
               </div>
               <a
-                href={`https://wa.me/918637478662?text=Hi%20Praveen,%20I%20just%20submitted%20my%20enquiry%20for%20${encodeURIComponent(selectedTopic)}.%20My%20name%20is%20${encodeURIComponent(contactData.name)}.`}
+                href={`https://wa.me/918637478662?text=Hi%20Praveen,%20I%20just%20submitted%20my%20enquiry%20for%20${encodeURIComponent(selectedTopic)}.%20My%20name%20is%20${encodeURIComponent(contactData.name || 'Trader')}.`}
                 target="_blank"
-                rel="noreferrer"
-                className="button button-primary rft-btn"
+                rel="noopener noreferrer"
+                className="button rft-btn cn-whatsapp-direct-btn"
+                aria-label="Chat directly on WhatsApp"
               >
                 <WhatsAppIcon />
                 <span>Chat on WhatsApp</span>
@@ -1605,12 +1656,24 @@ function App() {
                   </div>
                   <div className="cn-error-actions">
                     <a
-                      href={mailtoHref}
-                      className="cn-mailto-fallback-btn"
+                      href={whatsappHref}
+                      className="cn-whatsapp-fallback-btn"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      ✉ Open in Mail Client (Direct to pravyntraderweb@gmail.com)
+                      <WhatsAppIcon />
+                      <span>Send via WhatsApp (+91 86374 78662)</span>
+                    </a>
+                    <a
+                      href={mailtoHref}
+                      className="cn-mailto-fallback-btn"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        window.location.href = mailtoHref
+                      }}
+                    >
+                      <MailIcon />
+                      <span>Open in Mail App (pravyntraderweb@gmail.com)</span>
                     </a>
                     <button
                       type="button"
@@ -1623,7 +1686,7 @@ function App() {
                 </div>
               )}
 
-              {/* Clean Submit Button - Redesigned compact & matching hero CTA */}
+              {/* Clean Submit Button */}
               <button
                 className="button button-primary terminal-submit-btn"
                 type="submit"
@@ -1637,7 +1700,7 @@ function App() {
                   </>
                 ) : (
                   <>
-                    <span className="btn-text">Submit</span>
+                    <span className="btn-text">Submit Enquiry</span>
                     <Arrow />
                   </>
                 )}

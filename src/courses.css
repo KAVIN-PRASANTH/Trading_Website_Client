@@ -897,6 +897,7 @@
   display: flex;
   align-items: center;
   transition: border-color 0.25s, box-shadow 0.25s;
+  touch-action: none;
 }
 
 .slide-track:hover {
@@ -1013,13 +1014,14 @@
   cursor: grab;
   z-index: 2;
   touch-action: none;
-  transition: transform 0.08s ease-out, background 0.3s;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s;
 }
 
+.slide-track.is-dragging .slide-knob,
 .slide-knob.is-dragging {
   cursor: grabbing;
   box-shadow: 0 5px 14px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  transform: scale(1.04);
+  transition: none !important;
 }
 
 .slide-cyan .slide-knob {

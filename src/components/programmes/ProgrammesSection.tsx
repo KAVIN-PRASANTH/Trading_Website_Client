@@ -7,10 +7,11 @@ import {
   getSlingshotWhatsAppUrl,
   initiateRazorpayCheckout,
   getRazorpayKey,
+  isMobileDevice,
 } from '../../services/razorpay'
 
 /* --------------------------------------------------------------------------
-   CoinDCX-Style Slide-To-Enroll Component (Preserved Exact Interaction & Visuals)
+   CoinDCX-Style Slide-To-Enroll Component (Smooth Touch & Mouse Pointer Engine)
    -------------------------------------------------------------------------- */
 interface SlideToEnrollProps {
   label: string
@@ -32,87 +33,158 @@ export function SlideToEnroll({
   const [sliderPos, setSliderPos] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
+
   const trackRef = useRef<HTMLDivElement>(null)
+  const knobRef = useRef<HTMLDivElement>(null)
+
   const startX = useRef(0)
+  const dragDistance = useRef(0)
+  const isDraggingRef = useRef(false)
+  const sliderPosRef = useRef(0)
   const isCompletedRef = useRef(false)
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const getMaxSlide = useCallback(() => {
+    if (!trackRef.current) return 0
+    const knobWidth = knobRef.current ? knobRef.current.offsetWidth : 34
+    // 3px left margin + 3px right margin
+    return Math.max(0, trackRef.current.offsetWidth - (knobWidth + 6))
+  }, [])
 
   const triggerComplete = useCallback(() => {
     if (isCompletedRef.current || disabled) return
     isCompletedRef.current = true
+    isDraggingRef.current = false
     setIsDragging(false)
     setIsCompleted(true)
-    if (trackRef.current) {
-      const maxSlide = trackRef.current.offsetWidth - 38
-      setSliderPos(maxSlide)
-    }
-    onSuccess()
-    setTimeout(() => {
+
+    const maxSlide = getMaxSlide()
+    sliderPosRef.current = maxSlide
+    setSliderPos(maxSlide)
+
+    if (successTimerRef.current) clearTimeout(successTimerRef.current)
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current)
+
+    // Brief tactile delay so the user perceives the green completion confirmation before navigation
+    successTimerRef.current = setTimeout(() => {
+      onSuccess()
+    }, 280)
+
+    // Reset after timeout in case user navigates back to the page
+    resetTimerRef.current = setTimeout(() => {
       isCompletedRef.current = false
       setIsCompleted(false)
+      sliderPosRef.current = 0
       setSliderPos(0)
-    }, 2800)
-  }, [onSuccess, disabled])
+    }, 4000)
+  }, [onSuccess, disabled, getMaxSlide])
 
-  const handleStart = (clientX: number) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (isCompletedRef.current || disabled) return
+    if (e.button !== undefined && e.button !== 0) return
+
+    isDraggingRef.current = true
     setIsDragging(true)
-    startX.current = clientX - sliderPos
+    dragDistance.current = 0
+    startX.current = e.clientX - sliderPosRef.current
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId)
+    } catch {
+      // Ignore if setPointerCapture is unsupported
+    }
   }
 
-  const handleMove = useCallback((clientX: number) => {
-    if (!isDragging || isCompletedRef.current || disabled || !trackRef.current) return
-    const maxSlide = Math.max(0, trackRef.current.offsetWidth - 38)
-    const newPos = Math.max(0, Math.min(clientX - startX.current, maxSlide))
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current || isCompletedRef.current || disabled || !trackRef.current) return
+
+    const maxSlide = getMaxSlide()
+    const rawPos = e.clientX - startX.current
+    const newPos = Math.max(0, Math.min(rawPos, maxSlide))
+
+    dragDistance.current += Math.abs(newPos - sliderPosRef.current)
+    sliderPosRef.current = newPos
     setSliderPos(newPos)
-    if (newPos >= maxSlide * 0.75) {
+
+    // Auto-trigger completion once slid to >= 70% of the track
+    if (maxSlide > 0 && newPos >= maxSlide * 0.7) {
       triggerComplete()
     }
-  }, [isDragging, disabled, triggerComplete])
+  }
 
-  const handleEnd = useCallback(() => {
-    if (!isDragging || isCompletedRef.current || disabled) return
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current || isCompletedRef.current || disabled) return
+    isDraggingRef.current = false
     setIsDragging(false)
-    if (!trackRef.current) return
-    const maxSlide = Math.max(0, trackRef.current.offsetWidth - 38)
-    if (sliderPos >= maxSlide * 0.6) {
+
+    try {
+      if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId)
+      }
+    } catch {
+      // Ignore if releasePointerCapture fails
+    }
+
+    const maxSlide = getMaxSlide()
+    if (maxSlide > 0 && sliderPosRef.current >= maxSlide * 0.48) {
+      triggerComplete()
+    } else if (dragDistance.current < 6) {
+      // Simple tap or click on the button
       triggerComplete()
     } else {
+      // Drag released before threshold; spring back to starting position
+      sliderPosRef.current = 0
       setSliderPos(0)
     }
-  }, [isDragging, sliderPos, disabled, triggerComplete])
+  }
 
-  useEffect(() => {
-    if (!isDragging || disabled) return
-    const onWindowMove = (e: MouseEvent) => handleMove(e.clientX)
-    const onWindowUp = () => handleEnd()
-    window.addEventListener('mousemove', onWindowMove)
-    window.addEventListener('mouseup', onWindowUp)
-    return () => {
-      window.removeEventListener('mousemove', onWindowMove)
-      window.removeEventListener('mouseup', onWindowUp)
+  const handlePointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isCompletedRef.current || disabled) return
+    isDraggingRef.current = false
+    setIsDragging(false)
+
+    try {
+      if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId)
+      }
+    } catch {
+      // Ignore if releasePointerCapture fails
     }
-  }, [isDragging, disabled, handleMove, handleEnd])
+
+    sliderPosRef.current = 0
+    setSliderPos(0)
+  }
 
   const handleTrackClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (!isCompletedRef.current && !isDragging && !disabled) {
+    if (!isCompletedRef.current && !isDraggingRef.current && !disabled) {
       triggerComplete()
     }
   }
 
+  useEffect(() => {
+    return () => {
+      if (successTimerRef.current) clearTimeout(successTimerRef.current)
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current)
+    }
+  }, [])
+
   return (
     <div
-      className={`slide-track slide-${colorVariant} ${disabled ? 'is-disabled' : ''} ${isCompleted ? 'is-completed' : ''}`}
+      className={`slide-track slide-${colorVariant} ${disabled ? 'is-disabled' : ''} ${isCompleted ? 'is-completed' : ''} ${isDragging ? 'is-dragging' : ''}`}
       ref={trackRef}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
       onClick={handleTrackClick}
-      onTouchMove={e => !disabled && handleMove(e.touches[0].clientX)}
-      onTouchEnd={handleEnd}
       role="button"
       tabIndex={disabled ? -1 : 0}
       aria-disabled={disabled}
       aria-label={disabled ? disabledLabel : label}
     >
-      <div className="slide-progress" style={{ width: disabled ? 0 : `${sliderPos + 16}px` }} />
+      <div className="slide-progress" style={{ width: disabled ? 0 : `${sliderPos + 18}px` }} />
       <span className="slide-text">
         {disabled ? (
           <span className="slide-disabled-content">
@@ -130,17 +202,8 @@ export function SlideToEnroll({
       </span>
       <div
         className={`slide-knob ${isDragging ? 'is-dragging' : ''}`}
+        ref={knobRef}
         style={{ transform: `translateX(${disabled ? 0 : sliderPos}px)` }}
-        onMouseDown={e => {
-          if (disabled) return
-          e.stopPropagation()
-          handleStart(e.clientX)
-        }}
-        onTouchStart={e => {
-          if (disabled) return
-          e.stopPropagation()
-          handleStart(e.touches[0].clientX)
-        }}
       >
         {disabled ? (
           <span className="knob-icon lock-mark">🔒</span>
@@ -195,17 +258,32 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
     })
   }
 
-  const openInNewTab = useCallback((url: string) => {
+  const navigateToDestination = useCallback((url: string) => {
+    // Detect mobile device, touch screen, or small viewport
+    const isMobile =
+      isMobileDevice() ||
+      (typeof window !== 'undefined' &&
+        (window.innerWidth <= 768 ||
+          ('ontouchstart' in window && window.innerWidth <= 1024) ||
+          /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)))
+
+    if (isMobile) {
+      // In mobile mode: always redirect in the current window.
+      // This is 100% immune to browser popup blockers and ensures seamless handoff to UPI apps.
+      window.location.assign(url)
+      return
+    }
+
+    // On desktop: attempt opening in a new tab first.
+    // If popup blocker intercepts it (common with drag/pointer gestures),
+    // immediately fall back to redirecting in the current window so the user is never stuck.
     try {
-      const link = document.createElement('a')
-      link.href = url
-      link.target = '_blank'
-      link.rel = 'noopener noreferrer'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      const opened = window.open(url, '_blank', 'noopener,noreferrer')
+      if (!opened || opened.closed || typeof opened.closed === 'undefined') {
+        window.location.assign(url)
+      }
     } catch {
-      window.open(url, '_blank', 'noopener,noreferrer')
+      window.location.assign(url)
     }
   }, [])
 
@@ -216,12 +294,12 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
     reserveActionLockRef.current = true
 
     const url = getSlingshotWhatsAppUrl(MENTORSHIP_PLANS.offline)
-    openInNewTab(url)
+    navigateToDestination(url)
 
     setTimeout(() => {
       reserveActionLockRef.current = false
-    }, 2000)
-  }, [openInNewTab])
+    }, 2500)
+  }, [navigateToDestination])
 
   const enrollActionLockRef = useRef(false)
 
@@ -230,10 +308,10 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
     enrollActionLockRef.current = true
 
     if (plan.paymentLink) {
-      openInNewTab(plan.paymentLink)
+      navigateToDestination(plan.paymentLink)
       setTimeout(() => {
         enrollActionLockRef.current = false
-      }, 2000)
+      }, 2500)
       return
     }
 
@@ -246,7 +324,7 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
       executeRazorpay(plan)
       enrollActionLockRef.current = false
     }
-  }, [openInNewTab])
+  }, [navigateToDestination])
 
   // Body scroll lock while modal is open
   useEffect(() => {
