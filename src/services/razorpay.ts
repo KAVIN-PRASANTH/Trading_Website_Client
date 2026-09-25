@@ -13,6 +13,7 @@ export interface MentorshipPlan {
   colorVariant: 'cyan' | 'blue' | 'gold'
   batchMonth?: string
   batchStartDate?: string | null
+  paymentLink?: string
 }
 
 export const PRAVYN_WHATSAPP_PHONE = '918637478662'
@@ -55,6 +56,7 @@ export const MENTORSHIP_PLANS: Record<string, MentorshipPlan> = {
     description: '11-Day Intensive Live Batch with Live Trading Sessions after classes',
     tag: 'ONLINE · LIVE BATCH',
     colorVariant: 'cyan',
+    paymentLink: 'https://rzp.io/rzp/A3T8CRu',
   },
   online: {
     id: 'online-mentorship',
@@ -64,6 +66,7 @@ export const MENTORSHIP_PLANS: Record<string, MentorshipPlan> = {
     description: '1-to-1 Personal Mentorship Program with dedicated live sessions',
     tag: 'ONLINE · 1-ON-1',
     colorVariant: 'blue',
+    paymentLink: 'https://rzp.io/rzp/tFstduzw',
   },
   offline: {
     id: 'offline-slingshot',

@@ -195,6 +195,20 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
     })
   }
 
+  const openInNewTab = useCallback((url: string) => {
+    try {
+      const link = document.createElement('a')
+      link.href = url
+      link.target = '_blank'
+      link.rel = 'noopener noreferrer'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch {
+      window.open(url, '_blank', 'noopener,noreferrer')
+    }
+  }, [])
+
   const reserveActionLockRef = useRef(false)
 
   const handleSlingshotReserve = useCallback(() => {
@@ -202,25 +216,37 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
     reserveActionLockRef.current = true
 
     const url = getSlingshotWhatsAppUrl(MENTORSHIP_PLANS.offline)
-    const win = window.open(url, '_blank', 'noopener,noreferrer')
-    if (!win) {
-      window.location.href = url
-    }
+    openInNewTab(url)
 
     setTimeout(() => {
       reserveActionLockRef.current = false
-    }, 2800)
-  }, [])
+    }, 2000)
+  }, [openInNewTab])
 
-  const handleEnrollClick = (plan: MentorshipPlan) => {
+  const enrollActionLockRef = useRef(false)
+
+  const handleEnrollClick = useCallback((plan: MentorshipPlan) => {
+    if (enrollActionLockRef.current) return
+    enrollActionLockRef.current = true
+
+    if (plan.paymentLink) {
+      openInNewTab(plan.paymentLink)
+      setTimeout(() => {
+        enrollActionLockRef.current = false
+      }, 2000)
+      return
+    }
+
     const currentKey = getRazorpayKey()
     if (currentKey === 'rzp_test_placeholder_key') {
       // Show helper dialog explaining gateway readiness and providing test options
       setPendingPlan(plan)
+      enrollActionLockRef.current = false
     } else {
       executeRazorpay(plan)
+      enrollActionLockRef.current = false
     }
-  }
+  }, [openInNewTab])
 
   // Body scroll lock while modal is open
   useEffect(() => {
@@ -1039,15 +1065,15 @@ export function ProgrammesSection({ isBatchLive }: ProgrammesSectionProps) {
                 }
                 onSuccess={() => {
                   if (activeModal === 'offline') {
-                    setActiveModal(null)
                     handleSlingshotReserve()
+                    setActiveModal(null)
                   } else {
                     const plan =
                       activeModal === 'mastery'
                         ? MENTORSHIP_PLANS.mastery
                         : MENTORSHIP_PLANS.online
-                    setActiveModal(null)
                     handleEnrollClick(plan)
+                    setActiveModal(null)
                   }
                 }}
               />
