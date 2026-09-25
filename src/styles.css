@@ -4235,12 +4235,25 @@ main > section, .hero, .method-section, .mentor-section, .prog-section, .curricu
 .cn-spinner {
   width: 15px;
   height: 15px;
-  border: 2px solid rgba(255, 255, 255, 0.35);
-  border-top-color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #ffffff;
+  border-right-color: rgba(255, 255, 255, 0.75);
   border-radius: 50%;
-  animation: cn-spin 0.7s linear infinite;
+  animation: cn-spin 0.65s linear infinite;
   display: inline-block;
-  margin-right: 6px;
+  vertical-align: middle;
+  margin-right: 8px;
+  box-sizing: border-box;
+  will-change: transform;
+}
+
+@keyframes cn-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Form Footer Note */
