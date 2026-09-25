@@ -65,7 +65,9 @@
     background 0.25s ease,
     box-shadow 0.25s ease;
   outline: none;
-  z-index: 20;
+  z-index: 50;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .fco-hub:hover {
@@ -217,20 +219,27 @@
   height: 44px;
   margin-bottom: -22px;
   margin-right: -22px;
-  pointer-events: none;
+  pointer-events: none !important;
   opacity: 0;
+  visibility: hidden;
   z-index: 35;
   transform: translate3d(0, 0, 0) scale(0.35);
   transition:
     transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.32s ease;
+    opacity 0.32s ease,
+    visibility 0s linear 0.45s;
   will-change: transform, opacity;
 }
 
 /* When Open: Nodes Glide Outward in a Perfect Radial Arc Around Hub */
 .fco-root.is-open .fco-node {
   opacity: 1;
-  pointer-events: auto;
+  visibility: visible;
+  pointer-events: auto !important;
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.32s ease,
+    visibility 0s linear 0s;
 }
 
 /* Desktop: Equal Radius Arc R ≈ 92px Around Hub (Center to Center) */
@@ -362,9 +371,15 @@
   justify-content: center;
   text-decoration: none;
   cursor: pointer;
-  pointer-events: auto;
+  pointer-events: none;
   outline: none;
   z-index: 10;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fco-root.is-open .fco-action-link {
+  pointer-events: auto;
 }
 
 .fco-icon-shell {
@@ -510,6 +525,13 @@
   .fco-root.is-open .fco-node-email {
     transform: translate3d(-9px, -79px, 0) scale(1);
   }
+
+  .fco-orbit-wire {
+    bottom: -25px;
+    right: -25px;
+    width: 170px;
+    height: 170px;
+  }
 }
 
 /* Mobile Screens (max-width: 768px) */
@@ -540,6 +562,13 @@
   .fco-orbit-stage {
     bottom: 23px;
     right: 23px;
+  }
+
+  .fco-orbit-wire {
+    bottom: -23px;
+    right: -23px;
+    width: 160px;
+    height: 160px;
   }
 
   .fco-node {

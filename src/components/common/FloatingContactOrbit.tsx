@@ -86,7 +86,8 @@ export const FloatingContactOrbit: React.FC = memo(() => {
   }, [])
 
   // Toggle Hub Open/Close (Click / Tap)
-  const handleToggleHub = useCallback((e: React.MouseEvent) => {
+  const handleToggleHub = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
     e.stopPropagation()
     clearCloseTimer()
     setIsOpen((prev) => !prev)
@@ -112,6 +113,7 @@ export const FloatingContactOrbit: React.FC = memo(() => {
 
   // Direct Click Handler for destinations (ensures immediate reliable opening)
   const handleActionClick = useCallback((url: string, isExternal = true) => {
+    if (!isOpen) return
     clearCloseTimer()
     if (isExternal) {
       window.open(url, '_blank', 'noopener,noreferrer')
@@ -122,7 +124,7 @@ export const FloatingContactOrbit: React.FC = memo(() => {
     setTimeout(() => {
       setIsOpen(false)
     }, 280)
-  }, [clearCloseTimer])
+  }, [clearCloseTimer, isOpen])
 
   // Click / Tap Outside Listener
   useEffect(() => {
@@ -187,7 +189,7 @@ export const FloatingContactOrbit: React.FC = memo(() => {
           <div className="fco-node fco-node-whatsapp">
             <div className="fco-orbit-drifter">
               <a
-                href={WHATSAPP_URL}
+                href={isOpen ? WHATSAPP_URL : undefined}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="fco-action-link fco-link-whatsapp"
@@ -196,6 +198,7 @@ export const FloatingContactOrbit: React.FC = memo(() => {
                 tabIndex={isOpen ? 0 : -1}
                 onClick={(e) => {
                   e.preventDefault()
+                  if (!isOpen) return
                   handleActionClick(WHATSAPP_URL, true)
                 }}
               >
@@ -210,7 +213,7 @@ export const FloatingContactOrbit: React.FC = memo(() => {
           <div className="fco-node fco-node-instagram">
             <div className="fco-orbit-drifter">
               <a
-                href={INSTAGRAM_URL}
+                href={isOpen ? INSTAGRAM_URL : undefined}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="fco-action-link fco-link-instagram"
@@ -219,6 +222,7 @@ export const FloatingContactOrbit: React.FC = memo(() => {
                 tabIndex={isOpen ? 0 : -1}
                 onClick={(e) => {
                   e.preventDefault()
+                  if (!isOpen) return
                   handleActionClick(INSTAGRAM_URL, true)
                 }}
               >
@@ -233,13 +237,14 @@ export const FloatingContactOrbit: React.FC = memo(() => {
           <div className="fco-node fco-node-email">
             <div className="fco-orbit-drifter">
               <a
-                href={EMAIL_URL}
+                href={isOpen ? EMAIL_URL : undefined}
                 className="fco-action-link fco-link-email"
                 aria-label="Email — pravyntraderweb@gmail.com"
                 title="Email"
                 tabIndex={isOpen ? 0 : -1}
                 onClick={(e) => {
                   e.preventDefault()
+                  if (!isOpen) return
                   handleActionClick(EMAIL_URL, false)
                 }}
               >
